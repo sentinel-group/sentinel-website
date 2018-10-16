@@ -1723,6 +1723,12 @@ h1, h2, h3, h4, h5, h6 {
       margin-right: 20px; }
     .home-page .top-section .button-area .button:last-child {
       margin-right: 0; }
+  .home-page .top-section .sentinel-img {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 568px; }
 
 .home-page .introduction-section {
   background: #F9FAFA; }

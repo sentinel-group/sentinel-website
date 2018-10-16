@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Particles from 'particlesjs';
+import 'particles.js';
 import { getScrollTop, getLink } from '../../../utils';
 import Header from '../../components/header';
 import Button from '../../components/button';
@@ -8,6 +8,7 @@ import Footer from '../../components/footer';
 import Language from '../../components/language';
 import Item from './featureItem';
 import homeConfig from '../../../site_config/home';
+import particles from './particles.json';
 import './index.scss';
 
 class Home extends Language {
@@ -32,13 +33,11 @@ class Home extends Language {
         });
       }
     });
-    // 详细参数配置见 https://www.npmjs.com/package/particlesjs
-    Particles.init({
-      selector: '#particle',
-      color: '#0DCCCC',
-      maxParticles: 300, // 粒子数最大值
-      sizeVariations: 5, // 尺寸种类
-    });
+    this.renderParticles();
+  }
+
+  renderParticles() {
+    window.particlesJS('top-section', particles);
   }
 
   render() {
@@ -48,8 +47,7 @@ class Home extends Language {
     const headerLogo = headerType === 'primary' ? '/img/sentinel_white.png' : '/img/sentinel_colorful.png';
     return (
       <div className="home-page">
-        <section className="top-section">
-          <canvas id="particle" />
+        <section className="top-section" id="top-section">
           <Header
             currentKey="home"
             type={headerType}
@@ -57,6 +55,7 @@ class Home extends Language {
             language={language}
             onLanguageChange={this.onLanguageChange}
           />
+          <img className="sentinel-img" src={getLink('/img/sentinel.png')} />
           <div className="vertical-middle">
             <div className="product-name">
               <h2>{dataSource.brand.brandName}</h2>
@@ -68,11 +67,6 @@ class Home extends Language {
             }
             </div>
           </div>
-          <div className="animation animation1" />
-          <div className="animation animation2" />
-          <div className="animation animation3" />
-          <div className="animation animation4" />
-          <div className="animation animation5" />
         </section>
         <section className="introduction-section">
           <div className="introduction-body">

@@ -47,6 +47,13 @@
         margin-right: 0;
       }
     }
+    .sentinel-img {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 568px;
+    }
   }
   .introduction-section {
     background: #F9FAFA;

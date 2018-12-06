@@ -8,7 +8,7 @@ export default {
       buttons: [
         {
           text: '快速开始',
-          link: '/zh-cn/docs/demo1.html',
+          link: '/zh-cn/docs/quick-start.html',
           type: 'primary',
         },
         {
@@ -27,12 +27,12 @@ export default {
       title: '特性一览',
       list: [
         {
-          img: '/img/feature_transpart.png',
+          img: '/img/feature_maintenance.png',
           title: '丰富的应用场景',
           content: '阿里巴巴 10 年双十一积累的丰富流量场景，包括秒杀、双十一零点持续洪峰、热点商品探测、预热、消息队列削峰填谷等多样化的场景。',
         },
         {
-          img: '/img/feature_loadbalances.png',
+          img: '/img/feature_transpart.png',
           title: '易于使用，快速接入',
           content: '简单易用，针对 Dubbo、Spring Cloud、gRPC 等框架只需要引入适配模块即可快速接入。',
         },
@@ -43,18 +43,8 @@ export default {
         },
         {
           img: '/img/feature_hogh.png',
-          title: '特性4',
-          content: '特性4的简单概括',
-        },
-        {
-          img: '/img/feature_runtime.png',
-          title: '特性5',
-          content: '特性5的简单概括',
-        },
-        {
-          img: '/img/feature_maintenance.png',
           title: '可视化的监控和规则管理',
-          content: '特性6的简单概括',
+          content: '功能完善的 Sentinel 控制台',
         },
       ],
     },
@@ -64,7 +54,7 @@ export default {
       img: '/img/quick_start.png',
       button: {
         text: '阅读更多',
-        link: '/zh-cn/docs/demo1.html',
+        link: '/zh-cn/docs/quick-start.html',
       },
     },
     users: {
@@ -85,11 +75,11 @@ export default {
   'en-us': {
     brand: {
       brandName: 'Sentinel',
-      briefIntroduction: 'The Flow Sentinel Of Your Services',
+      briefIntroduction: 'The Flow Sentinel of Your Services',
       buttons: [
         {
           text: 'Quick Start',
-          link: '/en-us/docs/demo1.html',
+          link: '/en-us/docs/quick-start.html',
           type: 'primary',
         },
         {
@@ -101,7 +91,7 @@ export default {
     },
     introduction: {
       title: 'Overview',
-      desc: 'some introduction of your product',
+      desc: 'A lightweight powerful flow-control component enabling reliability (flow control, circuit breaking, adaptive system protection) and real-time monitoring for microservices',
       img: '/img/architecture.png',
     },
     features: {
@@ -145,7 +135,7 @@ export default {
       img: '/img/quick_start.png',
       button: {
         text: 'READ MORE',
-        link: '/en-us/docs/demo1.html',
+        link: '/en-us/docs/quick-start.html',
       },
     },
     users: {

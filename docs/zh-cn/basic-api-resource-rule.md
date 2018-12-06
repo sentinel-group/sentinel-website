@@ -74,7 +74,7 @@ try {
 
 ### 注解方式定义资源
 
-Sentinel 支持通过 `@SentinelResource` 注解定义资源并配置 `blockHandler` 和 `fallback` 函数。详情可以参见 [Sentinel 注解支持文档](https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81)。
+Sentinel 支持通过 `@SentinelResource` 注解定义资源并配置 `blockHandler` 和 `fallback` 函数。详情可以参见 [Sentinel 注解支持文档](./annotation-support.md)。
 
 ### 业务异常统计
 
@@ -178,7 +178,7 @@ public void someAsync() {
 
 为了减少开发的复杂程度，我们对大部分的主流框架，例如 Dubbo, RocketMQ, Spring Cloud 等都做了适配。您只需要引入对应的依赖，它们的方法，服务，都会进行默认的埋点。
 
-参见: [主流框架的适配](https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D)
+参见: [主流框架的适配](./open-source-framework-integrations.md)
 
 ## 定义规则
 Sentinel 的所有规则都可以在内存态中动态地查询及修改，修改之后立即生效。同时 Sentinel 也提供相关 API，供您来定制自己的规则策略。
@@ -222,7 +222,7 @@ private static void initFlowQpsRule() {
     }
 ```
 
-更多详细内容可以参考 [流量控制](https://github.com/alibaba/Sentinel/wiki/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6)。
+更多详细内容可以参考 [流量控制](./flow-control.md)。
 
 ### 熔断降级规则 (DegradeRule)
 
@@ -253,7 +253,7 @@ private static void initFlowQpsRule() {
     }
 ```
 
-更多详情可以参考 [熔断降级](https://github.com/alibaba/Sentinel/wiki/%E7%86%94%E6%96%AD%E9%99%8D%E7%BA%A7)。
+更多详情可以参考 [熔断降级](./circuit-breaking.md)。
 
 ### 系统保护规则 (SystemRule)
 
@@ -278,7 +278,7 @@ private void initSystemProtectionRule() {
 }
 ```
 
-更多详情可以参考 [系统负载保护](https://github.com/alibaba/Sentinel/wiki/%E7%B3%BB%E7%BB%9F%E8%B4%9F%E8%BD%BD%E4%BF%9D%E6%8A%A4)。
+更多详情可以参考 [系统负载保护](./system-adaptive-protection.md)。
 
 ### 查询更改规则
 
@@ -306,11 +306,11 @@ curl http://localhost:8719/setRules?type=<XXXX>&data=<DATA>
 - 结合 RDBMS、NoSQL、VCS 等来实现该规则
 - 配合 Sentinel Dashboard 使用
 
-更多详情请参考 [动态规则配置](https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95)。
+更多详情请参考 [动态规则配置](./dynamic-rule-configuration.md)。
 
 # 规则生效的效果
 
 除了在业务代码逻辑上看到规则生效，我们也可以通过下面简单的方法，来校验规则生效的效果：
 
 - **暴露的 HTTP 接口**：通过运行下面命令 `curl http://localhost:8719/cnode?id=<资源名称>`，观察返回的数据。如果规则生效，在返回的数据栏中的 `block` 以及 `block(m)` 中会有显示
-- **日志**：Sentinel 提供秒级的资源运行日志以及限流日志，详情可以参考: [日志](https://github.com/alibaba/Sentinel/wiki/%E6%97%A5%E5%BF%97)
+- **日志**：Sentinel 提供秒级的资源运行日志以及限流日志，详情可以参考: [日志](./logs.md)

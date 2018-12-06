@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="quick-start" />
+	<meta name="description" content="quick-start" />
+	<!-- 网页标签标题 -->
+	<title>quick-start</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/docs/demo1.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Tutorial<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/en-us/docs/introduction.html" target="_self">Introduction</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/quick-start.html" target="_self">Quick Start</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/basic-implementation.html" target="_self">How It Works</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Feature Documentation<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/dashboard.html" target="_self">Dashboard</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Quick Start</h1>
+<p>Below is a simple demo that guides new users to use Sentinel in just 3 steps. It also shows how to monitor this demo using the dashboard.</p>
+<h2>1. Add Dependency</h2>
+<p><strong>Note:</strong> Sentinel requires Java 6 or later.</p>
+<p>If your application is build in maven, just add the following code in pom.xml.</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>If not, you can download JAR in <a href="https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core">Maven Center Repository</a>.</p>
+<h2>2. Define Resource</h2>
+<p>Wrap code snippet via Sentinel API: <code>SphU.entry(&quot;resourceName&quot;)</code> and <code>entry.exit()</code>. In below example, it is <code>System.out.println(&quot;hello world&quot;);</code>:</p>
+<pre><code class="language-java">Entry entry = <span class="hljs-keyword">null</span>;
+
+<span class="hljs-keyword">try</span> {   
+  entry = SphU.entry(<span class="hljs-string">"HelloWorld"</span>);
+  
+  <span class="hljs-comment">// BIZ logic being protected</span>
+  System.out.println(<span class="hljs-string">"hello world"</span>);
+} <span class="hljs-keyword">catch</span> (BlockException e) {
+  <span class="hljs-comment">// handle block logic</span>
+} <span class="hljs-keyword">finally</span> {
+  <span class="hljs-comment">// make sure that the exit() logic is called</span>
+  <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+    entry.exit();
+  }
+}
+</code></pre>
+<p>So far the code modification is done. We also provide <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-annotation-aspectj/README.md">annotation support module</a> to define resource easier.</p>
+<h2>3. Define Rules</h2>
+<p>If we want to limit the access times of the resource, we can define rules. The following code defines a rule that limits access to the reource to 20 times per second at the maximum.</p>
+<pre><code class="language-java">List&lt;FlowRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;FlowRule&gt;();
+FlowRule rule = <span class="hljs-keyword">new</span> FlowRule();
+rule.setResource(<span class="hljs-string">"HelloWorld"</span>);
+<span class="hljs-comment">// set limit qps to 20</span>
+rule.setCount(<span class="hljs-number">20</span>);
+rule.setGrade(RuleConstant.FLOW_GRADE_QPS);
+rules.add(rule);
+FlowRuleManager.loadRules(rules);
+</code></pre>
+<p>For more information, please refer to <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use">How To Use</a>.</p>
+<h2>4. Check the Result</h2>
+<p>After running the demo for a while, you can see the following records in <code>~/logs/csp/${appName}-metrics.log</code>.</p>
+<pre><code>|--timestamp-|------date time----|--resource-|p |block|s |e|rt
+1529998904000|2018-06-26 15:41:44|hello world|20|0    |20|0|0
+1529998905000|2018-06-26 15:41:45|hello world|20|5579 |20|0|728
+1529998906000|2018-06-26 15:41:46|hello world|20|15698|20|0|0
+1529998907000|2018-06-26 15:41:47|hello world|20|19262|20|0|0
+1529998908000|2018-06-26 15:41:48|hello world|20|19502|20|0|0
+1529998909000|2018-06-26 15:41:49|hello world|20|18386|20|0|0
+
+p stands for incoming request, block for blocked by rules, success for success handled by Sentinel, e for exception count, rt for average response time (ms)
+</code></pre>
+<p>This shows that the demo can print &quot;hello world&quot; 20 times per second.</p>
+<p>More examples and information can be found in the <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use">How To Use</a> section.</p>
+<p>The working principles of Sentinel can be found in <a href="https://github.com/alibaba/Sentinel/wiki/How-it-works">How it works</a> section.</p>
+<p>Samples can be found in the <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo">sentinel-demo</a> module.</p>
+<h2>5. Start Dashboard</h2>
+<p>Sentinel also provides a simple dashboard application, on which you can monitor the clients and configure the rules in real time.</p>
+<p>For details please refer to <a href="./dashboard.md">Sentinel dashboard document</a>.</p>
+<h2>Trouble Shooting and Logs</h2>
+<p>Sentinel will generate logs for troubleshooting. All the information can be found in <a href="./logs.md">Sentinel logs</a>.</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/demo1.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/demo2.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/demo3.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

@@ -8,7 +8,7 @@ export default {
       list: [
         {
           img: '/img/brhtqqzh.jpeg',
-          title: 'this is the title',
+          title: 'Sentinel 1.3.0 GA released',
           content: 'this is the content',
           dateStr: 'May 12nd，2018',
           link: '/en-us/blog/blog1.html',
@@ -37,36 +37,36 @@ export default {
           img: '/img/mailinglist.png',
           imgHover: '/img/mailinglist_hover.png',
           title: 'Mailing List',
-          link: ''
+          link: 'mailto:sentinel@linux.alibaba.com'
         },
         {
           img: '/img/alibaba.png',
           imgHover: '/img/alibaba_hover.png',
           title: 'gitter',
-          link: '',
+          link: 'https://gitter.im/alibaba/Sentinel',
         },
         {
-          img: '/img/segmentfault.png',
-          imgHover: '/img/segmentfault_hover.png',
-          title: 'Segment Fault',
-          link: ''
+          img: '/img/mailinglist.png',
+          imgHover: '/img/mailinglist_hover.png',
+          title: 'Google Groups',
+          link: 'https://groups.google.com/forum/#!forum/sentinel-users'
         },
         {
-          img: '/img/weibo.png',
-          imgHover: '/img/weibo_hover.png',
-          title: 'weibo',
-          link: '',
+          img: '/img/twitter.png',
+          imgHover: '/img/twitter_hover.png',
+          title: 'Twitter',
+          link: 'https://twitter.com/AlibabaSentinel',
         },
       ],
     },
     contributorGuide: {
       title: 'Contributor Guide',
-      desc: 'some description',
+      desc: 'Any kinds of contributions are welcomed!',
       list: [
         {
           img: '/img/mailinglist.png',
           title: 'Mailing List',
-          content: <span>this is the content</span>,
+          content: <p>Discuss in the <a href="mailto:sentinel@linux.alibaba.com">mailing list</a></p>,
         },
         {
           img: '/img/issue.png',

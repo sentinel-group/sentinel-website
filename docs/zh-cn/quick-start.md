@@ -80,7 +80,7 @@ Demo 运行之后，我们可以在日志 `~/logs/csp/${appName}-metrics.log.xxx
 
 可以看到，这个程序每秒稳定输出 "hello world" 20 次，和规则中预先设定的阈值是一样的。
 
-更详细的说明可以参考 [基本使用文档](./basic-use.md)；更多的例子可以参考 [demo 集合](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo)。
+更详细的说明可以参考 [基本使用文档](./basic-api-resource-rule.md)；更多的例子可以参考 [demo 集合](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo)。
 
 ## 启动 Sentinel 控制台
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="dashboard" />
+	<meta name="description" content="dashboard" />
+	<!-- 网页标签标题 -->
+	<title>dashboard</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/docs/demo1.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Tutorial<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/en-us/docs/introduction.html" target="_self">Introduction</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/quick-start.html" target="_self">Quick Start</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/basic-implementation.html" target="_self">How It Works</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Feature Documentation<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li class="menu-item menu-item-level-3"><a href="/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/dashboard.html" target="_self">Dashboard</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Sentinel Dashboard</h1>
+<h2>1. Introduction</h2>
+<p>Sentinel provides a simple stand-alone dashboard, on which you can monitor your applications, and configure the rules in real time. It includes the following features:</p>
+<ul>
+<li>Machine discovery</li>
+<li>Resource monitoring for single machine or clusters with less than 500 nodes</li>
+<li>Rule management</li>
+</ul>
+<p><img src="https://user-images.githubusercontent.com/9434884/47999307-208a7680-e13d-11e8-8431-f13fda939f91.png" alt="Dashboard"></p>
+<h2>2. Start the dashboard</h2>
+<h3>2.1 Download the dashboard</h3>
+<p>You can download the latest Sentinel Dashboard jar from <a href="https://github.com/alibaba/Sentinel/releases">the release page</a>.</p>
+<p>You can also build from code:</p>
+<ul>
+<li>Download <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-dashboard">Dashboard</a> module (<code>dashboard/en</code> branch to build English version)；</li>
+<li>Package it to fat jar with the following command: <code>mvn clean package</code>;</li>
+</ul>
+<h3>2.2 Run the dashboard</h3>
+<p>Use the following command to start the dashboard：</p>
+<pre><code class="language-bash">java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar
+</code></pre>
+<ul>
+<li><code>-Dserver.port=8080</code> is the HTTP port of the Sentinel Dashboard.</li>
+</ul>
+<h2>3. Applications</h2>
+<p>Perform the following 2 steps to connect your application to the dashboard.</p>
+<h3>3.1 Download JAR</h3>
+<p>If your project is a Maven project, add the following dependency in your <code>pom.xml</code>. Otherwise, please download it from Maven.</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h3>3.2 Configure dashboard IP address</h3>
+<p>Add dashboard IP address when starting the application: <code>-Dcsp.sentinel.dashboard.server=consoleIp:port</code>.</p>
+<p>In addition to JVM parameters, you can also do this by configuring property files. For more details, see <a href="https://github.com/alibaba/Sentinel/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%A1%B9">Configuration</a>.</p>
+<h2>4. Invocation Resource</h2>
+<p>After the above steps are completed, if any resource is called, your application will start to send its heartbeat to the dashboard. You can check the following information on the dashboard:</p>
+<h3>a. &quot;Machine Discovery&quot; will display machines grouped by their application names</h3>
+<p><strong>Machine List</strong> page:</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/47998981-f84e4800-e13b-11e8-9e1d-04f0958b58b1.png" alt="Machine Discovery"></p>
+<h3>b. &quot;Resources Tracing&quot; will display resources by machine</h3>
+<p><strong>Note:</strong> Resources displayed in &quot;Resource Chain&quot; are stored in memory.</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/48124680-ded20b00-e2b7-11e8-9e16-382746316ce0.png" alt="Resource Tracing"></p>
+<h3>c. &quot;Monitoring&quot; will summarize resource metrics of all machines in the same application</h3>
+<p><strong>Note:</strong> &quot;Monitoring&quot; will only record metrics in 5 minutes. If you need to persist these data, please refer to <a href="https://github.com/alibaba/Sentinel/wiki/Metrics#history-resource-metrics">Metrics</a>.</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/47999307-208a7680-e13d-11e8-8431-f13fda939f91.png" alt="Dashboard"></p>
+<p>If any information is missed please check your configuration and troubleshoot via <code>record.log</code> and <code>metricStat.log.pid&lt;Pid No&gt;.&lt;Date&gt;</code>. For details please refer to <a href="https://github.com/alibaba/Sentinel/wiki/Logs">logs</a>.</p>
+<h2>5. Manage rules</h2>
+<p>Sentinel Dashboard provides rules management as well.</p>
+<h3>5.1 Rule queries</h3>
+<p>Rule page in Sentinel Dashboard:</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/47999114-7b6f9e00-e13c-11e8-9d78-9b937027e608.png" alt="Rules"></p>
+<p>You can also query rules on the dashboard via HTTP commands exposed by client site. For details please refer to
+<a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#http-commands-for-rules">HTTP API for rules</a>.</p>
+<h3>5.2 Rule configuration</h3>
+<p>You can add or edit rules in rule pages.</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/48175515-5b5ffa80-e347-11e8-9dc0-c4f222768737.png" alt="Add new rule"></p>
+<p>You can also modify rules on the dashboard in real-time via <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#http-commands-for-rules">HTTP API for rules</a>.</p>
+<p><strong>Note:</strong> All these rules are stored in memory by default.</p>
+<p>We recommend you to use <a href="https://github.com/alibaba/Sentinel/wiki/Dynamic-Rule-Configuration">dynamic rule configuration</a> to customize your own rule configuration logic.</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/demo1.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/demo2.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/demo3.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

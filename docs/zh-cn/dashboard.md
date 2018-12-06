@@ -6,7 +6,7 @@ Sentinel 控制台提供一个轻量级的控制台，它提供机器发现、�
 
 **注意:** 集群资源汇总仅支持 500 台以下的应用集群，有大概 1 - 2 秒的延时。
 
-![Dashboard](./image/dashboard.png)
+![Dashboard](https://github.com/alibaba/Sentinel/wiki/image/dashboard.png)
 
 ## 2. 启动控制台
 
@@ -67,7 +67,7 @@ java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject
 
 当您在机器列表中看到您的机器，就代表着您已经成功接入控制台；如果没有看到您的机器，请检查配置，并通过 `record.log` 和 `metricStat.log.pid<Pid No>.<Date>`来排查原因，详细的部分请参考 [日志文档](https://github.com/alibaba/Sentinel/wiki/%E6%97%A5%E5%BF%97)。
 
-![machinediscover](./image/machinediscover.png)
+![machinediscover](https://github.com/alibaba/Sentinel/wiki/image/machinediscover.png)
 
 ### 4.2 "簇点链路"中显示刚刚调用的资源
 
@@ -77,7 +77,7 @@ java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject
 
 | 树状链路| 平铺链路 
 | :----: | :----
-|![resourceTree](./image/resourceTree.png)|![cluster](./image/sentine_dashboard.gif)
+|![resourceTree](https://github.com/alibaba/Sentinel/wiki/image/resourceTree.png)|![cluster](https://github.com/alibaba/Sentinel/wiki/image/sentine_dashboard.gif)
 
 ### 4.3 "实时监控"汇总资源信息
 
@@ -85,7 +85,7 @@ java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject
 
 **注意:** 实时监控仅存储 5 分钟以内的数据，如果需要持久化，需要通过调用[实时监控](https://github.com/alibaba/Sentinel/wiki/%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7)接口来定制。
 
-![Dashboard](./image/dashboard.png)
+![Dashboard](https://github.com/alibaba/Sentinel/wiki/image/dashboard.png)
 
 > 注意：请确保 Sentinel 控制台所在的机器时间与自己应用的机器时间保持一致，否则会导致拉不到实时的监控数据。
 

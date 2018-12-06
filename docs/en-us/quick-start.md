@@ -4,7 +4,7 @@ Below is a simple demo that guides new users to use Sentinel in just 3 steps. It
 
 ## 1. Add Dependency
 
-**Note:** Sentinel requires Java 6 or later.
+**Note:** Sentinel requires Java 7 or later.
 
 If your application is build in maven, just add the following code in pom.xml.
 
@@ -57,7 +57,7 @@ rules.add(rule);
 FlowRuleManager.loadRules(rules);
 ```
 
-For more information, please refer to [How To Use](https://github.com/alibaba/Sentinel/wiki/How-to-Use).
+For more information, please refer to [How To Use](./basic-api-resource-rule.md).
 
 ## 4. Check the Result
 
@@ -76,9 +76,7 @@ p stands for incoming request, block for blocked by rules, success for success h
 ```
 This shows that the demo can print "hello world" 20 times per second.
 
-More examples and information can be found in the [How To Use](https://github.com/alibaba/Sentinel/wiki/How-to-Use) section.
-
-The working principles of Sentinel can be found in [How it works](https://github.com/alibaba/Sentinel/wiki/How-it-works) section.
+More examples and information can be found in the [How To Use](./basic-api-resource-rule.md) section.
 
 Samples can be found in the [sentinel-demo](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo) module.
 

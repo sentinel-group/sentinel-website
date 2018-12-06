@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="basic-api-resource-rule" />
+	<meta name="description" content="basic-api-resource-rule" />
+	<!-- 网页标签标题 -->
+	<title>basic-api-resource-rule</title>
+	<link rel="shortcut icon" href="/sentinel-website/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/sentinel-website/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/sentinel-website/en-us/index.html"><img class="logo" src="/sentinel-website/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/sentinel-website/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/sentinel-website/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/sentinel-website/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/sentinel-website/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/sentinel-website/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/sentinel-website/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/sentinel-website/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Tutorial<img style="transform:rotate(-90deg)" class="menu-toggle" src="/sentinel-website/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/introduction.html" target="_self">Introduction to Sentinel</a></li><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/quick-start.html" target="_self">Quick Start</a></li><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/basic-implementation.html" target="_self">How Sentinel Works</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Feature Documentation<img style="transform:rotate(-90deg)" class="menu-toggle" src="/sentinel-website/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/basic-api-resource-rule.html" target="_self">How to use (resource and rule)</a></li><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li class="menu-item menu-item-level-3"><a href="/sentinel-website/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/sentinel-website/en-us/docs/dashboard.html" target="_self">Dashboard</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>How to use - resource and rule</h1>
+<h2>Introduction</h2>
+<p>To use Sentinel, you only need to complete 2 steps:</p>
+<ol>
+<li>Define resources</li>
+<li>Configure rules</li>
+</ol>
+<p>These two steps don’t have to be synchronized. As long as the resources are defined, you can add rules as needed. Multiple rules can be applied to the same resource simultaneously.</p>
+<p>Sentinel provides <a href="https://github.com/alibaba/Sentinel/wiki/Adapters-to-Popular-Framework">integrations with popular open-source frameworks and libraries</a> as well (e.g. Spring Cloud, gRPC, Dubbo). After introducing these integrations, services and methods provided by these frameworks are defined as resources by default.</p>
+<h2>Define Resource</h2>
+<p>You can use one of the following approaches to define resources.</p>
+<h3>&quot;try&quot; and &quot;catch&quot; mode</h3>
+<pre><code class="language-java">Entry entry = <span class="hljs-keyword">null</span>;
+<span class="hljs-keyword">try</span> {
+    entry = SphU.entry(resourceName);
+
+    <span class="hljs-comment">// Your business logic here.</span>
+} <span class="hljs-keyword">catch</span> (BlockException ex) {
+    <span class="hljs-comment">// Resource is rejected.</span>
+
+    <span class="hljs-comment">// Here to handle the block exception</span>
+} <span class="hljs-keyword">finally</span> {
+    <span class="hljs-comment">// DO NOT forget to exit the entry!</span>
+    <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+        entry.exit();
+    }
+}
+</code></pre>
+<h3>Bool mode</h3>
+<pre><code class="language-java"><span class="hljs-keyword">if</span> (SphO.entry(resourceName)) {
+  <span class="hljs-keyword">try</span> {
+     <span class="hljs-comment">// Your code logic here.</span>
+  } <span class="hljs-keyword">finally</span> {
+      SphO.exit();
+  }
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// Resource is rejected.</span>
+    <span class="hljs-comment">// Your logic to handle blocking here.</span>
+  }
+}
+</code></pre>
+<h3>Annotation mode</h3>
+<p>Sentinel supports defining resource with <code>@SentinelResource</code> annotation. See <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-annotation-aspectj/README.md">annotation support</a> for guidelines.</p>
+<h3>Check block exception</h3>
+<p>You can check whether an exception is caused by Sentinel's flow control (<code>BlockException</code>) via:</p>
+<pre><code class="language-java">BlockException.isBlockException(Throwable t);
+</code></pre>
+<h3>Integrations with open-source frameworks</h3>
+<p>For details, please refer to <a href="https://github.com/alibaba/Sentinel/wiki/Adapters-to-Popular-Framework">Adapters to popular frameworks</a>.</p>
+<h3>Resource for asynchronous entries</h3>
+<p>Here is a simple example:</p>
+<pre><code class="language-java"><span class="hljs-keyword">try</span> {
+    AsyncEntry entry = SphU.asyncEntry(resourceName);
+
+    <span class="hljs-comment">// Asynchronous invocation.</span>
+    doAsync(userId, result -&gt; {
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-comment">// Handle your asynchronous result here.</span>
+        } <span class="hljs-keyword">finally</span> {
+            <span class="hljs-comment">// Exit after callback completed.</span>
+            entry.exit();
+        }
+    });
+} <span class="hljs-keyword">catch</span> (BlockException ex) {
+    <span class="hljs-comment">// Request blocked.</span>
+    <span class="hljs-comment">// Handle the exception (e.g. retry or fallback).</span>
+}
+</code></pre>
+<p>For more advanced usage, you can refer to <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/AsyncEntryDemo.java">AsyncEntryDemo</a>.</p>
+<h2>Configure Rules</h2>
+<p>Sentinel provides APIs for you to modify your rules, which can be integrated with various kinds of rule repository, such as configuration server and NoSQL.</p>
+<h3>Definition of Rules</h3>
+<p>There are 4 types of rules：<strong>flow control rules</strong>, <strong>degrade rules</strong>, <strong>system protection rules</strong> and <strong>authority rules</strong>.</p>
+<h4>Flow control rules (FlowRule)</h4>
+<p><strong>Definition</strong></p>
+<p>key fields：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:left">resource name</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">threshold</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:left">flow control metric (QPS or concurrent thread count)</td>
+<td style="text-align:left">QPS</td>
+</tr>
+<tr>
+<td style="text-align:center">limitApp</td>
+<td style="text-align:left">refer to specified caller</td>
+<td style="text-align:left">default</td>
+</tr>
+<tr>
+<td style="text-align:center">strategy</td>
+<td style="text-align:left">by resource itself or other resource (<code>refResource</code>)，or entry (refResource)</td>
+<td style="text-align:left">resource itself</td>
+</tr>
+<tr>
+<td style="text-align:center">controlBehavior</td>
+<td style="text-align:left">traffic shaping control behavior (reject directly，queue，slow start up)</td>
+<td style="text-align:left">reject directly</td>
+</tr>
+</tbody>
+</table>
+<p>Multiple rules can be applied to the same resource.</p>
+<p><strong>API</strong></p>
+<p><code>FlowRuleManager.loadRules()</code> can be used to configure flow control rules.</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initFlowQpsRule</span><span class="hljs-params">()</span> </span>{
+        List&lt;FlowRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;FlowRule&gt;();
+        FlowRule rule1 = <span class="hljs-keyword">new</span> FlowRule();
+        rule1.setResource(KEY);
+        <span class="hljs-comment">// set limit qps to 20</span>
+        rule1.setCount(<span class="hljs-number">20</span>);
+        rule1.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        rule1.setLimitApp(<span class="hljs-string">"default"</span>);
+        rules.add(rule1);
+        FlowRuleManager.loadRules(rules);
+}
+</code></pre>
+<p>For more details please refer to <a href="./flow-control.md">Flow Control</a>.</p>
+<h4>Circuit breaking rules (DegradeRule)</h4>
+<p>Key fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:left">resource name</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">threshold</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:left">circuit breaking mode, by response time or exception ratio</td>
+<td style="text-align:left">response time</td>
+</tr>
+<tr>
+<td style="text-align:center">timeWindow</td>
+<td style="text-align:left">degrade time window (in second)</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>Multiple rules can be applied to the same resource.</p>
+<p><strong>API</strong></p>
+<p><code>DegradeRuleManager.loadRules()</code> can be used to configure degrade rules.</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initDegradeRule</span><span class="hljs-params">()</span> </span>{
+        List&lt;DegradeRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;DegradeRule&gt;();
+        DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule();
+        rule.setResource(KEY);
+        <span class="hljs-comment">// set threshold rt, 10 ms</span>
+        rule.setCount(<span class="hljs-number">10</span>);
+        rule.setGrade(RuleConstant.DEGRADE_GRADE_RT);
+        rule.setTimeWindow(<span class="hljs-number">10</span>);
+        rules.add(rule);
+        DegradeRuleManager.loadRules(rules);
+}
+</code></pre>
+<p>For more details, please refer to <a href="./circuit-breaking.md">Circuit Breaking</a>.</p>
+<h4>System protection rules (SystemRule)</h4>
+<p>Key factors</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">highestSystemLoad</td>
+<td style="text-align:left">threshold of Load1</td>
+<td style="text-align:left">-1(not valid)</td>
+</tr>
+<tr>
+<td style="text-align:center">avgRt</td>
+<td style="text-align:left">average response time</td>
+<td style="text-align:left">-1(not valid)</td>
+</tr>
+<tr>
+<td style="text-align:center">maxThread</td>
+<td style="text-align:left">concurrent thread count</td>
+<td style="text-align:left">-1(not valid)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>API</strong></p>
+<p><code>SystemRuleManager.loadRules()</code> can be used to configure system protection rules.</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initSystemProtectionRule</span><span class="hljs-params">()</span> </span>{
+  List&lt;SystemRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+  SystemRule rule = <span class="hljs-keyword">new</span> SystemRule();
+  rule.setHighestSystemLoad(<span class="hljs-number">10</span>);
+  rules.add(rule);
+  SystemRuleManager.loadRules(rules);
+}
+</code></pre>
+<p>For more details, please refer to <a href="./system-adaptive-protection.md">System Adaptive Protection</a>.</p>
+<h3>HTTP commands for rules</h3>
+<p>You can also use HTTP API to configure, query and update Sentinel rules.</p>
+<p>To use these API, make sure that the following library has been introduced:</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h4>Query command</h4>
+<p>API:</p>
+<pre><code class="language-shell">curl http://localhost:8719/getRules?type=&lt;XXXX&gt;
+</code></pre>
+<ul>
+<li><code>type=flow</code> for flow rules;</li>
+<li><code>type=degrade</code> for circuit breaking rules;</li>
+<li><code>type=system</code> for system protection rules.</li>
+</ul>
+<p>Rules will be returned in JSON format.</p>
+<h4>Modification command</h4>
+<blockquote>
+<p>Note: Only for test, do not use in production.</p>
+</blockquote>
+<pre><code class="language-shell">curl http://localhost:8719/setRules?type=&lt;XXXX&gt;&amp;data=&lt;DATA&gt;
+</code></pre>
+<h2>Integrate with rule repositories</h2>
+<p><a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AbstractDataSource.java">DataSource</a> is designed to integrate rules to customized repositories and make rules persistent.</p>
+<p>For more details, you can refer to <a href="./dynamic-rule-configuration.md">Dynamic Rule Configuration</a>.</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/sentinel-website/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/sentinel-website/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/sentinel-website/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/sentinel-website/en-us/docs/dir/demo3.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/sentinel-website/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/sentinel-website/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '/sentinel-website';
+  </script>
+	<script src="/sentinel-website/build/documentation.js"></script>
+</body>
+</html>

@@ -9,23 +9,9 @@ export default {
         {
           img: '/img/brhtqqzh.jpeg',
           title: 'Sentinel 1.3.0 GA released',
-          content: 'this is the content',
-          dateStr: 'May 12nd，2018',
+          content: '',
+          dateStr: 'Oct 30th，2018',
           link: '/en-us/blog/blog1.html',
-        },
-        {
-          img: '/img/brhtqqzh.jpeg',
-          title: 'this is the title',
-          content: 'this is the content',
-          dateStr: 'May 12nd，2018',
-          link: '/en-us/blog/blog2.html',
-        },
-        {
-          img: '/img/brhtqqzh.jpeg',
-          title: 'this is the title',
-          content: 'this is the content',
-          dateStr: 'May 12nd，2018',
-          link: '/en-us/blog/blog3.html',
         },
       ]
     },
@@ -42,7 +28,7 @@ export default {
         {
           img: '/img/alibaba.png',
           imgHover: '/img/alibaba_hover.png',
-          title: 'gitter',
+          title: 'Gitter',
           link: 'https://gitter.im/alibaba/Sentinel',
         },
         {
@@ -71,17 +57,17 @@ export default {
         {
           img: '/img/issue.png',
           title: 'Issue',
-          content: <span>this is the content</span>,
+          content: <p>Report bugs and request features in <a href="https://github.com/alibaba/Sentinel/issues">GitHub Issues</a></p>,
         },
         {
           img: '/img/documents.png',
           title: 'Documents',
-          content: <span>this is the content</span>,
+          content: <span>Improve the document and blog posts</span>,
         },
         {
           img: '/img/pullrequest.png',
           title: 'Pull Request',
-          content: <span>this is the content</span>,
+          content: <span>Send a <a href="https://github.com/alibaba/Sentinel/pulls">PR</a> to contribute</span>,
         },
       ],
     },
@@ -89,47 +75,52 @@ export default {
       title: 'Eco System',
       list: [
         {
-          title: 'Eco1',
-          content: <span>Eco System1</span>,
+          title: 'Integrations',
+          content: <span>Sentinel provides integration modules for commonly-used frameworks and libraries.</span>,
           tags: [
             {
-              text: 'tag1',
-              link: '',
+              text: 'Dubbo',
+              link: 'https://github.com/dubbo/dubbo-sentinel-support',
               bgColor: '#7A63FC',
             },
             {
-              text: 'tag2',
+              text: 'Spring Cloud',
               link: '',
               bgColor: '#00D0D9',
             },
             {
-              text: 'tag3',
+              text: 'Servlet',
+              link: '',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'gRPC',
               link: '',
               bgColor: '#00D0D9',
             },
           ],
         },
         {
-          title: 'Eco2',
-          content: <span>Eco System2</span>,
+          title: 'Dynamic Rule Sources',
+          content: <span>Sentinel provides dynamic rule source extensions with various config centers.</span>,
           tags: [
             {
-              text: 'tag1',
+              text: 'Nacos',
               link: '',
               bgColor: '#7A63FC',
             },
             {
-              text: 'tag2',
+              text: 'ZooKeeper',
               link: '',
               bgColor: '#00D0D9',
             },
             {
-              text: 'tag3',
-              link: '/en-us/docs/demo1.html',
+              text: 'Apollo',
+              link: '',
               bgColor: '#00D0D9',
             },
             {
-              text: 'tag4',
+              text: 'Redis',
               link: '',
               bgColor: '#00D0D9',
             },
@@ -176,8 +167,8 @@ export default {
           link: 'https://gitter.im/alibaba/Sentinel',
         },
         {
-          img: '/img/sentinel.png',
-          imgHover: '/img/sentinel.png',
+          img: '/img/mailinglist.png',
+          imgHover: '/img/mailinglist_hover.png',
           title: 'Google Groups',
           link: 'https://groups.google.com/forum/#!forum/sentinel-users'
         },

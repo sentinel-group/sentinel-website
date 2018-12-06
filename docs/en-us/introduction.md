@@ -1,7 +1,5 @@
 # Introduction
 
-# Sentinel: The Flow Sentinel of Your App
-
 # What Is Sentinel?
 
 As distributed systems are becoming increasingly popular, the reliability between services is becoming more important than ever before. Sentinel is a library that takes "flow" as the breakthrough point, and covers multiple fields including flow control, concurrency, circuit breaking, and load protection to protect service stability.
@@ -9,7 +7,7 @@ As distributed systems are becoming increasingly popular, the reliability betwee
 ## History of Sentinel
 
 * 2012, Sentinel was born in Alibaba with the main purpose of flow control.
-* 2013-2017, Sentinel grew fast and became a basic component for all applications in Alibaba. It was used in more than 4000 applications and covers almost all core e-commerce scenarios. 
+* 2013 - 2017, Sentinel grew fast and became a basic component for all applications in Alibaba. It was used in more than 4000 applications and covers almost all core e-commerce scenarios. 
 * 2018, Sentinel evolves into an open source project.
 
 # Key Concepts
@@ -26,7 +24,8 @@ The way Sentinel protects resources is defined by rules, such as flow control, c
 # Features and Principles 
 ## Flow Control
 Sentinel can enable applications to handle random incoming requests according to the appropriate shape as needed, as illustrated below:
-<img src="https://github.com/alibaba/Sentinel/wiki/image/limitflow.gif" width="640" height="360" />
+
+![image](./img/sentinel-flow-overview-en.jpg)
 
 ## Principles of Flow Control
 Flow control is based on the following statistics:

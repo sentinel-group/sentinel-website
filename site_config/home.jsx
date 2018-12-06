@@ -29,12 +29,12 @@ export default {
         {
           img: '/img/feature_maintenance.png',
           title: '丰富的应用场景',
-          content: '阿里巴巴 10 年双十一积累的丰富流量场景，包括秒杀、双十一零点持续洪峰、热点商品探测、预热、消息队列削峰填谷等多样化的场景。',
+          content: '阿里巴巴 10 年双十一积累的丰富流量场景，包括秒杀、双十一零点持续洪峰、热点商品探测、预热、消息队列削峰填谷等多样化的场景',
         },
         {
           img: '/img/feature_transpart.png',
           title: '易于使用，快速接入',
-          content: '简单易用，针对 Dubbo、Spring Cloud、gRPC 等框架只需要引入适配模块即可快速接入。',
+          content: '简单易用，开源生态广泛，针对 Dubbo、Spring Cloud、gRPC 等框架只需要引入适配模块即可快速接入',
         },
         {
           img: '/img/feature_service.png',
@@ -50,7 +50,7 @@ export default {
     },
     start: {
       title: '快速开始',
-      desc: '只需 5 分钟即可快速接入 Sentinel',
+      desc: '只需 5 分钟即可快速熟悉 Sentinel',
       img: '/img/quick_start.png',
       button: {
         text: '阅读更多',
@@ -84,54 +84,44 @@ export default {
         },
         {
           text: 'View on Github',
-          link: '',
+          link: 'https://github.com/alibaba/Sentinel',
           type: 'normal',
         },
       ],
     },
     introduction: {
       title: 'Overview',
-      desc: 'A lightweight powerful flow-control component enabling reliability (flow control, circuit breaking, adaptive system protection) and real-time monitoring for microservices',
-      img: '/img/architecture.png',
+      desc: 'Sentinel is a lightweight powerful flow-control component enabling reliability (flow control, circuit breaking, adaptive system protection) and real-time monitoring for microservices',
+      img: '/img/sentinel-flow-index-overview-en.jpg',
     },
     features: {
       title: 'Feature List',
       list: [
         {
-          img: '/img/feature_transpart.png',
-          title: 'feature1',
-          content: 'feature description',
+          img: '/img/feature_maintenance.png',
+          title: 'Rich scanerios',
+          content: 'Rich production-level scanerios from Alibaba such as peak load shifting, spikes in pulse flow and adaptive system protection.',
         },
         {
-          img: '/img/feature_loadbalances.png',
-          title: 'feature2',
-          content: 'feature description',
+          img: '/img/feature_transpart.png',
+          title: 'Easy to use',
+          content: 'Provides annotation support and out-of-box integrations with popular open-source frameworks such as Dubbo, Spring Cloud and gRPC.',
         },
         {
           img: '/img/feature_service.png',
-          title: 'feature3',
-          content: 'feature description',
+          title: 'Advanced flow control',
+          content: 'Support advanced flow control by various metric types, relation and traffic shaping effect.',
         },
         {
           img: '/img/feature_hogh.png',
-          title: 'feature4',
-          content: 'feature description',
+          title: 'Real-time monitoring and rule configuration',
+          content: 'Provides a powerful dashboard for real-time monitoring and rule configuration.',
         },
-        {
-          img: '/img/feature_runtime.png',
-          title: 'feature5',
-          content: 'feature description',
-        },
-        {
-          img: '/img/feature_maintenance.png',
-          title: 'feature6',
-          content: 'feature description',
-        }
       ]
     },
     start: {
       title: 'Quick start',
-      desc: 'some description text',
+      desc: 'This guide gets you started with Sentinel quickly in a few minutes.',
       img: '/img/quick_start.png',
       button: {
         text: 'READ MORE',
@@ -140,24 +130,16 @@ export default {
     },
     users: {
       title: 'Who is using Sentinel',
-      desc: <span>some description</span>,
+      desc: <p>Please <a href="https://github.com/alibaba/Sentinel/issues/18">leave a comment here</a> to tell us your scenario to make Sentinel better :)</p>,
       list: [
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
-        '/img/users_alibaba.png',
+        'https://docs.alibabagroup.com/assets2/images/en/global/logo_header.png',
+        'http://www.cntaiping.com/tplresource/cms/www/taiping/img/home_new/tp_logo_img.png',
+        'https://user-images.githubusercontent.com/9434884/48463502-2f48eb80-e817-11e8-984f-2f9b1b789e2d.png',
+        'https://user-images.githubusercontent.com/9434884/48463559-6cad7900-e817-11e8-87e4-42952b074837.png',
+        'https://home.missfresh.cn/statics/img/logo.png',
+        'https://user-images.githubusercontent.com/9434884/49358468-bc43de00-f70d-11e8-97fe-0bf05865f29f.png',
+        'https://user-images.githubusercontent.com/9434884/49355264-c6f87600-f701-11e8-8109-054cf91df868.png',
+        'http://cdn.52shangou.com/shandianbang/official-source/3.1.1/build/images/logo.png',
       ],
     },
   },

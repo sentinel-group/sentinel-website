@@ -8,7 +8,7 @@ export default {
             title: 'Tutorial',
             children: [
               {
-                title: 'Introduction',
+                title: 'Introduction to Sentinel',
                 link: '/en-us/docs/introduction.html',
               },
               {
@@ -16,7 +16,7 @@ export default {
                 link: '/en-us/docs/quick-start.html',
               },
               {
-                title: 'How It Works',
+                title: 'How Sentinel Works',
                 link: '/en-us/docs/basic-implementation.html',
               },
             ]
@@ -24,6 +24,10 @@ export default {
           {
             title: 'Feature Documentation',
             children: [
+              {
+                title: 'How to use (resource and rule)',
+                link: '/en-us/docs/basic-api-resource-rule.html',
+              },
               {
                 title: 'Flow Control',
                 link: '/en-us/docs/flow-control.html',

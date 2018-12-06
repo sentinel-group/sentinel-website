@@ -17,9 +17,16 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Guideline: 从 Hystrix 迁移到 Sentinel',
+        author: 'Eric Zhao',
+        dateStr: '2018.11.29',
+        desc: '本文将帮助您从 Hystrix 迁移到 Sentinel，并帮助您快速了解 Sentinel 的使用。',
+        link: '/zh-cn/blog/guideline-migrate-from-hystrix-to-sentinel.html',
+      },
+      {
         title: 'Sentinel 1.3.0 重磅发布',
         author: 'Eric Zhao',
-        dateStr: '2018.10.30',
+        dateStr: '2018.10.31',
         desc: 'Sentinel 1.3.0 GA 版本正式发布，提供功能完善的控制台。',
         link: '/zh-cn/blog/sentinel-1-3-0-release.html',
       },

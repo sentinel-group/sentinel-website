@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="guideline-migrate-from-hystrix-to-sentinel" />
+	<meta name="description" content="guideline-migrate-from-hystrix-to-sentinel" />
+	<!-- 网页标签标题 -->
+	<title>guideline-migrate-from-hystrix-to-sentinel</title>
+	<link rel="shortcut icon" href="/sentinel-website/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/sentinel-website/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/sentinel-website/zh-cn/index.html"><img class="logo" src="/sentinel-website/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/sentinel-website/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/sentinel-website/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/sentinel-website/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/sentinel-website/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/sentinel-website/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Guideline: 从 Hystrix 迁移到 Sentinel</h1>
+<p>本文将帮助您从 Hystrix 迁移到 Sentinel，并帮助您快速了解 Sentinel 的使用。</p>
+<table>
+<thead>
+<tr>
+<th>Hystrix 功能</th>
+<th>迁移方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线程池隔离/信号量隔离</td>
+<td>Sentinel 不支持线程池隔离；信号量隔离对应 Sentinel 中的线程数限流，详见<a href="#%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9A%94%E7%A6%BB">此处</a></td>
+</tr>
+<tr>
+<td>熔断器</td>
+<td>Sentinel 支持按平均响应时间、异常比率、异常数来进行熔断降级。从 Hystrix 的异常比率熔断迁移的步骤详见<a href="#%E7%86%94%E6%96%AD%E9%99%8D%E7%BA%A7">此处</a></td>
+</tr>
+<tr>
+<td>Command 创建</td>
+<td>直接使用 Sentinel <code>SphU</code> API 定义资源即可，资源定义与规则配置分离，详见<a href="#command-%E8%BF%81%E7%A7%BB">此处</a></td>
+</tr>
+<tr>
+<td>规则配置</td>
+<td>在 Sentinel 中可通过 API 硬编码配置规则，也支持多种动态规则源</td>
+</tr>
+<tr>
+<td>注解支持</td>
+<td>Sentinel 也提供注解支持，可以很方便地迁移，详见<a href="#%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81">此处</a></td>
+</tr>
+<tr>
+<td>开源框架支持</td>
+<td>Sentinel 提供 Servlet、Dubbo、Spring Cloud、gRPC 的适配模块，开箱即用；若之前使用 Spring Cloud Netflix，可迁移至 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a></td>
+</tr>
+</tbody>
+</table>
+<h2>功能对比</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Sentinel</th>
+<th>Hystrix</th>
+<th>resilience4j</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>隔离策略</td>
+<td>信号量隔离（并发线程数限流）</td>
+<td>线程池隔离/信号量隔离</td>
+<td>信号量隔离</td>
+</tr>
+<tr>
+<td>熔断降级策略</td>
+<td>基于响应时间、异常比率、异常数</td>
+<td>基于异常比率</td>
+<td>基于异常比率、响应时间</td>
+</tr>
+<tr>
+<td>实时统计实现</td>
+<td>滑动窗口（LeapArray）</td>
+<td>滑动窗口（基于 RxJava）</td>
+<td>Ring Bit Buffer</td>
+</tr>
+<tr>
+<td>动态规则配置</td>
+<td>支持多种数据源</td>
+<td>支持多种数据源</td>
+<td>有限支持</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>多个扩展点</td>
+<td>插件的形式</td>
+<td>接口的形式</td>
+</tr>
+<tr>
+<td>基于注解的支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>限流</td>
+<td>基于 QPS，支持基于调用关系的限流</td>
+<td>有限的支持</td>
+<td>Rate Limiter</td>
+</tr>
+<tr>
+<td>流量整形</td>
+<td>支持预热模式、匀速器模式、预热排队模式</td>
+<td>不支持</td>
+<td>简单的 Rate Limiter 模式</td>
+</tr>
+<tr>
+<td>系统自适应保护</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>控制台</td>
+<td>提供开箱即用的控制台，可配置规则、查看秒级监控、机器发现等</td>
+<td>简单的监控查看</td>
+<td>不提供控制台，可对接其它监控系统</td>
+</tr>
+</tbody>
+</table>
+<h2>Command 迁移</h2>
+<p>Hystrix 的执行模型设计上采用了命令模式，将对外部资源的调用逻辑和 fallback 逻辑封装成一个命令对象（<code>HystrixCommand</code> / <code>HystrixObservableCommand</code>），交由 Hystrix 执行。一个最简单的例子：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeCommand</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SomeCommand</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"SomeGroup"</span>))
+            <span class="hljs-comment">// command 定义</span>
+            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">"SomeCommand"</span>))
+            <span class="hljs-comment">// 规则配置</span>
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withFallbackEnabled(<span class="hljs-keyword">true</span>)
+            ));
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// 真正的业务逻辑</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello World!"</span>;
+    }
+}
+
+<span class="hljs-comment">// Hystrix 的执行方式</span>
+<span class="hljs-comment">// 同步执行：</span>
+String s = <span class="hljs-keyword">new</span> SomeCommand().execute();
+<span class="hljs-comment">// 异步执行 (交由 Hystrix 管理)</span>
+Observable&lt;String&gt; s = <span class="hljs-keyword">new</span> SomeCommand().observe();
+</code></pre>
+<p>而 Sentinel 并不指定执行模型，也不关注应用是如何执行的。在 Sentinel 中手动定义资源，只需要用 API 将其包装起来即可：</p>
+<pre><code class="language-java">Entry entry = <span class="hljs-keyword">null</span>;
+<span class="hljs-keyword">try</span> {
+    entry = SphU.entry(<span class="hljs-string">"resourceName"</span>);
+    <span class="hljs-comment">// 真正的业务逻辑.</span>
+    <span class="hljs-keyword">return</span> doSomeThing();
+} <span class="hljs-keyword">catch</span> (BlockException ex) {
+    <span class="hljs-comment">// 处理限流降级异常</span>
+} <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+        entry.exit();
+    }
+}
+</code></pre>
+<p>在 Hystrix 中，一般需要在 command 定义的时候就配置规则。而在 Sentinel 中资源定义和规则配置是分离的。用户先通过 Sentinel API 给对应的业务逻辑定义资源（埋点），然后可以在需要的时候配置规则。具体可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8">相关文档</a>。</p>
+<h2>线程池隔离</h2>
+<p>线程池隔离的好处是隔离度比较高，可以针对某个资源的线程池去进行处理而不影响其它资源，但是代价就是线程数目比较多，线程上下文切换的 overhead 比较大，特别是对低延时的调用有比较大的影响。Sentinel 没有提供线程池隔离这样比较重的隔离方式，而是提供了信号量隔离这种比较轻量级的隔离方式。</p>
+<h2>信号量隔离</h2>
+<p>Hystrix 的信号量隔离是在 Command 定义时配置的，比如：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CommandUsingSemaphoreIsolation</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> id;
+
+    <span class="hljs-comment">// 在 command 的构造函数配置信号量隔离模式，并指定最大并发量限制</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">CommandUsingSemaphoreIsolation</span><span class="hljs-params">(<span class="hljs-keyword">int</span> id)</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"SomeGroup"</span>))
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withExecutionIsolationStrategy(ExecutionIsolationStrategy.SEMAPHORE)
+                .withExecutionIsolationSemaphoreMaxConcurrentRequests(<span class="hljs-number">8</span>)));
+        <span class="hljs-keyword">this</span>.id = id;
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"result_"</span> + id;
+    }
+}
+</code></pre>
+<p>而在 Sentinel 中，信号量隔离是作为流量控制的一种模式（线程数模式）提供的，因此只需要给资源配置线程数限流规则即可：</p>
+<pre><code class="language-java">FlowRule rule = <span class="hljs-keyword">new</span> FlowRule(<span class="hljs-string">"doSomething"</span>) <span class="hljs-comment">// 资源名称</span>
+    .setGrade(RuleConstant.FLOW_GRADE_THREAD) <span class="hljs-comment">// 线程数模式 (信号量隔离)</span>
+    .setCount(<span class="hljs-number">8</span>); <span class="hljs-comment">// 最大并发数</span>
+FlowRuleManager.loadRules(Collections.singletonList(rule)); <span class="hljs-comment">// 加载规则</span>
+</code></pre>
+<p>如果应用接入了 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台</a>，也可以方便地在控制台上进行配置。</p>
+<p>同个资源可以配置多种规则，多条规则。</p>
+<h2>熔断降级</h2>
+<p>Hystrix 熔断器支持异常比率熔断模式，主要有以下配置项：</p>
+<ul>
+<li><code>circuitBreaker.errorThresholdPercentage</code>: 异常比率阈值，超出这个比率就会进行熔断</li>
+<li><code>circuitBreaker.sleepWindowInMilliseconds</code>: 熔断时长（保持 OPEN 状态的时长）</li>
+</ul>
+<p>示例：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FooServiceCommand</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-title">FooServiceCommand</span><span class="hljs-params">(HystrixCommandGroupKey group)</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"OtherGroup"</span>))
+            <span class="hljs-comment">// command key</span>
+            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">"fooService"</span>))
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withExecutionTimeoutInMilliseconds(<span class="hljs-number">500</span>)
+                .withCircuitBreakerRequestVolumeThreshold(<span class="hljs-number">5</span>)
+                .withCircuitBreakerErrorThresholdPercentage(<span class="hljs-number">50</span>)
+                .withCircuitBreakerSleepWindowInMilliseconds(<span class="hljs-number">10000</span>)
+            ));
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"some_result"</span>;
+    }
+}
+</code></pre>
+<p>在 Sentinel 中只需要对希望自动熔断降级的资源配置降级规则即可。比如与上面 Hystrix 示例相对应的规则：</p>
+<pre><code class="language-java">DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule(<span class="hljs-string">"fooService"</span>) <span class="hljs-comment">// 资源名称</span>
+    .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) <span class="hljs-comment">// 异常比率模式(秒级)</span>
+    .setCount(<span class="hljs-number">0.5</span>) <span class="hljs-comment">// 异常比率阈值(50%)</span>
+    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// 熔断降级时间(10s)</span>
+<span class="hljs-comment">// 加载规则.</span>
+DegradeRuleManager.loadRules(Collections.singletonList(rule));
+</code></pre>
+<p>如果接入了 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台</a>，也可以在控制台上直接配置熔断降级规则。</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/49210023-fa33c000-f3f6-11e8-98f4-436e5edc0b36.png" alt="image"></p>
+<p>除了异常比率模式之外，Sentinel 还支持根据平均响应时间、分钟级异常数进行自动熔断降级。</p>
+<h2>注解支持</h2>
+<p>Hystrix 提供了注解的方式来封装 command 并进行配置。以下是 Hystrix 注解的示例：</p>
+<pre><code class="language-java"><span class="hljs-comment">// 原本的业务方法</span>
+<span class="hljs-meta">@HystrixCommand</span>(fallbackMethod = <span class="hljs-string">"fallbackForGetUser"</span>)
+<span class="hljs-function">User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"getUserById command failed"</span>);
+}
+
+<span class="hljs-comment">// fallback 方法，原方法被降级的时候调用</span>
+<span class="hljs-function">User <span class="hljs-title">fallbackForGetUser</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>);
+}
+</code></pre>
+<p>Hystrix command 执行和规则是捆绑在一起的，因此配置规则是在 <code>@HystrixCommand</code> 注解中的 <code>commandProperties</code> 属性中配置，比如：</p>
+<pre><code class="language-java">    <span class="hljs-meta">@HystrixCommand</span>(commandProperties = {
+            <span class="hljs-meta">@HystrixProperty</span>(name = <span class="hljs-string">"circuitBreaker.errorThresholdPercentage"</span>, value = <span class="hljs-string">"50"</span>)
+        })
+    <span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+        <span class="hljs-keyword">return</span> userResource.getUserById(id);
+    }
+</code></pre>
+<p>而 Sentinel 并不指定执行模型，也不关注应用是如何执行的。Sentinel 的原则非常简单：根据对应资源配置的规则来为资源执行相应的限流/降级/负载保护策略。在 Sentinel 中资源定义和规则配置是分离的。用户先通过 Sentinel API 给对应的业务逻辑定义资源（埋点），然后可以在需要的时候配置规则。</p>
+<p>使用 Sentinel 注解的方式和 Hystrix 类似，步骤如下：</p>
+<ul>
+<li>引入注解支持依赖：<code>sentinel-annotation-aspectj</code>，并注入对应的 Aspect 实例（若使用 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a> 则会自动注入，不需要额外配置）；</li>
+<li>在需要进行限流/降级的方法上添加 <code>@SentinelResource</code> 注解并进行相应的配置（如配置 <code>fallback</code> 函数，配置 <code>blockHandler</code> 函数）；</li>
+<li>配置规则</li>
+</ul>
+<p>Sentinel 注解示例（<a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81">相关文档</a>）：</p>
+<pre><code class="language-java"><span class="hljs-comment">// 原本的业务方法.</span>
+<span class="hljs-meta">@SentinelResource</span>(fallback = <span class="hljs-string">"fallbackForGetUser"</span>)
+<span class="hljs-function">User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"getUserById command failed"</span>);
+}
+
+<span class="hljs-comment">// fallback 方法，原方法被降级的时候调用；若需要限流/系统保护的 fallback 可以配置 blockHandler.</span>
+<span class="hljs-function">User <span class="hljs-title">fallbackForGetUser</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>);
+}
+</code></pre>
+<p>配置规则按照 Sentinel 提供的配置规则的方式即可：</p>
+<ul>
+<li>通过 API 来进行配置（如 <code>DegradeRuleManager.loadRules(rules)</code> 方法）：</li>
+</ul>
+<pre><code class="language-java">DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule(<span class="hljs-string">"getUserById"</span>) <span class="hljs-comment">// 资源名称</span>
+    .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) <span class="hljs-comment">// 异常比率模式</span>
+    .setCount(<span class="hljs-number">0.5</span>) <span class="hljs-comment">// 异常比率阈值(50%)</span>
+    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// 熔断降级时间(10s)</span>
+DegradeRuleManager.loadRules(Collections.singletonList(rule));
+</code></pre>
+<ul>
+<li>通过 Sentinel 控制台进行规则配置和管理</li>
+</ul>
+<h2>开源框架适配</h2>
+<p>Sentinel 目前已经针对 Servlet、Dubbo、Spring Cloud、gRPC 等进行了适配，用户只需引入相应依赖并进行简单配置即可快速地接入 Sentinel，无需修改现有代码。若您之前在使用  Spring Cloud Netflix，可以考虑迁移到 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a> 体系中。</p>
+<h2>动态配置</h2>
+<p>Sentinel 提供 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95">动态规则数据源</a> 支持来动态地管理、读取配置的规则。Sentinel 提供的 <code>ReadableDataSource</code> 和 <code>WritableDataSource</code> 接口简单易用，非常方便使用。</p>
+<p>Sentinel 动态规则源针对常见的配置中心和远程存储进行适配，目前已支持 <strong>Nacos、ZooKeeper、Apollo、Redis</strong> 等多种动态规则源，可以覆盖到很多的生产场景。</p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/sentinel-website/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/sentinel-website/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/sentinel-website/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/sentinel-website/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/sentinel-website/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/sentinel-website/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '/sentinel-website';
+  </script>
+	<script src="/sentinel-website/build/blogDetail.js"></script>
+</body>
+</html>

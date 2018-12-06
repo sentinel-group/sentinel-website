@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="log" />
+	<meta name="description" content="log" />
+	<!-- 网页标签标题 -->
+	<title>log</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/demo1.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>入门</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>日志</h1>
+<h2>拦截详情日志</h2>
+<p>无论限流，降级还是系统保护，它们的秒级拦截详情日志都在 <code>{user_home}/logs/csp/sentinel-block.log</code>里。格式如下:</p>
+<pre><code>2014-06-20 16:35:10|1|sayHello(java.lang.String,long),FlowException,default,origin|61,0
+2014-06-20 16:35:11|1|sayHello(java.lang.String,long),FlowException,default,origin|1,0
+</code></pre>
+<ol>
+<li><code>2014-06-20 16:35:10</code>：时间戳；</li>
+<li><code>1</code>：序号；</li>
+<li><code>sayHello(java.lang.String,long)</code>：资源描述符；</li>
+<li><code>XXXException</code>：表示被限制的种类。<code>FlowException</code> 表示被限流，<code>DegradeException</code> 表示被降级，<code>SystemException</code> 表示被系统保护</li>
+<li><code>default</code>规则上配置的限制应用；</li>
+<li><code>origin</code>：实际被限制的来源应用，可能为空字符串；</li>
+<li><code>61,0</code>：61 代表这一秒内限流降级发生的次数，0 无含义（可忽略)。</li>
+</ol>
+<h2>秒级监控日志</h2>
+<p>所有的资源都会产生秒级日志，它在 <code>{user_home}/logs/csp/{app_name}-{pid}-metrics.log</code>里。格式如下:</p>
+<pre><code>1532415661000|2018-07-24 15:01:01|sayHello(java.lang.String)|12|3|4|2|295
+</code></pre>
+<ol>
+<li><code>1532415661000</code>：时间戳</li>
+<li><code>2018-07-24 15:01:01</code>：格式化之后的时间戳</li>
+<li><code>sayHello(java.lang.String)</code>：资源名</li>
+<li><code>12</code>：表示到来的数量，即此刻通过 Sentinel 规则 check 的数量（passed QPS）</li>
+<li><code>3</code>：实际该资源被拦截的数量（blocked QPS）</li>
+<li><code>4</code>：每秒结束的资源个数（完成调用），包括正常结束和异常结束的情况（exit QPS）</li>
+<li><code>2</code>：异常的数量</li>
+<li><code>295</code>：资源的平均响应时间（RT）</li>
+</ol>
+<h2>业务日志</h2>
+<p>其它的日志在 <code>{user_home}/logs/csp/record.log</code>里。该日志包含规则的推送、接收、处理等记录。</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/demo1.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/demo2.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/demo3.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="flow-control" />
+	<meta name="description" content="flow-control" />
+	<!-- 网页标签标题 -->
+	<title>flow-control</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/demo1.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>入门</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>流量控制</h1>
+<h2>目录</h2>
+<ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8Eqps%E5%B9%B6%E5%8F%91%E6%95%B0%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6">基于 QPS/并发数的流量控制</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6">基于调用关系的流量控制</a></li>
+</ul>
+<h2>概述</h2>
+<p><code>FlowSlot</code> 会根据预设的规则，结合前面 <code>NodeSelectorSlot</code>、<code>ClusterNodeBuilderSlot</code>、<code>StatistcSlot</code> 统计出来的实时信息进行流量控制。</p>
+<p>限流的直接表现是在执行 <code>Entry nodeA = SphU.entry(资源名字)</code> 的时候抛出 <code>FlowException</code> 异常。<code>FlowException</code> 是 <code>BlockException</code> 的子类，您可以捕捉 <code>BlockException</code> 来自定义被限流之后的处理逻辑。</p>
+<p>同一个资源可以对应多条限流规则。<code>FlowSlot</code> 会对该资源的所有限流规则依次遍历，直到有规则触发限流或者所有规则遍历完毕。</p>
+<p>一条限流规则主要由下面几个因素组成，我们可以组合这些元素来实现不同的限流效果：</p>
+<ul>
+<li><code>resource</code>：资源名，即限流规则的作用对象</li>
+<li><code>count</code>: 限流阈值</li>
+<li><code>grade</code>: 限流阈值类型，QPS 或线程数</li>
+<li><code>strategy</code>: 根据调用关系选择策略</li>
+</ul>
+<h2>基于QPS/并发数的流量控制</h2>
+<p>流量控制主要有两种统计类型，一种是统计线程数，另外一种则是统计 QPS。类型由 <code>FlowRule.grade</code> 字段来定义。其中，0 代表根据并发数量来限流，1 代表根据 QPS 来进行流量控制。其中线程数、QPS 值，都是由 <code>StatisticSlot</code> 实时统计获取的。</p>
+<p>可以通过下面的命令查看实时统计信息：</p>
+<pre><code class="language-shell">curl http://localhost:8719/cnode?id=resourceName
+</code></pre>
+<p>输出内容格式如下：</p>
+<pre><code>idx id   thread  pass  blocked   success  total Rt   1m-pass   1m-block   1m-all   exeption
+2   abc647 0     46     0           46     46   1       2763      0         2763     0
+</code></pre>
+<p>其中：</p>
+<ul>
+<li>thread： 代表当前处理该资源的线程数；</li>
+<li>pass： 代表一秒内到来到的请求；</li>
+<li>blocked： 代表一秒内被流量控制的请求数量；</li>
+<li>success： 代表一秒内成功处理完的请求；</li>
+<li>total： 代表到一秒内到来的请求以及被阻止的请求总和；</li>
+<li>RT： 代表一秒内该资源的平均响应时间；</li>
+<li>1m-pass： 则是一分钟内到来的请求；</li>
+<li>1m-block： 则是一分钟内被阻止的请求；</li>
+<li>1m-all： 则是一分钟内到来的请求和被阻止的请求的总和；</li>
+<li>exception： 则是一秒内业务本身异常的总和。</li>
+</ul>
+<h3>2.1 并发线程数流量控制</h3>
+<p>线程数限流用于保护业务线程数不被耗尽。例如，当应用所依赖的下游应用由于某种原因导致服务不稳定、响应延迟增加，对于调用者来说，意味着吞吐量下降和更多的线程数占用，极端情况下甚至导致线程池耗尽。为应对高线程占用的情况，业内有使用隔离的方案，比如通过不同业务逻辑使用不同线程池来隔离业务自身之间的资源争抢（线程池隔离），或者使用信号量来控制同时请求的个数（信号量隔离）。这种隔离方案虽然能够控制线程数量，但无法控制请求排队时间。当请求过多时排队也是无益的，直接拒绝能够迅速降低系统压力。Sentinel线程数限流不负责创建和管理线程池，而是简单统计当前请求上下文的线程个数，如果超出阈值，新的请求会被立即拒绝。</p>
+<p>例子参见：<a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/flow/FlowThreadDemo.java">ThreadDemo</a></p>
+<h3>2.2 QPS流量控制</h3>
+<p>当 QPS 超过某个阈值的时候，则采取措施进行流量控制。流量控制的手段包括下面 3 种，对应 <code>FlowRule</code> 中的 <code>controlBehavior</code> 字段：</p>
+<ol>
+<li>
+<p>直接拒绝（<code>RuleConstant.CONTROL_BEHAVIOR_DEFAULT</code>）方式。该方式是默认的流量控制方式，当QPS超过任意规则的阈值后，新的请求就会被立即拒绝，拒绝方式为抛出<code>FlowException</code>。这种方式适用于对系统处理能力确切已知的情况下，比如通过压测确定了系统的准确水位时。具体的例子参见 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/flow/FlowQpsDemo.java">FlowqpsDemo</a>。</p>
+</li>
+<li>
+<p>冷启动（<code>RuleConstant.CONTROL_BEHAVIOR_WARM_UP</code>）方式。该方式主要用于系统长期处于低水位的情况下，当流量突然增加时，直接把系统拉升到高水位可能瞬间把系统压垮。通过&quot;冷启动&quot;，让通过的流量缓慢增加，在一定时间内逐渐增加到阈值上限，给冷系统一个预热的时间，避免冷系统被压垮的情况。具体的例子参见 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/flow/WarmUpFlowDemo.java">WarmUpFlowDemo</a>。</p>
+</li>
+</ol>
+<p>通常冷启动的过程系统允许通过的 QPS 曲线如下图所示：</p>
+<p><img src="https://github.com/alibaba/Sentinel/wiki/image/warmup.gif" alt="冷启动过程 QPS 曲线"></p>
+<ol start="3">
+<li>匀速器（<code>RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER</code>）方式。这种方式严格控制了请求通过的间隔时间，也即是让请求以均匀的速度通过，对应的是漏桶算法。具体的例子参见 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/flow/PaceFlowDemo.java">PaceFlowDemo</a>。</li>
+</ol>
+<p>该方式的作用如下图所示：</p>
+<p><img src="https://github.com/alibaba/Sentinel/wiki/image/queue.gif" alt=""></p>
+<p>这种方式主要用于处理间隔性突发的流量，例如消息队列。想象一下这样的场景，在某一秒有大量的请求到来，而接下来的几秒则处于空闲状态，我们希望系统能够在接下来的空闲期间逐渐处理这些请求，而不是在第一秒直接拒绝多余的请求。</p>
+<h2>基于调用关系的流量控制</h2>
+<p>调用关系包括调用方、被调用方；方法又可能会调用其它方法，形成一个调用链路的层次关系。Sentinel 通过 <code>NodeSelectorSlot</code> 建立不同资源间的调用的关系，并且通过 <code>ClusterNodeBuilderSlot</code> 记录每个资源的实时统计信息。</p>
+<p>有了调用链路的统计信息，我们可以衍生出多种流量控制手段。</p>
+<h3>3.1 根据调用方限流</h3>
+<p><code>ContextUtil.enter(resourceName, origin)</code> 方法中的 <code>origin</code> 参数标明了调用方身份。这些信息会在 <code>ClusterBuilderSlot</code> 中被统计。可通过以下命令来展示不同的调用方对同一个资源的调用数据：</p>
+<pre><code class="language-shell">curl http://localhost:8719/origin/id=nodeA
+</code></pre>
+<p>调用数据示例：</p>
+<pre><code>id: nodeA
+idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1m-total 
+1   caller1 0         0         0          0        0     0         0          0
+2   caller2 0         0         0          0        0     0         0          0
+</code></pre>
+<p>上面这个命令展示了资源名为 <code>nodeA</code> 的资源被两个不同的调用方调用的统计。</p>
+<p>限流规则中的 <code>limitApp</code> 字段用于根据调用方进行流量控制。该字段的值有以下三种选项，分别对应不同的场景：</p>
+<ul>
+<li><code>default</code>：表示不区分调用者，来自任何调用者的请求都将进行限流统计。如果这个资源名的调用总和超过了这条规则定义的阈值，则触发限流。</li>
+<li><code>{some_origin_name}</code>：表示针对特定的调用者，只有来自这个调用者的请求才会进行流量控制。例如 <code>NodeA</code> 配置了一条针对调用者<code>caller1</code>的规则，那么当且仅当来自 <code>caller1</code> 对 <code>NodeA</code> 的请求才会触发流量控制。</li>
+<li><code>other</code>：表示针对除 <code>{some_origin_name}</code> 以外的其余调用方的流量进行流量控制。例如，资源<code>NodeA</code>配置了一条针对调用者 <code>caller1</code> 的限流规则，同时又配置了一条调用者为 <code>other</code> 的规则，那么任意来自非 <code>caller1</code> 对 <code>NodeA</code> 的调用，都不能超过 <code>other</code> 这条规则定义的阈值。</li>
+</ul>
+<p>同一个资源名可以配置多条规则，规则的生效顺序为：<strong>{some_origin_name} &gt; other &gt; default</strong></p>
+<h3>3.2 根据调用链路入口限流：链路限流</h3>
+<p><code>NodeSelectorSlot</code> 中记录了资源之间的调用链路，这些资源通过调用关系，相互之间构成一棵调用树。这棵树的根节点是一个名字为 <code>machine-root</code> 的虚拟节点，调用链的入口都是这个虚节点的子节点。</p>
+<p>一棵典型的调用树如下图所示：</p>
+<pre><code>     	          machine-root
+                    /       \
+                   /         \
+             Entrance1     Entrance2
+                /             \
+               /               \
+      DefaultNode(nodeA)   DefaultNode(nodeA)
+</code></pre>
+<p>上图中来自入口 <code>Entrance1</code> 和 <code>Entrance2</code> 的请求都调用到了资源 <code>NodeA</code>，Sentinel 允许只根据某个入口的统计信息对资源限流。比如我们可以设置 <code>FlowRule.strategy</code> 为 <code>RuleConstant.CHAIN</code>，同时设置 <code>FlowRule.ref_identity</code> 为 <code>Entrance1</code> 来表示只有从入口 <code>Entrance1</code> 的调用才会记录到 <code>NodeA</code> 的限流统计当中，而对来自 <code>Entrance2</code> 的调用漠不关心。</p>
+<p>调用链的入口是通过 API 方法 <code>ContextUtil.enter(name)</code> 定义的。</p>
+<h3>3.3 具有关系的资源流量控制：关联流量控制</h3>
+<p>当两个资源之间具有资源争抢或者依赖关系的时候，这两个资源便具有了关联。比如对数据库同一个字段的读操作和写操作存在争抢，读的速度过高会影响写得速度，写的速度过高会影响读的速度。如果放任读写操作争抢资源，则争抢本身带来的开销会降低整体的吞吐量。可使用关联限流来避免具有关联关系的资源之间过度的争抢，举例来说，<code>read_db</code> 和 <code>write_db</code> 这两个资源分别代表数据库读写，我们可以给 <code>read_db</code> 设置限流规则来达到写优先的目的：设置 <code>FlowRule.strategy</code> 为 <code>RuleConstant.RELATE</code> 同时设置 <code>FlowRule.ref_identity</code> 为 <code>write_db</code>。这样当写库操作过于频繁时，读数据的请求会被限流。</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/demo1.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/demo2.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/demo3.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

@@ -27,7 +27,7 @@ Sentinel 的 [动态规则数据源](https://github.com/alibaba/Sentinel/wiki/%E
 
 若应用未注册任何数据源，直接从 Sentinel 控制台推送规则的过程非常简单：
 
-![Original push rules from Sentinel Dashboard](https://cdn.nlark.com/lark/0/2018/png/47688/1536660296273-4f440bba-5b9e-4205-9402-fb6083b66912.png) 
+![Original push rules from Sentinel Dashboard](https://camo.githubusercontent.com/96b07d598c9eee5a513801cecc68f266fbe58d14/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f6c61726b2f302f323031382f706e672f34373638382f313533363636303239363237332d34663434306262612d356239652d343230352d393430322d6662363038336236363931322e706e67) 
 
 Sentinel 控制台通过 API 将规则推送至客户端并直接更新到内存中。这种情况下应用重启规则就会消失，仅用于简单测试，不能用于生产环境。一般在生产环境中，我们需要在应用端配置规则数据源。
 
@@ -62,7 +62,7 @@ public class FileDataSourceInit implements InitFunc {
 
 本地文件数据源会定时轮询文件的变更，读取规则。这样我们既可以在应用本地直接修改文件来更新规则，也可以通过 Sentinel 控制台推送规则。以本地文件数据源为例，推送过程如下图所示：
 
-![Push rules from Sentinel Dashboard to local file](https://cdn.nlark.com/lark/0/2018/png/47688/1536660311826-addf4ff6-9fc9-4586-ba8b-4caf3a91457d.png) 
+![Push rules from Sentinel Dashboard to local file](https://camo.githubusercontent.com/991ac2f6a21b0a54263576341d3beca9edc93389/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f6c61726b2f302f323031382f706e672f34373638382f313533363636303331313832362d61646466346666362d396663392d343538362d626138622d3463616633613931343537642e706e67) 
 
 首先 Sentinel 控制台通过 API 将规则推送至客户端并更新到内存中，接着注册的写数据源会将新的规则保存到本地的文件中。使用 pull 模式的数据源时一般不需要对 Sentinel 控制台进行改造。
 
@@ -72,7 +72,7 @@ public class FileDataSourceInit implements InitFunc {
 
 假设写入的操作也由数据源进行，那么 Sentinel 客户端收到控制台推送的规则后，将新的规则更新到内存中，同时将规则推送至远程的配置中心。此时，数据源监听到配置中心推送过来的新规则，又一次更新到内存中。也就是说应用在本地更新完规则并推送到远程后，又要接收变更并更新一次，这样显然是不合理的。因此推送规则正确做法应该是 **配置中心控制台/Sentinel 控制台 → 配置中心 → Sentinel 数据源 → Sentinel**，而不是经 Sentinel 数据源推送至配置中心。这样的流程就非常清晰了：
 
-![Remote push rules to config center](https://cdn.nlark.com/lark/0/2018/png/47688/1536660393347-c5bc2ad6-0d00-4871-8b9b-388f437611ef.png) 
+![Remote push rules to config center](https://camo.githubusercontent.com/e612b90a4c7065edd8ee2890e1a0da135017b713/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f6c61726b2f302f323031382f706e672f34373638382f313533363636303339333334372d63356263326164362d306430302d343837312d386239622d3338386634333736313165662e706e67) 
 
 注意由于不同的生产环境可能使用不同的数据源，从 Sentinel 控制台推送至配置中心的实现需要用户自行改造。以 ZooKeeper 为例，我们可以按照如下步骤进行改造（假设推送维度为应用维度）：
 

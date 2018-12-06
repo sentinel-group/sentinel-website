@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="dashboard" />
+	<meta name="description" content="dashboard" />
+	<!-- 网页标签标题 -->
+	<title>dashboard</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/demo1.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>入门</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Sentinel 控制台</h1>
+<h2>1. 概述</h2>
+<p>Sentinel 控制台提供一个轻量级的控制台，它提供机器发现、单机资源实时监控、集群资源汇总，以及规则管理的功能。您只需要对应用进行简单的配置，就可以使用这些功能。</p>
+<p><strong>注意:</strong> 集群资源汇总仅支持 500 台以下的应用集群，有大概 1 - 2 秒的延时。</p>
+<p><img src="./image/dashboard.png" alt="Dashboard"></p>
+<h2>2. 启动控制台</h2>
+<h3>2.1 获取 Sentinel 控制台</h3>
+<p>您可以从 <a href="https://github.com/alibaba/Sentinel/releases">release 页面</a> 下载最新版本的控制台 jar 包。</p>
+<p>您也可以从最新版本的源码自行构建 Sentinel 控制台：</p>
+<ul>
+<li>下载 <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-dashboard">控制台</a> 工程</li>
+<li>使用以下命令将代码打包成一个 fat jar: <code>mvn clean package</code></li>
+</ul>
+<h3>2.2 启动</h3>
+<blockquote>
+<p><strong>注意</strong>：启动 Sentinel 控制台需要 JDK 版本为 1.8 及以上版本。</p>
+</blockquote>
+<p>使用如下命令启动控制台：</p>
+<pre><code class="language-bash">java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar
+</code></pre>
+<p>其中 <code>-Dserver.port=8080</code> 用于指定 Sentinel 控制台端口为 <code>8080</code>。</p>
+<h2>3. 客户端接入控制台</h2>
+<p>控制台启动后，客户端需要按照以下步骤接入到控制台。</p>
+<h3>3.1 引入JAR包</h3>
+<p>客户端需要引入 Transport 模块来与 Sentinel 控制台进行通信。您可以通过 <code>pom.xml</code> 引入 JAR 包:</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h3>3.2 配置启动参数</h3>
+<p>启动时加入 JVM 参数 <code>-Dcsp.sentinel.dashboard.server=consoleIp:port</code> 指定控制台地址和端口。若启动多个应用，则需要通过 <code>-Dcsp.sentinel.api.port=xxxx</code> 指定客户端监控 API 的端口（默认是 8719）。</p>
+<p>除了修改 JVM 参数，也可以通过配置文件取得同样的效果。更详细的信息可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%A1%B9">启动配置项</a>。</p>
+<h3>3.3 触发客户端初始化</h3>
+<p><strong>确保客户端有访问量</strong>，Sentinel 会在<strong>客户端首次调用的时候</strong>进行初始化，开始向控制台发送心跳包。</p>
+<h2>4. 查看机器列表和监控</h2>
+<blockquote>
+<p>注意：若接入 Sentinel 控制台不成功，可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/FAQ#q-sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%B2%A1%E6%9C%89%E6%98%BE%E7%A4%BA%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E6%88%96%E8%80%85%E6%B2%A1%E6%9C%89%E7%9B%91%E6%8E%A7%E5%B1%95%E7%A4%BA%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5">FAQ</a> 排查问题。</p>
+</blockquote>
+<blockquote>
+<p>注意：请确保在使用较新版本的浏览器，我们不保证支持旧版本的浏览器。</p>
+</blockquote>
+<h3>4.1 &quot;机器列表&quot;中显示机器</h3>
+<p>当您在机器列表中看到您的机器，就代表着您已经成功接入控制台；如果没有看到您的机器，请检查配置，并通过 <code>record.log</code> 和 <code>metricStat.log.pid&lt;Pid No&gt;.&lt;Date&gt;</code>来排查原因，详细的部分请参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%97%A5%E5%BF%97">日志文档</a>。</p>
+<p><img src="./image/machinediscover.png" alt="machinediscover"></p>
+<h3>4.2 &quot;簇点链路&quot;中显示刚刚调用的资源</h3>
+<p>簇点链路实时的去拉取指定客户端资源的运行情况，它一共提供两种展示模式：一种用树状结构展示资源的调用链路，另外一种则不区分调用链路展示资源的运行情况。</p>
+<p><strong>注意:</strong> 簇点监控是内存态的信息，它仅展示启动后调用过的资源。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">树状链路</th>
+<th style="text-align:left">平铺链路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="./image/resourceTree.png" alt="resourceTree"></td>
+<td style="text-align:left"><img src="./image/sentine_dashboard.gif" alt="cluster"></td>
+</tr>
+</tbody>
+</table>
+<h3>4.3 &quot;实时监控&quot;汇总资源信息</h3>
+<p>同时，同一个服务下的所有机器的簇点信息会被汇总，并且秒级地展示在&quot;实时监控&quot;下。</p>
+<p><strong>注意:</strong> 实时监控仅存储 5 分钟以内的数据，如果需要持久化，需要通过调用<a href="https://github.com/alibaba/Sentinel/wiki/%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7">实时监控</a>接口来定制。</p>
+<p><img src="./image/dashboard.png" alt="Dashboard"></p>
+<blockquote>
+<p>注意：请确保 Sentinel 控制台所在的机器时间与自己应用的机器时间保持一致，否则会导致拉不到实时的监控数据。</p>
+</blockquote>
+<h2>5. 规则管理及推送</h2>
+<p>控制台同时提供简单的规则管理以及推送的功能。</p>
+<h3>5.1 规则管理</h3>
+<p>您可以在控制台通过客户端开放的 HTTP 命令来查询规则，详情请参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99">规则查询更改</a>。</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/48189045-2ae58400-e37a-11e8-84aa-2e2c0dd042e2.png" alt="rules"></p>
+<h3>5.2 规则推送</h3>
+<p><img src="https://user-images.githubusercontent.com/9434884/48189035-25883980-e37a-11e8-8f25-3f3f5be23f0e.png" alt="dashboard-add-rule"></p>
+<p>目前控制台的规则推送也是通过 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99">规则查询更改</a> HTTP 命令来更改规则。这也意味着这些规则仅在内存态生效，应用重启之后，该规则会丢失。</p>
+<p>同时我们非常鼓励您通过 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95">动态规则</a> 并结合各种外部存储来定制自己的规则源。我们推荐通过动态配置源的控制台来进行规则写入和推送，而不是通过 Sentinel 客户端直接写入到动态配置源中。</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/demo1.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/demo2.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/demo3.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

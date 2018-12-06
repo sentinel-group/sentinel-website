@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="basic-use" />
+	<meta name="description" content="basic-use" />
+	<!-- 网页标签标题 -->
+	<title>basic-use</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/demo1.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>入门</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>基本使用 - 资源与规则</h1>
+<h2>目录</h2>
+<ul>
+<li><a href="#%E7%AE%80%E4%BB%8B">简介</a></li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90">定义资源</a>
+<ul>
+<li><a href="#%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90">抛出异常的方式定义资源</a></li>
+<li><a href="#%E8%BF%94%E5%9B%9E%E5%B8%83%E5%B0%94%E5%80%BC%E6%96%B9%E5%BC%8F%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90">返回布尔值方式定义资源</a></li>
+<li><a href="#%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90">注解方式定义资源</a></li>
+<li><a href="#%E5%88%A4%E6%96%AD%E9%99%90%E6%B5%81%E9%99%8D%E7%BA%A7%E5%BC%82%E5%B8%B8">判断限流降级异常</a></li>
+<li><a href="#%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%E6%94%AF%E6%8C%81">异步调用支持</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99">定义规则</a>
+<ul>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E8%A7%84%E5%88%99%E7%9A%84%E5%AE%9A%E4%B9%89">规则的定义</a></li>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99">查询修改规则</a></li>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E8%A7%84%E5%88%99">定制规则推送方式</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%84%E5%88%99%E7%94%9F%E6%95%88%E7%9A%84%E6%95%88%E6%9E%9C">规则生效的效果</a></li>
+</ul>
+<h2>简介</h2>
+<p>我们说的资源，可以是任何东西，服务，服务里的方法，甚至是一段代码。使用 Sentinel 来进行资源保护，主要分为两个步骤:</p>
+<ol>
+<li>定义资源</li>
+<li>定义规则</li>
+</ol>
+<p>先把可能需要保护的资源定义好，之后再配置规则。也可以理解为，只要有了资源，我们就可以在任何时候灵活地定义各种流量控制规则。在编码的时候，只需要考虑这个代码是否需要保护，如果需要保护，就将之定义为一个资源。</p>
+<p>对于主流的框架，我们提供适配，只需要按照适配中的说明配置，Sentinel 就会默认定义提供的服务，方法等为资源。</p>
+<h2>定义资源</h2>
+<h3>抛出异常的方式定义资源</h3>
+<p>用这种方式，当资源发生了限流之后会抛出 <code>BlockException</code>。这个时候可以捕捉异常，进行限流之后的逻辑处理。示例代码如下:</p>
+<pre><code class="language-java">Entry entry = <span class="hljs-keyword">null</span>;
+<span class="hljs-comment">// 务必保证finally会被执行</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-comment">// 资源名可使用任意有业务语义的字符串</span>
+  entry = SphU.entry(<span class="hljs-string">"自定义资源名"</span>);
+  <span class="hljs-comment">/**
+   * 被保护的业务逻辑
+   */</span>
+} <span class="hljs-keyword">catch</span> (BlockException e1) {
+  <span class="hljs-comment">// 资源访问阻止，被限流或被降级</span>
+  <span class="hljs-comment">// 进行相应的处理操作</span>
+} <span class="hljs-keyword">finally</span> {
+  <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+    entry.exit();
+  }
+}
+</code></pre>
+<h3>返回布尔值方式定义资源</h3>
+<p>用这种方式，当资源发生了限流之后会返回 <code>false</code>，这个时候可以根据返回值，进行限流之后的逻辑处理。示例代码如下:</p>
+<pre><code class="language-java">  <span class="hljs-comment">// 资源名可使用任意有业务语义的字符串</span>
+  <span class="hljs-keyword">if</span> (SphO.entry(<span class="hljs-string">"自定义资源名"</span>)) {
+    <span class="hljs-comment">// 务必保证finally会被执行</span>
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-comment">/**
+      * 被保护的业务逻辑
+      */</span>
+    } <span class="hljs-keyword">finally</span> {
+      SphO.exit();
+    }
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 资源访问阻止，被限流或被降级</span>
+    <span class="hljs-comment">// 进行相应的处理操作</span>
+  }
+</code></pre>
+<h3>注解方式定义资源</h3>
+<p>Sentinel 支持通过 <code>@SentinelResource</code> 注解定义资源并配置 <code>blockHandler</code> 和 <code>fallback</code> 函数。详情可以参见 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81">Sentinel 注解支持文档</a>。</p>
+<h3>业务异常统计</h3>
+<p>如果用户通过 <code>SphU</code> 或 <code>SphO</code> 手动定义资源，则 Sentinel 不能感知上层业务的异常，需要手动调用 <code>Tracer.trace(ex)</code> 来记录业务异常，否则对应的异常不会统计到 Sentinel 异常计数中。</p>
+<p>从 1.4.0 版本开始，注解方式定义资源支持自动统计业务异常，无需手动调用 <code>Tracer.trace(ex)</code> 来记录业务异常。Sentinel 1.4.0 以前的版本需要手动记录。</p>
+<h3>判断限流降级异常</h3>
+<p>通过以下方法判断：</p>
+<pre><code class="language-java">BlockException.isBlockException(Throwable t);
+</code></pre>
+<h3>异步调用支持</h3>
+<p>Sentinel 从 0.2.0 版本开始支持异步调用资源的定义。在异步调用中，需要通过 <code>SphU.asyncEntry(xxx)</code> 方法定义资源，并通常需要在异步的回调函数中调用 <code>exit</code> 方法。以下是一个简单的示例：</p>
+<pre><code class="language-java"><span class="hljs-keyword">try</span> {
+    AsyncEntry entry = SphU.asyncEntry(resourceName);
+
+    <span class="hljs-comment">// 异步调用.</span>
+    doAsync(userId, result -&gt; {
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-comment">// 在此处处理异步调用的结果.</span>
+        } <span class="hljs-keyword">finally</span> {
+            <span class="hljs-comment">// 在回调结束后 exit.</span>
+            entry.exit();
+        }
+    });
+} <span class="hljs-keyword">catch</span> (BlockException ex) {
+    <span class="hljs-comment">// Request blocked.</span>
+    <span class="hljs-comment">// Handle the exception (e.g. retry or fallback).</span>
+}
+</code></pre>
+<p><code>SphU.asyncEntry(xxx)</code> 不会影响当前（调用线程）的 Context，因此以下两个 entry 在调用链上是平级关系（处于同一层），而不是嵌套关系：</p>
+<pre><code class="language-java"><span class="hljs-comment">// 调用链类似于：</span>
+<span class="hljs-comment">// -parent</span>
+<span class="hljs-comment">// ---asyncResource</span>
+<span class="hljs-comment">// ---syncResource</span>
+asyncEntry = SphU.asyncEntry(asyncResource);
+entry = SphU.entry(normalResource);
+</code></pre>
+<p>若在异步回调中需要嵌套其它的资源调用（无论是 <code>entry</code> 还是 <code>asyncEntry</code>），只需要借助 Sentinel 提供的上下文切换功能，在对应的地方通过 <code>ContextUtil.runOnContext(context, f)</code> 进行 Context 变换，将对应资源调用处的 Context 切换为生成的异步 Context，即可维持正确的调用链路关系。示例如下：</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handleResult</span><span class="hljs-params">(String result)</span> </span>{
+    Entry entry = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">try</span> {
+        entry = SphU.entry(<span class="hljs-string">"handleResultForAsync"</span>);
+        <span class="hljs-comment">// Handle your result here.</span>
+    } <span class="hljs-keyword">catch</span> (BlockException ex) {
+        <span class="hljs-comment">// Blocked for the result handler.</span>
+    } <span class="hljs-keyword">finally</span> {
+        <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+            entry.exit();
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">someAsync</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">try</span> {
+        AsyncEntry entry = SphU.asyncEntry(resourceName);
+
+        <span class="hljs-comment">// Asynchronous invocation.</span>
+        doAsync(userId, result -&gt; {
+            <span class="hljs-comment">// 在异步回调中进行上下文变换，通过 AsyncEntry 的 getAsyncContext 方法获取异步 Context</span>
+            ContextUtil.runOnContext(entry.getAsyncContext(), () -&gt; {
+                <span class="hljs-keyword">try</span> {
+                    <span class="hljs-comment">// 此处嵌套正常的资源调用.</span>
+                    handleResult(result);
+                } <span class="hljs-keyword">finally</span> {
+                    entry.exit();
+                }
+            });
+        });
+    } <span class="hljs-keyword">catch</span> (BlockException ex) {
+        <span class="hljs-comment">// Request blocked.</span>
+        <span class="hljs-comment">// Handle the exception (e.g. retry or fallback).</span>
+    }
+}
+</code></pre>
+<p>此时的调用链就类似于：</p>
+<pre><code>-parent
+---asyncInvocation
+-----handleResultForAsync
+</code></pre>
+<p>更详细的示例可以参考 Demo 中的 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-basic/src/main/java/com/alibaba/csp/sentinel/demo/AsyncEntryDemo.java">AsyncEntryDemo</a>，里面包含了普通资源与异步资源之间的各种嵌套示例。</p>
+<h2>主流框架的适配</h2>
+<p>为了减少开发的复杂程度，我们对大部分的主流框架，例如 Dubbo, RocketMQ, Spring Cloud 等都做了适配。您只需要引入对应的依赖，它们的方法，服务，都会进行默认的埋点。</p>
+<p>参见: <a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D">主流框架的适配</a></p>
+<h2>定义规则</h2>
+<p>Sentinel 的所有规则都可以在内存态中动态地查询及修改，修改之后立即生效。同时 Sentinel 也提供相关 API，供您来定制自己的规则策略。</p>
+<h3>规则的定义</h3>
+<p>Sentinel 支持以下几种规则：<strong>流量控制规则</strong>、<strong>熔断降级规则</strong>、<strong>系统保护规则</strong> 以及 <strong>授权规则</strong>。</p>
+<h3>流量控制规则 (FlowRule)</h3>
+<h4>流量规则的定义</h4>
+<p>重要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:left">资源名，资源名是限流规则的作用对象</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">限流阈值</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:left">限流阈值类型，是按照 QPS 还是线程数</td>
+<td style="text-align:left">QPS 模式</td>
+</tr>
+<tr>
+<td style="text-align:center">limitApp</td>
+<td style="text-align:left">是否根据调用者来限流</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td style="text-align:center">strategy</td>
+<td style="text-align:left">判断的根据是资源自身，还是根据其它资源 (<code>refResource</code>)，还是根据链路入口 (<code>refResource</code>)</td>
+<td style="text-align:left">根据资源本身</td>
+</tr>
+<tr>
+<td style="text-align:center">controlBehavior</td>
+<td style="text-align:left">发生拦截后的流量整形和控制策略（直接拒绝 / 排队等待 / 慢启动模式）</td>
+<td style="text-align:left">直接拒绝</td>
+</tr>
+</tbody>
+</table>
+<p>同一个资源可以同时有多个限流规则。</p>
+<h4>通过代码定义流量控制规则</h4>
+<p>理解上面规则的定义之后，我们可以通过调用 <code>FlowRuleManager.loadRules()</code> 方法来用硬编码的方式定义流量控制规则，比如：</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initFlowQpsRule</span><span class="hljs-params">()</span> </span>{
+        List&lt;FlowRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+        FlowRule rule1 = <span class="hljs-keyword">new</span> FlowRule();
+        rule1.setResource(KEY);
+        <span class="hljs-comment">// set limit qps to 20</span>
+        rule1.setCount(<span class="hljs-number">20</span>);
+        rule1.setGrade(RuleConstant.FLOW_GRADE_QPS);
+        rule1.setLimitApp(<span class="hljs-string">"default"</span>);
+        rules.add(rule1);
+        FlowRuleManager.loadRules(rules);
+    }
+</code></pre>
+<p>更多详细内容可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6">流量控制</a>。</p>
+<h3>熔断降级规则 (DegradeRule)</h3>
+<p>熔断降级规则包含下面几个重要的属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:left">资源名，资源名是限流规则的作用对象</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">限流阈值</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:left">降级模式，根据 RT 降级还是根据异常比例降级</td>
+<td style="text-align:left">RT</td>
+</tr>
+<tr>
+<td style="text-align:center">timeWindow</td>
+<td style="text-align:left">降级的时间</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>同一个资源可以同时有多个降级规则。</p>
+<p>理解上面规则的定义之后，我们可以通过调用 <code>DegradeRuleManager.loadRules()</code> 方法来用硬编码的方式定义流量控制规则。</p>
+<pre><code class="language-java"> <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initDegradeRule</span><span class="hljs-params">()</span> </span>{
+        List&lt;DegradeRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+        DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule();
+        rule.setResource(KEY);
+        <span class="hljs-comment">// set threshold rt, 10 ms</span>
+        rule.setCount(<span class="hljs-number">10</span>);
+        rule.setGrade(RuleConstant.DEGRADE_GRADE_RT);
+        rule.setTimeWindow(<span class="hljs-number">10</span>);
+        rules.add(rule);
+        DegradeRuleManager.loadRules(rules);
+    }
+</code></pre>
+<p>更多详情可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E7%86%94%E6%96%AD%E9%99%8D%E7%BA%A7">熔断降级</a>。</p>
+<h3>系统保护规则 (SystemRule)</h3>
+<p>规则包含下面几个重要的属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">highestSystemLoad</td>
+<td style="text-align:left">最大的 <code>load1</code>，参考值</td>
+<td style="text-align:left">-1 (不生效)</td>
+</tr>
+<tr>
+<td style="text-align:center">avgRt</td>
+<td style="text-align:left">所有入口流量的平均响应时间</td>
+<td style="text-align:left">-1 (不生效)</td>
+</tr>
+<tr>
+<td style="text-align:center">maxThread</td>
+<td style="text-align:left">入口流量的最大并发数</td>
+<td style="text-align:left">-1 (不生效)</td>
+</tr>
+</tbody>
+</table>
+<p>理解上面规则的定义之后，我们可以通过调用 <code>SystemRuleManager.loadRules()</code> 方法来用硬编码的方式定义流量控制规则。</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initSystemProtectionRule</span><span class="hljs-params">()</span> </span>{
+  List&lt;SystemRule&gt; rules = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+  SystemRule rule = <span class="hljs-keyword">new</span> SystemRule();
+  rule.setHighestSystemLoad(<span class="hljs-number">10</span>);
+  rules.add(rule);
+  SystemRuleManager.loadRules(rules);
+}
+</code></pre>
+<p>更多详情可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E7%B3%BB%E7%BB%9F%E8%B4%9F%E8%BD%BD%E4%BF%9D%E6%8A%A4">系统负载保护</a>。</p>
+<h3>查询更改规则</h3>
+<p>运行下面命令，则会返回现有生效的规则：</p>
+<pre><code class="language-shell">curl http://localhost:8719/getRules?type=&lt;XXXX&gt;
+</code></pre>
+<p>其中，<code>type=flow</code> 以 JSON 格式返回现有的限流规则；degrade 则返回现有生效的降级规则列表；system 则返回系统保护规则。</p>
+<p>同时也可以通过下面命令来修改已有规则：</p>
+<pre><code class="language-shell">curl http://localhost:8719/setRules?type=&lt;XXXX&gt;&amp;data=&lt;DATA&gt;
+</code></pre>
+<p>其中，type 可以输入 <code>flow</code>、<code>degrade</code> 等方式来制定更改的规则种类，<code>data</code> 则是对应的 JSON 格式的规则。</p>
+<h2>定制自己的持久化规则</h2>
+<p>上面的规则配置，都是存在内存中的。即如果应用重启，这个规则就会失效。因此我们提供了开放的接口，您可以通过实现 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AbstractDataSource.java"><code>DataSource</code></a> 接口的方式，来自定义规则的存储数据源。通常我们的建议有：</p>
+<ul>
+<li>整合动态配置系统，如 ZooKeeper、<a href="https://github.com/alibaba/Nacos">Nacos</a> 等，动态地实时刷新配置规则</li>
+<li>结合 RDBMS、NoSQL、VCS 等来实现该规则</li>
+<li>配合 Sentinel Dashboard 使用</li>
+</ul>
+<p>更多详情请参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95">动态规则配置</a>。</p>
+<h1>规则生效的效果</h1>
+<p>除了在业务代码逻辑上看到规则生效，我们也可以通过下面简单的方法，来校验规则生效的效果：</p>
+<ul>
+<li><strong>暴露的 HTTP 接口</strong>：通过运行下面命令 <code>curl http://localhost:8719/cnode?id=&lt;资源名称&gt;</code>，观察返回的数据。如果规则生效，在返回的数据栏中的 <code>block</code> 以及 <code>block(m)</code> 中会有显示</li>
+<li><strong>日志</strong>：Sentinel 提供秒级的资源运行日志以及限流日志，详情可以参考: <a href="https://github.com/alibaba/Sentinel/wiki/%E6%97%A5%E5%BF%97">日志</a></li>
+</ul>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/demo1.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/demo2.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/demo3.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

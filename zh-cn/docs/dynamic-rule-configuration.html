@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="dynamic-rule-configuration" />
+	<meta name="description" content="dynamic-rule-configuration" />
+	<!-- 网页标签标题 -->
+	<title>dynamic-rule-configuration</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/demo1.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>入门</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>动态规则扩展</h1>
+<h2>规则</h2>
+<p>Sentinel 的理念是开发者只需要关注资源的定义，当资源定义成功后可以动态增加各种流控降级规则。Sentinel 提供两种方式修改规则：</p>
+<ul>
+<li>通过 API 直接修改 (<code>loadRules</code>)</li>
+<li>通过 <code>DataSource</code> 适配不同数据源修改</li>
+</ul>
+<p>通过 API 修改比较直观，可以通过以下几个 API 修改不同的规则：</p>
+<pre><code class="language-Java">FlowRuleManager.loadRules(List&lt;FlowRule&gt; rules); <span class="hljs-comment">// 修改流控规则</span>
+DegradeRuleManager.loadRules(List&lt;DegradeRule&gt; rules); <span class="hljs-comment">// 修改降级规则</span>
+SystemRuleManager.loadRules(List&lt;SystemRule&gt; rules); <span class="hljs-comment">// 修改系统规则</span>
+AuthorityRuleManager.loadRules(List&lt;AuthorityRule&gt; rules); <span class="hljs-comment">// 修改授权规则</span>
+</code></pre>
+<h2>DataSource 扩展</h2>
+<p>上述 <code>loadRules()</code> 方法只接受内存态的规则对象，但更多时候规则存储在文件、数据库或者配置中心当中。<code>DataSource</code> 接口给我们提供了对接任意配置源的能力。相比直接通过 API 修改规则，实现 <code>DataSource</code> 接口是更加可靠的做法。</p>
+<p>我们推荐<strong>通过控制台设置规则后将规则推送到统一的规则中心，客户端实现</strong> <code>ReadableDataSource</code> <strong>接口端监听规则中心实时获取变更</strong>，流程如下：</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/45406233-645e8380-b698-11e8-8199-0c917403238f.png" alt="push-rules-from-dashboard-to-config-center"></p>
+<p><code>DataSource</code> 扩展常见的实现方式有:</p>
+<ul>
+<li><strong>拉模式</strong>：客户端主动向某个规则管理中心定期轮询拉取规则，这个规则中心可以是 RDBMS、文件，甚至是 VCS 等。这样做的方式是简单，缺点是无法及时获取变更；</li>
+<li><strong>推模式</strong>：规则中心统一推送，客户端通过注册监听器的方式时刻监听变化，比如使用 <a href="https://github.com/alibaba/nacos">Nacos</a>、Zookeeper 等配置中心。这种方式有更好的实时性和一致性保证。</li>
+</ul>
+<h3>拉模式拓展</h3>
+<p>实现拉模式的数据源最简单的方式是继承 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AutoRefreshDataSource.java"><code>AutoRefreshDataSource</code></a> 抽象类，然后实现 <code>readSource()</code> 方法，在该方法里从指定数据源读取字符串格式的配置数据。比如 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dynamic-file-rule/src/main/java/com/alibaba/csp/sentinel/demo/file/rule/FileDataSourceDemo.java">基于文件的数据源</a>。</p>
+<h3>推模式拓展</h3>
+<p>实现推模式的数据源最简单的方式是继承 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AbstractDataSource.java"><code>AbstractDataSource</code></a> 抽象类，在其构造方法中添加监听器，并实现 <code>readSource()</code> 从指定数据源读取字符串格式的配置数据。比如 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-nacos/src/main/java/com/alibaba/csp/sentinel/datasource/nacos/NacosDataSource.java">基于 Nacos 的数据源</a>。</p>
+<h3>注册数据源</h3>
+<p>通常需要调用以下方法将数据源注册至指定的规则管理器中：</p>
+<pre><code class="language-java">ReadableDataSource&lt;String, List&lt;FlowRule&gt;&gt; flowRuleDataSource = <span class="hljs-keyword">new</span> NacosDataSource&lt;&gt;(remoteAddress, groupId, dataId, parser);
+FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+</code></pre>
+<p>若不希望手动注册数据源，可以借助 Sentinel 的 <code>InitFunc</code> SPI 扩展接口。只需要实现自己的 <code>InitFunc</code> 接口，在 <code>init</code> 方法中编写注册数据源的逻辑。比如：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.test.init;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DataSourceInitFunc</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">InitFunc</span> </span>{
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">final</span> String remoteAddress = <span class="hljs-string">"localhost"</span>;
+        <span class="hljs-keyword">final</span> String groupId = <span class="hljs-string">"Sentinel:Demo"</span>;
+        <span class="hljs-keyword">final</span> String dataId = <span class="hljs-string">"com.alibaba.csp.sentinel.demo.flow.rule"</span>;
+
+        ReadableDataSource&lt;String, List&lt;FlowRule&gt;&gt; flowRuleDataSource = <span class="hljs-keyword">new</span> NacosDataSource&lt;&gt;(remoteAddress, groupId, dataId,
+            source -&gt; JSON.parseObject(source, <span class="hljs-keyword">new</span> TypeReference&lt;List&lt;FlowRule&gt;&gt;() {}));
+        FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+    }
+}
+</code></pre>
+<p>接着将对应的类名添加到位于资源目录（通常是 <code>resource</code> 目录）下的 <code>META-INF/services</code> 目录下的 <code>com.alibaba.csp.sentinel.init.InitFunc</code> 文件中，比如：</p>
+<pre><code>com.test.init.DataSourceInitFunc
+</code></pre>
+<p>这样，当初次访问任意资源的时候，Sentinel 就可以自动去注册对应的数据源了。</p>
+<h2>示例</h2>
+<h3>API 模式：使用客户端规则 API 配置规则</h3>
+<p><a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-dashboard">Sentinel Dashboard</a> 通过客户端自带的<a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99">规则 API</a>来实时查询和更改内存中的规则。</p>
+<p>注意: 要使客户端具备规则 API，需在客户端引入以下依赖：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentienl-http-simple-transport<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h3>拉模式：使用文件配置规则</h3>
+<p><a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dynamic-file-rule/src/main/java/com/alibaba/csp/sentinel/demo/file/rule/FileDataSourceDemo.java">这个示例</a>展示 Sentinel 是如何从文件获取规则信息的。<a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/FileRefreshableDataSource.java"><code>FileRefreshableDataSource</code></a> 会周期性的读取文件以获取规则，当文件有更新时会及时发现，并将规则更新到内存中。使用时只需添加以下依赖：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-datasource-extension<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h3>推模式：使用 Nacos 配置规则</h3>
+<p><a href="https://github.com/alibaba/Nacos">Nacos</a> 是阿里中间件团队开源的服务发现和动态配置中心。Sentinel 针对 Nacos 作了适配，底层可以采用 Nacos 作为规则配置数据源。使用时只需添加以下依赖：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-datasource-nacos<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>然后创建 <code>NacosDataSource</code> 并将其注册至对应的 RuleManager 上即可。比如：</p>
+<pre><code class="language-java"><span class="hljs-comment">// remoteAddress 代表 Nacos 服务端的地址</span>
+<span class="hljs-comment">// groupId 和 dataId 对应 Nacos 中相应配置</span>
+ReadableDataSource&lt;String, List&lt;FlowRule&gt;&gt; flowRuleDataSource = <span class="hljs-keyword">new</span> NacosDataSource&lt;&gt;(remoteAddress, groupId, dataId,
+    source -&gt; JSON.parseObject(source, <span class="hljs-keyword">new</span> TypeReference&lt;List&lt;FlowRule&gt;&gt;() {}));
+FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+</code></pre>
+<p>详细示例可以参见 <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-nacos-datasource">sentinel-demo-nacos-datasource</a>。</p>
+<h3>推模式：使用 ZooKeeper 配置规则</h3>
+<p>Sentinel 针对 ZooKeeper 作了相应适配，底层可以采用 ZooKeeper 作为规则配置数据源。使用时只需添加以下依赖：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-datasource-zookeeper<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>然后创建 <code>ZookeeperDataSource</code> 并将其注册至对应的 RuleManager 上即可。比如：</p>
+<pre><code class="language-java"><span class="hljs-comment">// remoteAddress 代表 ZooKeeper 服务端的地址</span>
+<span class="hljs-comment">// path 对应 ZK 中的数据路径</span>
+ReadableDataSource&lt;String, List&lt;FlowRule&gt;&gt; flowRuleDataSource = <span class="hljs-keyword">new</span> ZookeeperDataSource&lt;&gt;(remoteAddress, path, source -&gt; JSON.parseObject(source, <span class="hljs-keyword">new</span> TypeReference&lt;List&lt;FlowRule&gt;&gt;() {}));
+FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+</code></pre>
+<p>详细示例可以参见 <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-zookeeper-datasource">sentinel-demo-zookeeper-datasource</a>。</p>
+<h3>推模式：使用 Apollo 配置规则</h3>
+<p>Sentinel 针对 <a href="https://github.com/ctripcorp/apollo">Apollo</a> 作了相应适配，底层可以采用 Apollo 作为规则配置数据源。使用时只需添加以下依赖：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-datasource-apollo<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>然后创建 <code>ApolloDataSource</code> 并将其注册至对应的 RuleManager 上即可。比如：</p>
+<pre><code class="language-java"><span class="hljs-comment">// namespaceName 对应 Apollo 的命名空间名称</span>
+<span class="hljs-comment">// ruleKey 对应规则存储的 key</span>
+<span class="hljs-comment">// defaultRules 对应连接不上 Apollo 时的默认规则</span>
+ReadableDataSource&lt;String, List&lt;FlowRule&gt;&gt; flowRuleDataSource = <span class="hljs-keyword">new</span> ApolloDataSource&lt;&gt;(namespaceName, ruleKey, defaultRules, source -&gt; JSON.parseObject(source, <span class="hljs-keyword">new</span> TypeReference&lt;List&lt;FlowRule&gt;&gt;() {}));
+FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+</code></pre>
+<p>详细示例可以参见 <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-apollo-datasource">sentinel-demo-apollo-datasource</a>。</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/demo1.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/demo2.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/demo3.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

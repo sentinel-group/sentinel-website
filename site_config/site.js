@@ -15,7 +15,7 @@ export default {
       {
         key: 'docs',
         text: 'DOCS',
-        link: '/en-us/docs/demo1.html',
+        link: '/en-us/docs/introduction.html',
       },
       {
         key: 'blog',
@@ -37,11 +37,11 @@ export default {
       list: [
         {
           text: 'Overview',
-          link: '/en-us/docs/demo1.html',
+          link: '/en-us/docs/introduction.html',
         },
         {
           text: 'Quick start',
-          link: '/en-us/docs/demo2.html',
+          link: '/en-us/docs/quick-start.html',
         },
         {
           text: 'Developer guide',
@@ -72,9 +72,9 @@ export default {
         link: '/zh-cn/index.html',
       },
       {
-        key: 'docs',
+        key: 'doc',
         text: '文档',
-        link: '/zh-cn/docs/demo1.html',
+        link: '/zh-cn/docs/introduction.html',
       },
       {
         key: 'blog',
@@ -96,15 +96,15 @@ export default {
       list: [
         {
           text: '概览',
-          link: '/zh-cn/docs/demo1.html',
+          link: '/zh-cn/docs/introduction.html',
         },
         {
           text: '快速开始',
-          link: '/zh-cn/docs/demo2.html',
+          link: '/zh-cn/docs/quick-start.html',
         },
         {
           text: '开发者指南',
-          link: '/zh-cn/docs/dir/demo3.html',
+          link: '/zh-cn/docs/contribution/contribution-guideline.html',
         },
       ],
     },

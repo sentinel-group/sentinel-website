@@ -136,14 +136,14 @@ export default {
       list: [
         {
           img: '/img/brhtqqzh.jpeg',
-          title: 'Sentinel 1.3.0 GA 重磅发布',
+          title: 'Sentinel 1.3.0 GA 正式发布',
           content: 'Sentinel 1.3.0 GA 版本正式发布，提供功能完善的控制台。',
           dateStr: 'Oct 30th，2018',
           link: '/zh-cn/blog/sentinel-1-3-0-release.html',
         },
         {
           img: '/img/brhtqqzh.jpeg',
-          title: 'Sentinel 0.2.0 GA 重磅发布',
+          title: 'Sentinel 0.2.0 重磅发布',
           content: '介绍 Sentinel 0.2.0 的核心功能，包括异步调用支持、热点参数限流等。',
           dateStr: 'Sep 27th，2018',
           link: '/zh-cn/blog/sentinel-0-2-0-release.html',

@@ -72,7 +72,7 @@ export default {
         link: '/zh-cn/index.html',
       },
       {
-        key: 'doc',
+        key: 'docs',
         text: '文档',
         link: '/zh-cn/docs/introduction.html',
       },

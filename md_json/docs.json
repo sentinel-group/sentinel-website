@@ -1,0 +1,136 @@
+{
+  "en-us": [
+    {
+      "filename": "basic-api-resource-rule.md",
+      "link": "/en-us/docs/basic-api-resource-rule.html",
+      "meta": {}
+    },
+    {
+      "filename": "basic-implementation.md",
+      "link": "/en-us/docs/basic-implementation.html",
+      "meta": {}
+    },
+    {
+      "filename": "circuit-breaking.md",
+      "link": "/en-us/docs/circuit-breaking.html",
+      "meta": {}
+    },
+    {
+      "filename": "dashboard.md",
+      "link": "/en-us/docs/dashboard.html",
+      "meta": {}
+    },
+    {
+      "filename": "flow-control.md",
+      "link": "/en-us/docs/flow-control.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
+      "link": "/en-us/docs/introduction.html",
+      "meta": {}
+    },
+    {
+      "filename": "quick-start.md",
+      "link": "/en-us/docs/quick-start.html",
+      "meta": {}
+    },
+    {
+      "filename": "system-adaptive-protection.md",
+      "link": "/en-us/docs/system-adaptive-protection.html",
+      "meta": {}
+    }
+  ],
+  "zh-cn": [
+    {
+      "filename": "annotation-support.md",
+      "link": "/zh-cn/docs/annotation-support.html",
+      "meta": {}
+    },
+    {
+      "filename": "basic-api-resource-rule.md",
+      "link": "/zh-cn/docs/basic-api-resource-rule.html",
+      "meta": {}
+    },
+    {
+      "filename": "basic-implementation.md",
+      "link": "/zh-cn/docs/basic-implementation.html",
+      "meta": {}
+    },
+    {
+      "filename": "circuit-breaking.md",
+      "link": "/zh-cn/docs/circuit-breaking.html",
+      "meta": {}
+    },
+    {
+      "filename": "contribution-guideline.md",
+      "link": "/zh-cn/docs/contribution/contribution-guideline.html",
+      "meta": {}
+    },
+    {
+      "filename": "dashboard.md",
+      "link": "/zh-cn/docs/dashboard.html",
+      "meta": {}
+    },
+    {
+      "filename": "dynamic-rule-configuration.md",
+      "link": "/zh-cn/docs/dynamic-rule-configuration.html",
+      "meta": {}
+    },
+    {
+      "filename": "faq.md",
+      "link": "/zh-cn/docs/faq.html",
+      "meta": {}
+    },
+    {
+      "filename": "flow-control.md",
+      "link": "/zh-cn/docs/flow-control.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
+      "link": "/zh-cn/docs/introduction.html",
+      "meta": {}
+    },
+    {
+      "filename": "logs.md",
+      "link": "/zh-cn/docs/logs.html",
+      "meta": {}
+    },
+    {
+      "filename": "metrics.md",
+      "link": "/zh-cn/docs/metrics.html",
+      "meta": {}
+    },
+    {
+      "filename": "open-source-framework-integrations.md",
+      "link": "/zh-cn/docs/open-source-framework-integrations.html",
+      "meta": {}
+    },
+    {
+      "filename": "origin-authority-control.md",
+      "link": "/zh-cn/docs/origin-authority-control.html",
+      "meta": {}
+    },
+    {
+      "filename": "parameter-flow-control.md",
+      "link": "/zh-cn/docs/parameter-flow-control.html",
+      "meta": {}
+    },
+    {
+      "filename": "quick-start.md",
+      "link": "/zh-cn/docs/quick-start.html",
+      "meta": {}
+    },
+    {
+      "filename": "startup-configuration.md",
+      "link": "/zh-cn/docs/startup-configuration.html",
+      "meta": {}
+    },
+    {
+      "filename": "system-adaptive-protection.md",
+      "link": "/zh-cn/docs/system-adaptive-protection.html",
+      "meta": {}
+    }
+  ]
+}

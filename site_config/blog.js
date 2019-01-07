@@ -17,6 +17,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.4.1 正式发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.4.1 版本发布，完善 Sentinel 控制台的集群流控管理功能。',
+        dateStr: '2019.01.04',
+        link: '/zh-cn/blog/sentinel-1-4-1-release.html',
+      },
+      {
         title: 'Guideline: 从 Hystrix 迁移到 Sentinel',
         author: 'Eric Zhao',
         dateStr: '2018.11.29',

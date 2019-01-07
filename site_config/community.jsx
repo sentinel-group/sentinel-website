@@ -136,6 +136,13 @@ export default {
       list: [
         {
           img: '/img/brhtqqzh.jpeg',
+          title: 'Sentinel 1.4.1 正式发布',
+          content: 'Sentinel 1.4.1 版本发布，完善 Sentinel 控制台的集群流控管理功能。',
+          dateStr: 'Jan 4th，2019',
+          link: '/zh-cn/blog/sentinel-1-4-1-release.html',
+        },
+        {
+          img: '/img/brhtqqzh.jpeg',
           title: 'Sentinel 1.3.0 GA 正式发布',
           content: 'Sentinel 1.3.0 GA 版本正式发布，提供功能完善的控制台。',
           dateStr: 'Oct 30th，2018',

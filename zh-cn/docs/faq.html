@@ -31,16 +31,20 @@
 <li><a href="#q-%E6%80%8E%E4%B9%88%E9%92%88%E5%AF%B9%E7%89%B9%E5%AE%9A%E8%B0%83%E7%94%A8%E7%AB%AF%E9%99%90%E6%B5%81%E6%AF%94%E5%A6%82%E6%88%91%E6%83%B3%E9%92%88%E5%AF%B9%E6%9F%90%E4%B8%AA-ip-%E6%88%96%E8%80%85%E6%9D%A5%E6%BA%90%E5%BA%94%E7%94%A8%E8%BF%9B%E8%A1%8C%E9%99%90%E6%B5%81%E8%A7%84%E5%88%99%E9%87%8C%E9%9D%A2-limitapp%E6%B5%81%E6%8E%A7%E5%BA%94%E7%94%A8%E7%9A%84%E4%BD%9C%E7%94%A8">怎么针对特定调用端限流？比如我想针对某个 IP 或者来源应用进行限流？规则里面 limitApp（流控应用）的作用？为何不生效？</a></li>
 <li><a href="#q-%E6%83%B3%E8%A6%81%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BF%98%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%93%AA%E4%BA%9B%E6%94%B9%E9%80%A0">想要在生产环境中使用 Sentinel 控制台，还需要进行哪些改造？</a></li>
 <li><a href="https://github.com/alibaba/Sentinel/wiki/Sentinel-%E4%B8%8E-Hystrix-%E7%9A%84%E5%AF%B9%E6%AF%94">Sentinel 与 Hystrix 的对比</a></li>
+<li><a href="https://github.com/alibaba/Sentinel/wiki/Guideline:-%E4%BB%8E-Hystrix-%E8%BF%81%E7%A7%BB%E5%88%B0-Sentinel">Guideline: 从 Hystrix 迁移到 Sentinel</a></li>
 </ul>
 <h1>配置相关</h1>
 <p>Q: 配置参数如何指定？</p>
 <p>A: 可通过 JVM -D 参数指定。除 <code>project.name</code> 之外，其余参数还可通过 properties 文件指定，路径为 <code>${home}/logs/csp/${project.name}.properties</code>。详见 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%A1%B9">启动项配置文档</a>。</p>
 <hr>
 <p>Q: 可否自定义 properties 文件的位置或日志文件的位置？</p>
-<p>A: 后续版本会进行相关支持。</p>
+<p>A: 1.3.0 版本开始支持配置日志文件的目录，可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%A1%B9">启动项配置文档</a>；若希望自定义 properties 文件的位置或使用其它的加载方式，可以结合 Spring Cloud Alibaba Sentinel 使用。</p>
 <h1>Sentinel 核心功能相关</h1>
 <p>Q: Sentinel 可否用于生产环境？</p>
 <p>A: 当然！Sentinel 可用于生产环境，但若要在生产环境中使用 Sentinel 控制台则还需要进行一些改造。</p>
+<hr>
+<h4>Q: 想从 Hystrix 迁移到 Sentinel，有没有相关指南？</h4>
+<p>A: 可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/Guideline:-%E4%BB%8E-Hystrix-%E8%BF%81%E7%A7%BB%E5%88%B0-Sentinel">Guideline: 从 Hystrix 迁移到 Sentinel</a>。</p>
 <hr>
 <p>Q: 我的服务是基于 Spring Boot 和 Dubbo 编写的，Sentinel 有相应的适配吗？</p>
 <p>A: 当然啦，Sentinel 针对常用框架和库进行了适配，包括 Web Servlet、Dubbo、Spring Boot / Spring Cloud、gRPC 等，可以参见 <a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D">主流框架的适配</a>。</p>
@@ -52,7 +56,7 @@
 <p>A: 不需要，sentinel-core 的 Env 类通过 static 块调用了此方法进行初始化，在首次调用资源时即可触发。一些 demo 中手动调用此方法是为了不让进程退出。</p>
 <hr>
 <p>Q: 降级规则生效后，除了抛异常之外还有没有其它的处理方式？</p>
-<p>A: 可以利用 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81">Sentinel 注解</a>来配置 fallback 函数，在方法被资源时进行相应处理。另外，对于 Dubbo 适配，我们支持注册全局全局的 fallback 函数，见 <a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D#dubbo">Dubbo 适配文档</a>。</p>
+<p>A: 可以利用 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%B3%A8%E8%A7%A3%E6%94%AF%E6%8C%81">Sentinel 注解</a> 来配置 fallback 函数，在资源被降级时进行相应处理。另外，对于 Dubbo 服务，我们支持注册全局的 fallback 函数，可参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D#dubbo">Dubbo 适配文档</a>。</p>
 <hr>
 <h4>Q: 怎么针对特定调用端限流？比如我想针对某个 IP 或者来源应用进行限流？规则里面 limitApp（流控应用）的作用？</h4>
 <p>A: Sentinel 支持按来源限流，可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6#%E5%9F%BA%E4%BA%8E%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6">基于调用关系的限流</a>。注意 origin 数量不能太多，否则会导致内存暴涨，并且目前不支持模式匹配。</p>
@@ -72,7 +76,7 @@
 <p>A: Sentinel 的核心功能是流量控制和限流降级。分布式链路调用跟踪不是 Sentinel 关注的功能，可以参考其它分布式链路调用跟踪系统。</p>
 <hr>
 <p>Q: Sentinel 支持集群限流吗？</p>
-<p>A: 集群限流功能将在后续版本引入，见 <a href="https://github.com/alibaba/Sentinel/wiki/Roadmap">Roadmap</a>。</p>
+<p>A: 1.4.0 版本开始已经支持，可以参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7">集群流控文档</a>。</p>
 <hr>
 <p>Q: Web 端的资源目前都是根据某个特定的 URL 限流，可不可以根据前缀匹配限流？</p>
 <p>A: 对于 Sentinel Web Servlet Filter，可以借助 <code>UrlCleaner</code> 处理对应的 URL（如提取前缀的操作），这样对应的资源都会归到处理后的资源（如 <code>/foo/1</code> 和 <code>/foo/2</code> 都归到 <code>/foo/*</code> 资源里面）。<code>UrlCleaner</code> 实现 URL 前缀匹配只是个 trick，它会把对应的资源也给归一掉，直接在资源名粒度上实现模式匹配还是有很多顾虑的问题的。</p>
@@ -108,7 +112,7 @@
 <li>规则推送支持应用维度，并且整合配置中心以便可以直接推送至远程配置中心</li>
 <li>权限控制</li>
 </ul>
-<p>详细指南请参考此 blog: <a href="https://github.com/alibaba/Sentinel/wiki/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0">在生产环境中使用 Sentinel 控制台</a>。</p>
+<p>详细指南请参考此 blog: <a href="https://github.com/alibaba/Sentinel/wiki/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-Sentinel">在生产环境中使用 Sentinel 控制台</a>。</p>
 <hr>
 <h4>Q: 已经引入了适配模块（比如 <code>sentinel-dubbo-adapter</code>），然而在 Sentinel 控制台上没有找到我的应用？</h4>
 <p>A: 请确保对应的依赖和参数配置正确。接入控制台需要上报的客户端依赖，如 <code>sentinel-transport-simple-http</code>，<strong>不引入相关依赖则无法将相关信息上报到控制台</strong>。参数配置详情请参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台文档</a>。</p>
@@ -131,7 +135,7 @@
 <p><strong>注意</strong>：Sentinel 会在客户端首次调用时候进行初始化，开始向控制台发送心跳包。因此需要确保客户端有访问量，才能在控制台上看到监控数据。另外，还是期待大家养成看日志的好习惯，详见 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%97%A5%E5%BF%97">日志文档</a>。</p>
 <ul>
 <li>控制台推送规则的日志默认位于 <code>${user.home}/logs/csp/sentinel-dashboard.log</code></li>
-<li>客户端接收规则日志默认位于 <code>${user.home}/logs/csp/record.log</code></li>
+<li>客户端接收规则日志默认位于 <code>${user.home}/logs/csp/sentinel-record.log.xxx</code></li>
 </ul>
 <p>常用排查问题列表：</p>
 <ul>
@@ -187,7 +191,7 @@
 <h1>其它</h1>
 <p>Q: 编译打包的时候 Maven 报错？</p>
 <p>A: 请将 Maven 版本升级至较新版本（3.5.x）再进行构建。</p>
-</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
 	<script>

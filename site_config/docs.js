@@ -97,6 +97,10 @@ export default {
                 link: '/zh-cn/docs/system-adaptive-protection.html',
               },
               {
+                title: '集群流量控制',
+                link: '/zh-cn/docs/cluster-flow-control.html',
+              },
+              {
                 title: '热点参数限流',
                 link: '/zh-cn/docs/parameter-flow-control.html',
               },

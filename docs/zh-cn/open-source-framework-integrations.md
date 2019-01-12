@@ -186,9 +186,9 @@ Sentinel 提供与 [Zuul](https://github.com/Netflix/zuul) 1.x 的整合，可�
 
 下面数据是Sentinel生成的链路数据，`coke` 和 `book` 是对应的微服务（服务ID存储在Zuul的`Context`中，对应的key为：`ctx.get("serviceId")`）。
 
-`--/coke/app` 是服务对应的请求，
+`--/coke/app` 是服务对应的请求路径。
 
-可以针对服务coke调用进行限流，也可以直接对URL限流，或者根据需要同时限流。
+可以针对服务`coke`调用进行限流，也可以直接对URL限流，或者根据需要同时限流。
 
 ```bash
 

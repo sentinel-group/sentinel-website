@@ -205,12 +205,11 @@ EntranceNode: machine-root
 使用时需引入以下模块（以 Maven 为例）：
 
 ```xml
-       <dependency>
-          <groupId>com.alibaba.csp</groupId>
-            <artifactId>sentinel-zuul-adapter</artifactId>
-            <version>x.y.z</version>
-        </dependency>
-
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-zuul-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
 ```
 
 注册ZuulFilter ：
@@ -242,9 +241,10 @@ r.put("sentinelErrorFilter", errorFilter);
 
 发生限流之后的处理流程 ：
 
-发生限流之后可自定义返回参数，通过实现 `SentinelFallbackProvider` 接口，默认的实现是 `DefaultBlockFallbackProvider`. 
+- 发生限流之后可自定义返回参数，通过实现 `SentinelFallbackProvider` 接口，默认的实现是 `DefaultBlockFallbackProvider`. 
 
-可以针对不同的路径有不同的返回，默认的 Fallback route 的规则是 `ServiveId + URI PATH`, 例如 `/book/app`, 其中 `book`是serviceId, `/app`是URI PATH. 
+- 可以针对不同的路径有不同的返回，默认的 Fallback route 的规则是 `ServiveId + URI PATH`, 例如 `/book/app`, 其中 `book`是serviceId, `/app`是URI PATH. 
+比如：
 
 ```java
 

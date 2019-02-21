@@ -2,27 +2,27 @@
 
 此处会列出关于 Sentinel 的常见问题以及相应的注意事项和解决方案。
 
-感谢以下热心贡献者参与整理：**宸明，谢佶含**
-
-# 目录
+## 目录
 
 - [常见问题](#常见问题)
 - [配置相关](#配置相关)
 - [Sentinel 核心功能相关](#sentinel-核心功能相关)
+- [Sentinel 集群限流相关](#sentinel-集群限流相关)
 - [Sentinel Transport / Dashboard 相关](#sentinel-transportdashboard-相关)
 - [规则存储与 DataSource 相关](#规则存储与动态规则数据源datasource)
 - [其它](#其它)
 
-# 常见问题
+## 常见问题
 
 - [应用如何接入 Sentinel Dashboard？为何我的应用没有出现，或者没有监控数据？](#q-sentinel-控制台没有显示我的应用或者没有监控展示如何排查)
 - [在控制台配置的规则存在哪里？为什么应用重启规则就消失了？客户端处配置了动态规则源，但是在 Dashboard 进行推送的时候却没有写到规则源中？](#q-在控制台配置的规则存在哪里为什么应用重启规则就消失了)
 - [怎么针对特定调用端限流？比如我想针对某个 IP 或者来源应用进行限流？规则里面 limitApp（流控应用）的作用？为何不生效？](#q-怎么针对特定调用端限流比如我想针对某个-ip-或者来源应用进行限流规则里面-limitapp流控应用的作用)
+- [集群限流配置后没有生效？](#q-集群限流没有生效)
 - [想要在生产环境中使用 Sentinel 控制台，还需要进行哪些改造？](#q-想要在生产环境中使用-sentinel-控制台还需要进行哪些改造)
 - [Sentinel 与 Hystrix 的对比](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E4%B8%8E-Hystrix-%E7%9A%84%E5%AF%B9%E6%AF%94)
 - [Guideline: 从 Hystrix 迁移到 Sentinel](https://github.com/alibaba/Sentinel/wiki/Guideline:-%E4%BB%8E-Hystrix-%E8%BF%81%E7%A7%BB%E5%88%B0-Sentinel)
 
-# 配置相关
+## 配置相关
 
 Q: 配置参数如何指定？
 
@@ -34,11 +34,11 @@ Q: 可否自定义 properties 文件的位置或日志文件的位置？
 
 A: 1.3.0 版本开始支持配置日志文件的目录，可以参考 [启动项配置文档](https://github.com/alibaba/Sentinel/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E9%A1%B9)；若希望自定义 properties 文件的位置或使用其它的加载方式，可以结合 Spring Cloud Alibaba Sentinel 使用。
 
-# Sentinel 核心功能相关
+## Sentinel 核心功能相关
 
 Q: Sentinel 可否用于生产环境？
 
-A: 当然！Sentinel 可用于生产环境，但若要在生产环境中使用 Sentinel 控制台则还需要进行一些改造。
+A: 当然可以！Sentinel 可用于生产环境，但若要在生产环境中使用 Sentinel 控制台则还需要进行一些改造。
 
 ---
 
@@ -116,7 +116,44 @@ Q: Web 端的资源目前都是根据某个特定的 URL 限流，可不可以�
 
 A: 对于 Sentinel Web Servlet Filter，可以借助 `UrlCleaner` 处理对应的 URL（如提取前缀的操作），这样对应的资源都会归到处理后的资源（如 `/foo/1` 和 `/foo/2` 都归到 `/foo/*` 资源里面）。`UrlCleaner` 实现 URL 前缀匹配只是个 trick，它会把对应的资源也给归一掉，直接在资源名粒度上实现模式匹配还是有很多顾虑的问题的。
 
-# Sentinel Transport/Dashboard 相关
+## Sentinel 集群限流相关
+
+#### Q: 集群限流没有生效？
+
+A: 请参考以下步骤排查：
+
+- 请确保接入端引入了 Sentinel 集群流控相关的依赖；
+- 检查 `~/logs/csp/sentinel-record.log` 查看 Token Server / Client 是否加载成功，是否成功启动；客户端规则和集群规则是否都接收成功；
+- 在 Token Client 端检查 `~/logs/csp/sentinel-cluster-client.log` 日志，看一下是否是 Token Server 未启动或者规则未接收到的问题；
+- 若从开源 Sentinel 控制台推送集群规则，请务必确保按照 [Sentinel 集群流控控制台文档](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%EF%BC%88%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7%E7%AE%A1%E7%90%86%EF%BC%89) 进行了相应改造，并且接入端按照 [集群规则配置文档](https://github.com/alibaba/Sentinel/wiki/%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7#%E9%9B%86%E7%BE%A4%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F) 配置了相关动态规则源；
+
+---
+
+Q: 通过 Sentinel 控制台或 API 来分配管理 Token Server 时，返回错误：token client/server mode not available: no SPI found
+
+A: 请确保接入端引入了 Sentinel 集群流控相关的依赖（嵌入模式两者都需要）：
+
+- Token Client: `sentinel-cluster-client-default`
+- Token Server: `sentinel-cluster-server-default`
+
+更多信息可参见 [集群流控文档](https://github.com/alibaba/Sentinel/wiki/%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7#%E6%A8%A1%E5%9D%97%E7%BB%93%E6%9E%84)。
+
+---
+
+Q: 集群流控规则中“单机均摊”阈值模式是什么意思？
+
+A: 单机均摊模式下配置的阈值等同于单机能够承受的平均限额。Token Server 会根据客户端对应的 namespace（默认为 `project.name` 定义的应用名）下的连接数来计算总的阈值（比如独立模式下有 3 个 client 连接到了 token server，然后配的单机均摊阈值为 10，则计算出的集群总量就为 30）。**单机均摊阈值仅用于计算总体阈值，不是说每台机器一定要控制在均摊阈值上**。配置方式：若希望某个资源限制集群总量为 Q，服务实例为 N，则可以配置单机均摊阈值为 `Q / N`。
+
+---
+
+Q: 集群流控 Token Server 中的 namespace set 有什么用处？
+
+A: namespace set 即 Token Server 服务的作用域（命名空间集合），用于指定该 Token Server 可以为哪些应用提供集群流控服务，一般设置为接入端应用名的集合。Token Client 在连接到 token server 后会上报自己的命名空间（默认为 `project.name` 配置的应用名），token server 会根据上报的命名空间名称统计连接数。
+
+- 嵌入模式下一般仅服务自身，默认嵌入模式的 namespace set 为该应用本身
+- 所有 Token Server 都自带一个默认的命名空间 `default`，一般情况下不会用到
+
+## Sentinel Transport/Dashboard 相关
 
 Q：Sentinel Transport 同一台机器起相同的端口不报错？如果几个应用都没配 `csp.sentinel.api.port` 会出错吗？
 
@@ -196,18 +233,17 @@ A: Sentinel Dashboard 是一个单独启动的控制台，应用若想上报监�
 
 常用排查问题列表：
 
-* 确认 Dashboard 正常工作
-* 若是 Spring Boot / Dubbo 等应用，请务必检查**是否引入了整合依赖并进行了相应配置**
-* 检查客户端的启动参数配置是否正确
-* 通过日志排查客户端发送心跳包是否正常，是否正常上报给 Dashboard
-* 确保 fastjson 的版本和 Sentinel 的依赖版本保持一致
-* 通过 `curl IP:port/getRules?type=flow` 等命令查看结果，查看规则是否推送成功
-* 发送到客户端的规则格式是否正确，例如确认一下降级规则的表单是否填写完整
-* 某些不能访问互联网的坏境比如堡垒机可能导致前端文件无法下载也可能导致图出不来，可以浏览器调试查看到
+- 确认 Dashboard 已经正常启动并可以正常访问
+- 若是 Spring Boot / Dubbo 等应用，请务必检查**是否引入了整合依赖并进行了相应配置**
+- **检查接入端的启动参数配置是否正确（如控制台地址是否配置正确）**
+- 通过 `~/logs/csp/sentinel-record.log` 日志排查客户端发送心跳包是否正常，是否正常上报给 Dashboard
+- 确保 fastjson 的版本和 Sentinel 的依赖版本保持一致
+- 通过 `curl IP:port/getRules?type=flow` 等命令查看结果，查看规则是否推送成功
+- 发送到客户端的规则格式是否正确，例如确认一下降级规则的表单是否填写完整
 
 ---
 
-#### Q: 客户端和控制台不在一台机器上，客户端成功接入控制台后，控制台无法显示实时的监控数据？
+#### Q: 客户端和控制台不在一台机器上，客户端成功接入控制台后，控制台无法显示实时的监控数据？但簇点链路页面有实时请求数据（不为 0）？
 
 A: 请确保 Sentinel 控制台所在的机器时间与自己应用的机器时间保持一致（通过 NTP 等同步）。Sentinel 控制台是通过控制台所在机器的时间戳拉取监控数据的，因此时间不一致会导致拉不到实时的监控数据。
 
@@ -215,7 +251,7 @@ A: 请确保 Sentinel 控制台所在的机器时间与自己应用的机器时�
 
 **Q: 客户端成功接入控制台后，控制台配置规则准确无误，但是客户端收不到规则或者报错？比如配置的规则 resourceName 正确但却报 resourceName 为空的错误？**
 
-A: 排查客户端是否使用了低版本的 fastjson，建议使用和 Sentinel 相关组件一致版本的 fastjson。
+A: 排查客户端是否使用了低版本的 fastjson，低版本的 fastjson 可能会有此问题，建议使用和 Sentinel 相关组件一致版本的 fastjson。
 
 ---
 
@@ -255,7 +291,7 @@ A: 因为 Sentinel 控制台仅作为示范，其监控聚合能力非常有限�
 
 A: 对应规则中的 `limitApp`，即请求来源，通过入口处 `ContextUtil.enter(contextName, origin)` 中的 `origin` 传入。参见上面的“按调用方进行限流”。
 
-# 规则存储与动态规则数据源（DataSource）
+## 规则存储与动态规则数据源（DataSource）
 
 Q: 动态规则数据源分为哪几种？各自的使用场景？
 
@@ -280,7 +316,7 @@ A: push 模式的数据源（如配置中心）都是**只读**的。对于配�
 
 对于 pull 模式的数据源（如本地文件），则可以向 transport-common 模块的 `WritableDataSourceRegistry` 注册写入数据源，在推送规则时会一并推送至本地数据源中。
 
-# 其它
+## 其它
 
 Q: 编译打包的时候 Maven 报错？
 

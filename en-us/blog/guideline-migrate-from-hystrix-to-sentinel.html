@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="guideline-migrate-from-hystrix-to-sentinel" />
+	<meta name="description" content="guideline-migrate-from-hystrix-to-sentinel" />
+	<!-- 网页标签标题 -->
+	<title>guideline-migrate-from-hystrix-to-sentinel</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Guideline: Migration from Hystrix to Sentinel</h1>
+<p>This article will help you migrate from Hystrix to Sentinel and help you get up to speed on using Sentinel.</p>
+<table>
+<thead>
+<tr>
+<th>Feature in Hystrix</th>
+<th>Migration Solution</th>
+<th>Feature in Sentinel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thread Pool Isolation / Semaphore Isolation</td>
+<td>Sentinel does not support thread pool isolation; In Sentinel, flow control in <a href="https://github.com/alibaba/Sentinel/wiki/Flow-Control#concurrent-thread-count">thread count mode</a> represents semaphore isolation. If you are using semaphore isolation, you can simply add flow rules for target resource.</td>
+<td><a href="https://github.com/alibaba/Sentinel/wiki/Flow-Control#concurrent-thread-count">Thread Count Flow Control</a></td>
+</tr>
+<tr>
+<td>Circuit Breaker</td>
+<td>Sentinel supports circuit breaking by average response time, exception ratio and exception count. If you want to use circuit breaking in Sentinel, you cam simply configure degrade rules for target resource.</td>
+<td><a href="https://github.com/alibaba/Sentinel/wiki/Circuit-Breaking">Circuit breaking with various strategy</a></td>
+</tr>
+<tr>
+<td>Command Definition</td>
+<td>You can define your resource entry (similar to command key) via <code>SphU</code> API in Sentinel. <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#define-resource">Resource definition</a> and <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#configure-rules">rule configuration</a> are separate.</td>
+<td><a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#define-resource">Resource Entry Definition</a></td>
+</tr>
+<tr>
+<td>Command Configuration</td>
+<td>Rules can be hardcoded through the <code>xxxRuleManager</code> API in Sentinel, and multiple dynamic rule data sources are also supported.</td>
+<td><a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use#configure-rules">Rule Configuration</a></td>
+</tr>
+<tr>
+<td>HystrixCommand annotation</td>
+<td>Sentinel also provides <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-annotation-aspectj/README.md">annotation support</a> (<code>SentinelResource</code>), which is easy to use.</td>
+<td><a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-annotation-aspectj/README.md">SentinelResource annotation</a></td>
+</tr>
+<tr>
+<td>Spring Cloud Netflix</td>
+<td>Sentinel provides out-of-box integration modules for Servlet, Dubbo, Spring Cloud, and gRPC. If you were using Spring Cloud Netflix previously, it's east for you to migrate to Spring Cloud Alibaba.</td>
+<td><a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a></td>
+</tr>
+</tbody>
+</table>
+<h2>HystrixCommand</h2>
+<p>The execution model of Hystrix is designed with command pattern that encapsulates the business logic and fallback logic into a single command object (<code>HystrixCommand</code> / <code>HystrixObservableCommand</code>). A simple example:</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeCommand</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SomeCommand</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"SomeGroup"</span>))
+            <span class="hljs-comment">// command key</span>
+            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">"SomeCommand"</span>))
+            <span class="hljs-comment">// command configuration</span>
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withFallbackEnabled(<span class="hljs-keyword">true</span>)
+            ));
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// business logic</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello World!"</span>;
+    }
+}
+
+<span class="hljs-comment">// The execution model of Hystrix</span>
+<span class="hljs-comment">// sync mode:</span>
+String s = <span class="hljs-keyword">new</span> SomeCommand().execute();
+<span class="hljs-comment">// async mode (managed by Hystrix):</span>
+Observable&lt;String&gt; s = <span class="hljs-keyword">new</span> SomeCommand().observe();
+</code></pre>
+<p>Sentinel does not specify an execution model, nor does it care how the code is executed. In Sentinel, what you should do is just to wrap your code with Sentinel API to define resources:</p>
+<pre><code class="language-java">Entry entry = <span class="hljs-keyword">null</span>;
+<span class="hljs-keyword">try</span> {
+    entry = SphU.entry(<span class="hljs-string">"resourceName"</span>);
+    <span class="hljs-comment">// your business logic here</span>
+    <span class="hljs-keyword">return</span> doSomeThing();
+} <span class="hljs-keyword">catch</span> (BlockException ex) {
+    <span class="hljs-comment">// handle rejected</span>
+} <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">if</span> (entry != <span class="hljs-keyword">null</span>) {
+        entry.exit();
+    }
+}
+</code></pre>
+<p>In Hystrix, you usually have to configure rules when the command is defined. In Sentinel, resource definitions and rule configurations are separate. Users first define resources for the corresponding business logic through the Sentinel API, and then configure the rules when needed. For details, please refer to <a href="https://github.com/alibaba/Sentinel/wiki/How-to-Use">the document</a>.</p>
+<h2>Thread Pool Isolation</h2>
+<p>The advantage of thread pool isolation is that the isolation is relatively thorough, and it can be processed for the thread pool of a resource without affecting other resources. But the drawback is that the number of threads is large, and the overhead of thread context switching is very large, especially for low latency invocations. Sentinel does not provide such a heavy isolation strategy, but provides a relatively lightweight isolation strategy - thread count flow control as semaphore isolation.</p>
+<h2>Semaphore Isolation</h2>
+<p>Hystrix's semaphore isolation is configured at Command definition, such as：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CommandUsingSemaphoreIsolation</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> id;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">CommandUsingSemaphoreIsolation</span><span class="hljs-params">(<span class="hljs-keyword">int</span> id)</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"SomeGroup"</span>))
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withExecutionIsolationStrategy(ExecutionIsolationStrategy.SEMAPHORE)
+                .withExecutionIsolationSemaphoreMaxConcurrentRequests(<span class="hljs-number">8</span>)));
+        <span class="hljs-keyword">this</span>.id = id;
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"result_"</span> + id;
+    }
+}
+</code></pre>
+<p>In Sentinel, semaphore isolation is provided as a mode of flow control (thread count mode), so you only need to configure the flow rule for the resource:</p>
+<pre><code class="language-java">FlowRule rule = <span class="hljs-keyword">new</span> FlowRule(<span class="hljs-string">"doSomething"</span>) <span class="hljs-comment">// resource name</span>
+    .setGrade(RuleConstant.FLOW_GRADE_THREAD) <span class="hljs-comment">// thread count mode</span>
+    .setCount(<span class="hljs-number">8</span>); <span class="hljs-comment">// max concurrency</span>
+FlowRuleManager.loadRules(Collections.singletonList(rule)); <span class="hljs-comment">// load the rules</span>
+</code></pre>
+<p>If you are using Sentinel dashboard, you can also easily configure the rules in dashboard.</p>
+<h2>Circuit Breaking</h2>
+<p>Hystrix circuit breaker supports error percentage mode. Related properties:</p>
+<ul>
+<li><code>circuitBreaker.errorThresholdPercentage</code>: the threshold</li>
+<li><code>circuitBreaker.sleepWindowInMilliseconds</code>: the sleep window when circuit breaker is open</li>
+</ul>
+<p>For example:</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FooServiceCommand</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HystrixCommand</span>&lt;<span class="hljs-title">String</span>&gt; </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-title">FooServiceCommand</span><span class="hljs-params">(HystrixCommandGroupKey group)</span> </span>{
+        <span class="hljs-keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">"OtherGroup"</span>))
+            <span class="hljs-comment">// command key</span>
+            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">"fooService"</span>))
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                .withExecutionTimeoutInMilliseconds(<span class="hljs-number">500</span>)
+                .withCircuitBreakerRequestVolumeThreshold(<span class="hljs-number">5</span>)
+                .withCircuitBreakerErrorThresholdPercentage(<span class="hljs-number">50</span>)
+                .withCircuitBreakerSleepWindowInMilliseconds(<span class="hljs-number">10000</span>)
+            ));
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">run</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"some_result"</span>;
+    }
+}
+</code></pre>
+<p>In Sentinel, you only need to configure circuit breaking rules for resources that want to be automatically degraded. For example, the rules corresponding to the Hystrix example above:</p>
+<pre><code class="language-java">DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule(<span class="hljs-string">"fooService"</span>)
+    .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) <span class="hljs-comment">// exception ratio mode</span>
+    .setCount(<span class="hljs-number">0.5</span>) <span class="hljs-comment">// ratio threshold (0.5 -&gt; 50%)</span>
+    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// sleep window (10s)</span>
+<span class="hljs-comment">// load the rules</span>
+DegradeRuleManager.loadRules(Collections.singletonList(rule));
+</code></pre>
+<p>If you are using <a href="https://github.com/alibaba/Sentinel/wiki/Dashboard">Sentinel dashboard</a>, you can also easily configure the circuit breaking rules in dashboard.</p>
+<p>In addition to the exception ratio mode, Sentinel also supports automatic circuit breaking based on average response time and minute exceptions.</p>
+<h2>Annotation Support</h2>
+<p>Hystrix provides annotation support to encapsulate command and configure it. Here is an example of Hystrix annotation:</p>
+<pre><code class="language-java"><span class="hljs-comment">// original method</span>
+<span class="hljs-meta">@HystrixCommand</span>(fallbackMethod = <span class="hljs-string">"fallbackForGetUser"</span>)
+<span class="hljs-function">User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"getUserById command failed"</span>);
+}
+
+<span class="hljs-comment">// fallback method</span>
+<span class="hljs-function">User <span class="hljs-title">fallbackForGetUser</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>);
+}
+</code></pre>
+<p>Hystrix rule configuration is bundled with command execution. We can configure rules for command in the <code>commandProperties</code> property of the <code>@HystrixCommand annotation</code>, such as:</p>
+<pre><code class="language-java"><span class="hljs-meta">@HystrixCommand</span>(commandProperties = {
+        <span class="hljs-meta">@HystrixProperty</span>(name = <span class="hljs-string">"circuitBreaker.errorThresholdPercentage"</span>, value = <span class="hljs-string">"50"</span>)
+    })
+<span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">return</span> userResource.getUserById(id);
+}
+</code></pre>
+<p>Using Sentinel annotations is similar to Hystrix, as follows:</p>
+<ul>
+<li>Add the annotation support dependency: <code>sentinel-annotation-aspectj</code> and register the aspect as a Spring bean (if you are using <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a> then the bean will be injected automatically);</li>
+<li>Add the <code>@SentinelResource</code> annotation to the method that needs flow control and circuit breaking. You can set <code>fallback</code> or <code>blockHandler</code> functions in the annotation;</li>
+<li>Configure rules</li>
+</ul>
+<p>For the details, you can refer to <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-annotation-aspectj/README.md">the annotation support document</a>. An example for Sentinel annotation:</p>
+<pre><code class="language-java"><span class="hljs-comment">// original method</span>
+<span class="hljs-meta">@SentinelResource</span>(fallback = <span class="hljs-string">"fallbackForGetUser"</span>)
+<span class="hljs-function">User <span class="hljs-title">getUserById</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"getUserById command failed"</span>);
+}
+
+<span class="hljs-comment">// fallback method (only invoked when the original resource triggers circuit breaking); If we need to handle for flow control / system protection, we can set `blockHandler` method</span>
+<span class="hljs-function">User <span class="hljs-title">fallbackForGetUser</span><span class="hljs-params">(String id)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>);
+}
+</code></pre>
+<p>Then configure the rules:</p>
+<ul>
+<li>via API (e.g. <code>DegradeRuleManager.loadRules(rules)</code> method)</li>
+</ul>
+<pre><code class="language-java">DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule(<span class="hljs-string">"getUserById"</span>)
+    .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) <span class="hljs-comment">// exception ratio mode</span>
+    .setCount(<span class="hljs-number">0.5</span>) <span class="hljs-comment">// ratio threshold (0.5 -&gt; 50%)</span>
+    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// sleep window (10s)</span>
+<span class="hljs-comment">// load the rules</span>
+DegradeRuleManager.loadRules(Collections.singletonList(rule));
+</code></pre>
+<ul>
+<li>via <a href="https://github.com/alibaba/Sentinel/wiki/Dashboard">Sentinel dashboard</a></li>
+</ul>
+<h2>Integrations</h2>
+<p>Sentinel has integration modules with Web Servlet, Dubbo, Spring Cloud and gRPC. Users can quickly use Sentinel by introducing adapter dependencies and do simple configuration. If you have been using Spring Cloud Netflix before, you may consider migrating to the <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a>.</p>
+<h2>Dynamic Configuration</h2>
+<p>Sentinel provides dynamic rule data-source support for dynamic rule management. The <code>ReadableDataSource</code> and <code>WritableDataSource</code> interfaces provided by Sentinel are easy to use.</p>
+<p>The Sentinel dynamic rule data-source provides extension module to integrate with popular configuration centers and remote storage. Currently, it supports many dynamic rule sources such as Nacos, ZooKeeper, Apollo, and Redis, which can cover many production scenarios.</p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/demo3.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

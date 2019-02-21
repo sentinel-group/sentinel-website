@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-4-1-release.md",
+  "__html": "<h1>Sentinel 1.4.1 Released</h1>\n<p><a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.4.1\">Sentinel 1.4.1</a> has been released. The main features of this version:</p>\n<ul>\n<li>Refactored and improved the cluster flow control management page of Sentinel dashboard.</li>\n<li>Support to limit the total QPS of the token server to avoid affecting the application itself when running in embedded mode.</li>\n<li>Enhanced the retry mechanism of token client in Sentinel cluster flow control.</li>\n</ul>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/50681555-e529fc80-1046-11e9-99e4-6f1bc2ea3bb1.png\" alt=\"image\"></p>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/50681583-0985d900-1047-11e9-8e99-73e43ff78098.png\" alt=\"image\"></p>\n<p>See <a href=\"https://github.com/alibaba/Sentinel/wiki/Release-Notes#141\">Release Notes</a> for details.</p>\n"
+}

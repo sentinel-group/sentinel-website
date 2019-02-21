@@ -7,11 +7,18 @@ export default {
       title: 'Events & News',
       list: [
         {
-          img: '/img/brhtqqzh.jpeg',
-          title: 'Sentinel 1.3.0 GA released',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          title: 'Sentinel 1.4.2 released',
           content: '',
-          dateStr: 'Oct 30th，2018',
-          link: '/en-us/blog/blog1.html',
+          dateStr: 'Feb 21st，2019',
+          link: '/en-us/blog/sentinel-1-4-2-release.html',
+        },
+        {
+          img: '/img/brhtqqzh.jpeg',
+          title: 'Sentinel 1.4.1 released',
+          content: 'Sentinel 1.4.1 released with the improvement of Sentinel cluster flow control.',
+          dateStr: 'Jan 4th，2019',
+          link: '/en-us/blog/sentinel-1-4-1-release.html',
         },
       ]
     },
@@ -134,6 +141,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.4.2 正式发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.4.2 版本发布，引入 Zuul 1.x 适配，完善了集群流控相关的功能。',
+          dateStr: 'Feb 21st，2019',
+          link: '/zh-cn/blog/sentinel-1-4-2-release.html',
+        },
         {
           img: '/img/brhtqqzh.jpeg',
           title: 'Sentinel 1.4.1 正式发布',

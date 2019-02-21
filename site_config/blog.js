@@ -4,10 +4,17 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Guideline: Migration from Hystrix to Sentinel',
+        author: 'Eric Zhao',
+        dateStr: 'Nov 29th，2018',
+        desc: 'This blog post will introduce how to migrate from Netflix Hystrix to Sentinel',
+        link: '/en-us/blog/guideline-migrate-from-hystrix-to-sentinel.html',
+      },
+      {
         title: 'Sentinel: The flow sentinel of Apache RocketMQ',
         author: 'Eric Zhao',
         dateStr: 'July 27th，2018',
-        desc: 'Blog description, some text to sum up the main content of the blog',
+        desc: 'This blog post describes the best practice of using Sentinel in MQ',
         link: '/en-us/blog/sentinel-flow-sentinel-of-rocketmq.html',
       },
     ],
@@ -16,6 +23,13 @@ export default {
     barText: '博客',
     postsTitle: '所有文章',
     list: [
+      {
+        title: 'Sentinel 1.4.2 正式发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.4.2 版本发布，引入 Zuul 1.x 适配，完善了集群流控相关的功能。',
+        dateStr: '2019.02.21',
+        link: '/zh-cn/blog/sentinel-1-4-2-release.html',
+      },
       {
         title: 'Sentinel 1.4.1 正式发布',
         author: 'Eric Zhao',

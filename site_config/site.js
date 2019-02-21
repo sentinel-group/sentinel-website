@@ -62,7 +62,7 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
   'zh-cn': {
     pageMenu: [

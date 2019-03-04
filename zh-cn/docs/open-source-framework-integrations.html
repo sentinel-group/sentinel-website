@@ -20,6 +20,7 @@
 <li><a href="#spring-cloud">Spring Boot / Spring Cloud</a></li>
 <li><a href="#grpc">gRPC</a></li>
 <li><a href="#apache-rocketmq">Apache RocketMQ</a></li>
+<li><a href="#zuul-1x">Netflix Zuul 1.x</a></li>
 </ul>
 <blockquote>
 <p><strong>注：适配模块仅提供相应适配功能，若希望接入 Sentinel 控制台，请务必参考 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台文档</a>。</strong></p>
@@ -146,6 +147,87 @@ Server server = ServerBuilder.forPort(port)
 }
 </code></pre>
 <p>结合 RocketMQ Client 使用 Sentinel 时，用户需要在处理消息时手动埋点。详情请见 <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-rocketmq">Sentinel RocketMQ Demo</a>。相关 Blog 见 <a href="https://github.com/alibaba/Sentinel/wiki/Sentinel-%E4%B8%BA-RocketMQ-%E4%BF%9D%E9%A9%BE%E6%8A%A4%E8%88%AA">Sentinel 为 RocketMQ 保驾护航</a>。</p>
+<h2>Zuul 1.x</h2>
+<p>Sentinel 提供与 <a href="https://github.com/Netflix/zuul">Netflix Zuul 1.x</a> 的整合，可以对网关的转发请求进行流量控制，默认提供 Service 和 URL 两个维度上的限流。</p>
+<p>使用时需引入以下模块（以 Maven 为例）：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-zuul-adapter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>下面数据是 Sentinel 生成的链路数据，其中 <code>coke</code> 和 <code>book</code> 是对应的微服务（服务 ID 存储在 Zuul 的 <code>Context</code> 中，对应的 key 为：<code>ctx.get(&quot;serviceId&quot;)</code>）；<code>--/coke/app</code> 是服务对应的请求路径：</p>
+<pre><code class="language-bash">EntranceNode: machine-root
+-EntranceNode: coke
+--coke
+---/coke/app
+-EntranceNode: book
+--book
+---/book/app
+</code></pre>
+<p>可以针对服务 <code>coke</code> 调用进行限流，也可以直接对 URL 限流，或者根据需要同时限流。</p>
+<p>Zuul Adapter 通过实现 <code>ZuulFilter</code> 来完成来完成 Sentinel 的整合，所以我们需要注册 <code>ZuulFilter</code>：</p>
+<pre><code class="language-java"><span class="hljs-comment">// 获取 FilterRegistry</span>
+<span class="hljs-keyword">final</span> FilterRegistry r = FilterRegistry.instance();
+<span class="hljs-comment">// 开关,顺序等ZuulFilter的配置信息。</span>
+SentinelZuulProperties properties = <span class="hljs-keyword">new</span> SentinelZuulProperties();
+<span class="hljs-comment">// 开启Sentinel。</span>
+properties.setEnabled(<span class="hljs-keyword">true</span>);
+<span class="hljs-comment">// 配置URL解析器（限流对应的资源）,可以自定义，这里使用默认的解析器。</span>
+UrlCleaner defaultUrlCleaner = <span class="hljs-keyword">new</span> DefaultUrlCleaner();
+<span class="hljs-comment">// 配置默认的orgin解析器（ContextUtil.enter(serviceTarget, origin) ）</span>
+RequestOriginParser defaultRequestOriginParser = <span class="hljs-keyword">new</span> DefaultRequestOriginParser();
+
+<span class="hljs-comment">// 注册ZuulFilter, 三个ZuulFilter 必须全部注册，才能完整的统计链路信息。</span>
+SentinelPreFilter sentinelPreFilter = <span class="hljs-keyword">new</span> SentinelPreFilter(properties, defaultUrlCleaner, defaultRequestOriginParser);
+r.put(<span class="hljs-string">"sentinelPreFilter"</span>, sentinelPreFilter);
+SentinelPostFilter postFilter = <span class="hljs-keyword">new</span> SentinelPostFilter(properties);
+r.put(<span class="hljs-string">"sentinelPostFilter"</span>, postFilter);
+SentinelErrorFilter errorFilter = <span class="hljs-keyword">new</span> SentinelErrorFilter(properties);
+r.put(<span class="hljs-string">"sentinelErrorFilter"</span>, errorFilter);
+</code></pre>
+<p>发生限流之后的处理流程 ：</p>
+<ul>
+<li>发生限流之后可自定义返回参数，通过实现 <code>SentinelFallbackProvider</code> 接口，默认的实现是 <code>DefaultBlockFallbackProvider</code></li>
+<li>可以针对不同的路径有不同的返回，默认的 fallback route 的规则是 <code>ServiveId + URI PATH</code>，例如 <code>/book/app</code>，其中 <code>book</code> 是serviceId，<code>/app</code> 是 URI PATH
+比如：</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-comment">// 自定义 FallbackProvider </span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyBlockFallbackProvider</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ZuulBlockFallbackProvider</span> </span>{
+
+    <span class="hljs-keyword">private</span> Logger logger = LoggerFactory.getLogger(DefaultBlockFallbackProvider.class);
+    
+    <span class="hljs-comment">// you can define route as service level </span>
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getRoute</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"/book/app"</span>;
+    }
+
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> BlockResponse <span class="hljs-title">fallbackResponse</span><span class="hljs-params">(String route, Throwable cause)</span> </span>{
+            RecordLog.info(String.format(<span class="hljs-string">"[Sentinel DefaultBlockFallbackProvider] Run fallback route: %s"</span>, route));
+            <span class="hljs-keyword">if</span> (cause <span class="hljs-keyword">instanceof</span> BlockException) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> BlockResponse(<span class="hljs-number">429</span>, <span class="hljs-string">"Sentinel block exception"</span>, route);
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> BlockResponse(<span class="hljs-number">500</span>, <span class="hljs-string">"System Error"</span>, route);
+            }
+        }
+ }
+ 
+ <span class="hljs-comment">// 注册 FallbackProvider</span>
+ ZuulBlockFallbackManager.registerProvider(<span class="hljs-keyword">new</span> MyBlockFallbackProvider());
+</code></pre>
+<p>限流发生之后的默认返回：</p>
+<pre><code class="language-json">{
+    <span class="hljs-attr">"code"</span>:<span class="hljs-number">429</span>,
+    <span class="hljs-attr">"message"</span>:<span class="hljs-string">"Sentinel block exception"</span>,
+    <span class="hljs-attr">"route"</span>:<span class="hljs-string">"/"</span>
+}
+</code></pre>
+<p><strong>注意</strong>：Sentinel Zuul Filter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 <code>UrlCleaner</code> 接口清洗一下资源（比如将满足 <code>/foo/:id</code> 的 URL 都归到 <code>/foo/*</code> 资源下），
+然后将其传入至 <code>SentinelPreFilter</code> 的构造参数中。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将 <strong>不会生效</strong>。</p>
+<p>若希望对 HTTP 请求按照来源限流，则可以自己实现 <code>RequestOriginParser</code> 接口从 HTTP 请求中解析 origin 然后将其传入至<code>SentinelPreFilter</code>的构造参数中。</p>
+<p>如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 Spring Cloud Alibaba Sentinel Zuul Starter 来更方便地整合 Sentinel。Starter 会依赖这个 Adapter, <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba/issues/58">进度请查看这里</a>。</p>
 </div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

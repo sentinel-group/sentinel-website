@@ -142,6 +142,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel 1.5.0 正式发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.5.0 版本正式发布，引入 Reactive 支持、滑动窗口占用机制等多项新特性。',
+          dateStr: 'Mar 14th，2019',
+          link: '/zh-cn/blog/sentinel-1-5-0-release.html',
+        },
+        {
           title: 'Sentinel 1.4.2 正式发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel 1.4.2 版本发布，引入 Zuul 1.x 适配，完善了集群流控相关的功能。',
@@ -241,17 +248,32 @@ export default {
             },
             {
               text: 'Spring Cloud',
-              link: '',
+              link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
               bgColor: '#00D0D9',
             },
             {
               text: 'Servlet',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-web-servlet',
               bgColor: '#00D0D9',
             },
             {
               text: 'gRPC',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-grpc-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Spring WebFlux',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-webflux-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Reactor',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-reactor-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Zuul 1.x',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
               bgColor: '#00D0D9',
             },
           ],

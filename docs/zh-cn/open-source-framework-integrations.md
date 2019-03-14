@@ -5,11 +5,13 @@
 - [Web Servlet](#web-servlet)
 - [Dubbo](#dubbo)
 - [Spring Boot / Spring Cloud](#spring-cloud)
+- [Spring WebFlux](#spring-webflux)
 - [gRPC](#grpc)
-- [Apache RocketMQ](#apache-rocketmq)
+- [Reactive 适配](#reactive-适配)
 - [Netflix Zuul 1.x](#zuul-1x)
+- [Apache RocketMQ](#apache-rocketmq)
 
-> **注：适配模块仅提供相应适配功能，若希望接入 Sentinel 控制台，请务必参考 [Sentinel 控制台文档](https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0)。**
+> **注：适配模块仅提供相应适配功能，若希望接入 Sentinel 控制台，请务必参考 [Sentinel 控制台文档](./dashboard.md)。**
 
 ## Web Servlet
 
@@ -92,7 +94,7 @@ Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.co
 - 服务接口：resourceName 为 `接口全限定名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService`
 - 服务方法：resourceName 为 `接口全限定名:方法签名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService:sayHello(java.lang.String)`
 
-从 0.1.1 版本开始，Sentinel Dubbo Adapter 还支持配置全局的 fallback 函数，可以在 Dubbo 服务被限流/降级/负载保护的时候进行相应的 fallback 处理。用户只需要实现自定义的 [`DubboFallback`](https://github.com/alibaba/Sentinel/blob/master/sentinel-adapter/sentinel-dubbo-adapter/src/main/java/com/alibaba/csp/sentinel/adapter/dubbo/fallback/DubboFallback.java) 接口，并通过 `DubboFallbackRegistry` 注册即可。默认情况会直接将 `BlockException` 包装后抛出。同时，我们还可以配合 [Dubbo 的 fallback 机制](http://dubbo.incubator.apache.org/zh-cn/docs/user/demos/local-mock.html) 来为降级的服务提供替代的实现。
+Sentinel Dubbo Adapter 还支持配置全局的 fallback 函数，可以在 Dubbo 服务被限流/降级/负载保护的时候进行相应的 fallback 处理。用户只需要实现自定义的 [`DubboFallback`](https://github.com/alibaba/Sentinel/blob/master/sentinel-adapter/sentinel-dubbo-adapter/src/main/java/com/alibaba/csp/sentinel/adapter/dubbo/fallback/DubboFallback.java) 接口，并通过 `DubboFallbackRegistry` 注册即可。默认情况会直接将 `BlockException` 包装后抛出。同时，我们还可以配合 [Dubbo 的 fallback 机制](http://dubbo.incubator.apache.org/zh-cn/docs/user/demos/local-mock.html) 来为降级的服务提供替代的实现。
 
 > 注：一般情况下熔断降级 / fallback 用于调用端（客户端）。
 
@@ -104,7 +106,69 @@ Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.co
 
 ## Spring Cloud
 
-[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供分布式应用服务开发的一站式解决方案。Sentinel 与 Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-examples/sentinel-example/sentinel-core-example/readme-zh.md)。
+[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供微服务开发的一站式解决方案。Sentinel 与 Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/wiki/Sentinel)。
+
+Spring Cloud Alibaba 默认为 Sentinel 整合了 Servlet 、RestTemplate 和 FeignClient。Sentinel 在 Spring Cloud 生态中，不仅补全了 Hystrix 在 Servlet 和 RestTemplate 这一块的空白，而且还完全兼容了 Hystrix 在 FeignClient 中限流降级的用法,最后还支持运行时灵活地配置和调整限流降级规则。
+
+## Spring WebFlux
+
+> 注：从 1.5.0 版本开始支持，需要 Java 8 及以上版本。
+
+Sentinel 提供与 Spring WebFlux 的整合模块，从而 Reactive Web 应用也可以利用 Sentinel 的流控降级来保障稳定性。该整合模块基于 Sentinel Reactor Adapter 实现。
+
+使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-spring-webflux-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+使用时只需注入对应的 `SentinelWebFluxFilter` 实例以及 `SentinelBlockExceptionHandler` 实例即可。比如：
+
+```java
+@Configuration
+public class WebFluxConfig {
+
+    private final List<ViewResolver> viewResolvers;
+    private final ServerCodecConfigurer serverCodecConfigurer;
+
+    public WebFluxConfig(ObjectProvider<List<ViewResolver>> viewResolversProvider,
+                         ServerCodecConfigurer serverCodecConfigurer) {
+        this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
+        this.serverCodecConfigurer = serverCodecConfigurer;
+    }
+
+    @Bean
+    @Order(-1)
+    public SentinelBlockExceptionHandler sentinelBlockExceptionHandler() {
+        // Register the block exception handler for Spring WebFlux.
+        return new SentinelBlockExceptionHandler(viewResolvers, serverCodecConfigurer);
+    }
+
+    @Bean
+    @Order(-1)
+    public SentinelWebFluxFilter sentinelWebFluxFilter() {
+        // Register the Sentinel WebFlux filter.
+        return new SentinelWebFluxFilter();
+    }
+}
+```
+
+您可以在 `WebFluxCallbackManager` 注册回调进行定制：
+
+- `setBlockHandler`：注册函数用于实现自定义的逻辑处理被限流的请求，对应接口为 `BlockRequestHandler`。默认实现为 `DefaultBlockRequestHandler`，当被限流时会返回类似于下面的错误信息：
+
+```
+Blocked by Sentinel: FlowException
+```
+
+- `setUrlCleaner`：注册函数用于 Web 资源名的归一化。函数类型为 `(ServerWebExchange, String) → String`，对应含义为 `(webExchange, originalUrl) → finalUrl`。
+- `setRequestOriginParser`：注册函数用于从请求中解析请求来源。函数类型为 `ServerWebExchange → String`。
+
+相关示例：[sentinel-demo-spring-webflux](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-spring-webflux)
 
 ## gRPC
 
@@ -146,6 +210,30 @@ Server server = ServerBuilder.forPort(port)
 ```
 
 注意：由于 gRPC 拦截器中 ClientCall/ServerCall 以回调的形式进行请求响应信息的获取，每次 gRPC 服务调用计算出的 RT 可能会不准确。Sentinel gRPC Adapter 目前只支持 unary call。
+
+## Reactive 适配
+
+### Reactor 适配
+
+> 注：从 1.5.0 版本开始支持，需要 Java 8 及以上版本。
+
+Sentinel 提供 [Reactor](https://projectreactor.io/) 的适配，可以方便地在 reactive 应用中接入 Sentinel。使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-reactor-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+Sentinel Reactor Adapter 分别针对 `Mono` 和 `Flux` 实现了对应的 Sentinel Operator，从而在各种事件触发时汇入 Sentinel 的相关逻辑。同时 Sentinel 在上层提供了 `SentinelReactorTransformer` 用于在组装期装入对应的 operator，用户使用时只需要通过 `transform` 操作符来进行变换即可。接入示例：
+
+```java
+someService.doSomething() // return type: Mono<T> or Flux<T>
+   .transform(new SentinelReactorTransformer<>(resourceName)) // 在此处进行变换
+   .subscribe();
+```
 
 ## Apache RocketMQ
 
@@ -279,4 +367,4 @@ public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
 
 若希望对 HTTP 请求按照来源限流，则可以自己实现 `RequestOriginParser` 接口从 HTTP 请求中解析 origin 然后将其传入至`SentinelPreFilter`的构造参数中。
 
-如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 Spring Cloud Alibaba Sentinel Zuul Starter 来更方便地整合 Sentinel。Starter 会依赖这个 Adapter, [进度请查看这里](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/issues/58)。
+如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 `spring-cloud-alibaba-sentinel-zuul` 来更方便地整合 Sentinel。请参考 [对应文档](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/tree/master/spring-cloud-alibaba-sentinel-zuul)。

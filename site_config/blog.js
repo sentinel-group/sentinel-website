@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.5.0 正式发布，引入 Reactive 支持',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.5.0 版本正式发布，引入 Reactive 支持、滑动窗口占用机制等多项新特性。',
+        dateStr: '2019.03.14',
+        link: '/zh-cn/blog/sentinel-1-5-0-release.html',
+      },
+      {
         title: 'Sentinel 1.4.2 正式发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.4.2 版本发布，引入 Zuul 1.x 适配，完善了集群流控相关的功能。',

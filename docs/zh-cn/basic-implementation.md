@@ -93,14 +93,15 @@ t:threadNum  pq:passQps  bq:blockedQps  tq:totalQps  rt:averageRt  prq: passRequ
 
 ## ClusterBuilderSlot
 
-此插槽用于构建资源的 `ClusterNode` 以及调用来源节点。`ClusterNode` 保持资源运行统计信息（响应时间、QPS、block 数目、线程数、异常数等）以及原始调用者统计信息列表。来源调用者的名字由 `Context.enter(contextName，origin)` 中的 `origin` 标记。可通过如下命令查看某个资源不同调用者的访问情况：`curl http://localhost:8719/origin?id=caller`：
+此插槽用于构建资源的 `ClusterNode` 以及调用来源节点。`ClusterNode` 保持资源运行统计信息（响应时间、QPS、block 数目、线程数、异常数等）以及原始调用者统计信息列表。来源调用者的名字由 `ContextUtil.enter(contextName，origin)` 中的 `origin` 标记。可通过如下命令查看某个资源不同调用者的访问情况：`curl http://localhost:8719/origin?id=caller`：
 
-``` 
+```
 id: nodeA
 idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1m-total 
 1   caller1 0         0         0          0        0     0         0          0        
 2   caller2 0         0         0          0        0     0         0          0        
-```   
+```
+
 ## StatisticSlot
 
 `StatisticSlot` 是 Sentinel 的核心功能插槽之一，用于统计实时的调用数据。
@@ -109,6 +110,10 @@ idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1
 - `origin`：根据来自不同调用者的统计信息
 - `defaultnode`: 根据上下文条目名称和资源 ID 的 runtime 统计
 - 入口的统计
+
+Sentinel 底层采用高性能的滑动窗口数据结构 `LeapArray` 来统计实时的秒级指标数据，可以很好地支撑写多于读的高并发场景。
+
+![sliding-window-leap-array](https://user-images.githubusercontent.com/9434884/51955215-0af7c500-247e-11e9-8895-9fc0e4c10c8c.png)
 
 ## FlowSlot
 
@@ -120,7 +125,7 @@ idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1
 
 ## DegradeSlot
 
-这个 slot 主要针对资源的运行 RT 以及预设规则（平均 RT 模式或异常比率模式），来决定资源是否在接下来的时间被自动降级掉。
+这个 slot 主要针对资源的平均响应时间（RT）以及异常比率，来决定资源是否在接下来的时间被自动熔断掉。
 
 ## SystemSlot
 
@@ -128,9 +133,5 @@ idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1
 
 注意这个功能的两个限制:
 
-- 只对入口流量起作用（调用类型为`EntryType.IN`），对出口流量无效。可通过 `SphU.entry()` 指定调用类型，如果不指定，默认是`EntryType.OUT`。
-``` java
- Entry entry = SphU.entry("resourceName"，EntryType.IN);
-``` 
-
+- 只对入口流量起作用（调用类型为`EntryType.IN`），对出口流量无效。可通过 `SphU.entry()` 指定调用类型，如果不指定，默认是`EntryType.OUT`。示例：`Entry entry = SphU.entry("resourceName"，EntryType.IN);`
 - 只在 Unix-like 的操作系统上生效

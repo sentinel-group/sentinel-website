@@ -82,7 +82,7 @@
 t:threadNum  pq:passQps  bq:blockedQps  tq:totalQps  rt:averageRt  prq: passRequestQps 1mp:1m-passed 1mb:1m-blocked 1mt:1m-total
 </code></pre>
 <h2>ClusterBuilderSlot</h2>
-<p>此插槽用于构建资源的 <code>ClusterNode</code> 以及调用来源节点。<code>ClusterNode</code> 保持资源运行统计信息（响应时间、QPS、block 数目、线程数、异常数等）以及原始调用者统计信息列表。来源调用者的名字由 <code>Context.enter(contextName，origin)</code> 中的 <code>origin</code> 标记。可通过如下命令查看某个资源不同调用者的访问情况：<code>curl http://localhost:8719/origin?id=caller</code>：</p>
+<p>此插槽用于构建资源的 <code>ClusterNode</code> 以及调用来源节点。<code>ClusterNode</code> 保持资源运行统计信息（响应时间、QPS、block 数目、线程数、异常数等）以及原始调用者统计信息列表。来源调用者的名字由 <code>ContextUtil.enter(contextName，origin)</code> 中的 <code>origin</code> 标记。可通过如下命令查看某个资源不同调用者的访问情况：<code>curl http://localhost:8719/origin?id=caller</code>：</p>
 <pre><code>id: nodeA
 idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1m-total 
 1   caller1 0         0         0          0        0     0         0          0        
@@ -96,6 +96,8 @@ idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1
 <li><code>defaultnode</code>: 根据上下文条目名称和资源 ID 的 runtime 统计</li>
 <li>入口的统计</li>
 </ul>
+<p>Sentinel 底层采用高性能的滑动窗口数据结构 <code>LeapArray</code> 来统计实时的秒级指标数据，可以很好地支撑写多于读的高并发场景。</p>
+<p><img src="https://user-images.githubusercontent.com/9434884/51955215-0af7c500-247e-11e9-8895-9fc0e4c10c8c.png" alt="sliding-window-leap-array"></p>
 <h2>FlowSlot</h2>
 <p>这个 slot 主要根据预设的资源的统计信息，按照固定的次序，依次生效。如果一个资源对应两条或者多条流控规则，则会根据如下次序依次检验，直到全部通过或者有一个规则生效为止:</p>
 <ul>
@@ -104,16 +106,12 @@ idx origin  threadNum passedQps blockedQps totalQps aRt   1m-passed 1m-blocked 1
 <li>调用方为 default 的规则。</li>
 </ul>
 <h2>DegradeSlot</h2>
-<p>这个 slot 主要针对资源的运行 RT 以及预设规则（平均 RT 模式或异常比率模式），来决定资源是否在接下来的时间被自动降级掉。</p>
+<p>这个 slot 主要针对资源的平均响应时间（RT）以及异常比率，来决定资源是否在接下来的时间被自动熔断掉。</p>
 <h2>SystemSlot</h2>
 <p>这个 slot 会根据对于当前系统的整体情况，对入口的资源进行调配。其原理是让入口的流量和当前系统的 load 达到一个动态平衡。</p>
 <p>注意这个功能的两个限制:</p>
 <ul>
-<li>只对入口流量起作用（调用类型为<code>EntryType.IN</code>），对出口流量无效。可通过 <code>SphU.entry()</code> 指定调用类型，如果不指定，默认是<code>EntryType.OUT</code>。</li>
-</ul>
-<pre><code class="language-java"> Entry entry = SphU.entry(<span class="hljs-string">"resourceName"</span>，EntryType.IN);
-</code></pre>
-<ul>
+<li>只对入口流量起作用（调用类型为<code>EntryType.IN</code>），对出口流量无效。可通过 <code>SphU.entry()</code> 指定调用类型，如果不指定，默认是<code>EntryType.OUT</code>。示例：<code>Entry entry = SphU.entry(&quot;resourceName&quot;，EntryType.IN);</code></li>
 <li>只在 Unix-like 的操作系统上生效</li>
 </ul>
 </div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>

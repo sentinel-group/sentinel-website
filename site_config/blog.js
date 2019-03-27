@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.5.1 正式发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.5.1 版本正式发布，主要包含一些 bug 修复和功能改进，同时添加了兼容 Dubbo 2.7.x 的适配模块。',
+        dateStr: '2019.03.28',
+        link: '/zh-cn/blog/sentinel-1-5-1-release.html',
+      },
+      {
         title: 'Sentinel 1.5.0 正式发布，引入 Reactive 支持',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.5.0 版本正式发布，引入 Reactive 支持、滑动窗口占用机制等多项新特性。',

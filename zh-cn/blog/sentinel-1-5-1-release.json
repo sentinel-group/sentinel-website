@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-5-1-release.md",
+  "__html": "<h1>Sentinel 1.5.1 版本发布</h1>\n<p><a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.5.1\">Sentinel 1.5.1</a> 正式发布，主要包含一些 bug 修复和功能改进，同时添加了兼容 Dubbo 2.7.x 的适配模块。主要变更如下：</p>\n<h2>特性/功能改进</h2>\n<ul>\n<li><code>@SentinelResource</code> 注解新增 <code>exceptionsToTrace</code> 配置项，用于指定要记录哪些业务异常</li>\n<li>完善 <code>InitExecutor</code> 以及 <code>LogBase</code> 中处理 Error 的逻辑</li>\n<li>新增 Apache Dubbo 2.7.x 的兼容模块 <code>sentinel-apache-dubbo-adapter</code></li>\n<li>完善 ZookeeperDataSource 在初始化过程中网络不稳定时的行为</li>\n</ul>\n<h2>Bug 修复</h2>\n<ul>\n<li>修复 Env 静态块间接循环引用导致死锁的 bug</li>\n<li>修复注解支持模块 exit 没有传入方法参数的 bug</li>\n</ul>\n<p>详情请参考 <a href=\"https://github.com/alibaba/Sentinel/wiki/Release-Notes#151\">Release Notes</a>。</p>\n"
+}

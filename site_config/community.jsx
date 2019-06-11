@@ -7,6 +7,20 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.6.0 released',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.6.0 released with flow control support for API gateways including Spring Cloud Gateway and Zuul.',
+          dateStr: 'Apr 24th，2019',
+          link: '/en-us/blog/sentinel-1-6-0-release.html',
+        },
+        {
+          title: 'Sentinel 1.5.0 released',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.5.0 released with attracting features including reactive support and occupiable sliding window.',
+          dateStr: 'Mar 14th，2019',
+          link: '/en-us/blog/sentinel-1-5-0-release.html',
+        },
+        {
           img: '/img/DZyHFgnWAAEfldY.jpg',
           title: 'Sentinel 1.4.2 released',
           content: '',
@@ -105,6 +119,26 @@ export default {
               link: '',
               bgColor: '#00D0D9',
             },
+            {
+              text: 'Spring WebFlux',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-webflux-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Reactor',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-reactor-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Zuul 1.x',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Spring Cloud Gateway',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-cloud-gateway-adapter',
+              bgColor: '#00D0D9',
+            },
           ],
         },
         {
@@ -141,6 +175,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.6.0 正式发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.6.0 版本正式发布，引入对 Spring Cloud Gateway 等主流 API Gateway 的场景化流控支持。',
+          dateStr: 'Apr 24th，2019',
+          link: '/zh-cn/blog/sentinel-1-6-0-release.html',
+        },
         {
           img: '/img/brhtqqzh.jpeg',
           title: 'Sentinel 1.5.1 正式发布',
@@ -281,6 +322,11 @@ export default {
             {
               text: 'Zuul 1.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Spring Cloud Gateway',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-cloud-gateway-adapter',
               bgColor: '#00D0D9',
             },
           ],

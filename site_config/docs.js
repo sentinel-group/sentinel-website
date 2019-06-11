@@ -101,6 +101,10 @@ export default {
                 link: '/zh-cn/docs/cluster-flow-control.html',
               },
               {
+                title: '网关流量控制',
+                link: '/zh-cn/docs/gateway-flow-control.html',
+              },
+              {
                 title: '热点参数限流',
                 link: '/zh-cn/docs/parameter-flow-control.html',
               },
@@ -146,6 +150,10 @@ export default {
           {
             title: '开源贡献指南',
             link: '/zh-cn/docs/contribution/contribution-guideline.html',
+          },
+          {
+            title: '开发人员',
+            link: '/zh-cn/docs/contribution/developers.html',
           },
         ],
       },

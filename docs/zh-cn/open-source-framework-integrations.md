@@ -8,6 +8,10 @@
 - [Spring WebFlux](#spring-webflux)
 - [gRPC](#grpc)
 - [Reactive 适配](#reactive-适配)
+  - [Reactor](#reactor)
+- [API Gateway 适配](#api-gateway-适配)
+  - [Spring Cloud Gateway](#spring-cloud-gateway)
+  - [Netflix Zuul 1.x](#zuul-1x)
 - [Netflix Zuul 1.x](#zuul-1x)
 - [Apache RocketMQ](#apache-rocketmq)
 
@@ -68,7 +72,22 @@ public class FilterConfig {
 
 ## Dubbo
 
-Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。使用时需引入以下模块（以 Maven 为例）：
+Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。相关模块：
+
+- `sentinel-apache-dubbo-adapter`（兼容 Apache Dubbo 2.7.x 及以上版本，自 Sentinel 1.5.1 开始支持）
+- `sentinel-dubbo-adapter`（兼容 Dubbo 2.6.x 版本）
+
+对于 Apache Dubbo **2.7.x** 及以上版本，使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-apache-dubbo-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+对于 Dubbo **2.6.x** 及以下版本，使用时需引入以下模块（以 Maven 为例）：
 
 ```xml
 <dependency>
@@ -159,12 +178,7 @@ public class WebFluxConfig {
 
 您可以在 `WebFluxCallbackManager` 注册回调进行定制：
 
-- `setBlockHandler`：注册函数用于实现自定义的逻辑处理被限流的请求，对应接口为 `BlockRequestHandler`。默认实现为 `DefaultBlockRequestHandler`，当被限流时会返回类似于下面的错误信息：
-
-```
-Blocked by Sentinel: FlowException
-```
-
+- `setBlockHandler`：注册函数用于实现自定义的逻辑处理被限流的请求，对应接口为 `BlockRequestHandler`。默认实现为 `DefaultBlockRequestHandler`，当被限流时会返回类似于下面的错误信息：`Blocked by Sentinel: FlowException`。
 - `setUrlCleaner`：注册函数用于 Web 资源名的归一化。函数类型为 `(ServerWebExchange, String) → String`，对应含义为 `(webExchange, originalUrl) → finalUrl`。
 - `setRequestOriginParser`：注册函数用于从请求中解析请求来源。函数类型为 `ServerWebExchange → String`。
 
@@ -213,7 +227,7 @@ Server server = ServerBuilder.forPort(port)
 
 ## Reactive 适配
 
-### Reactor 适配
+### Reactor
 
 > 注：从 1.5.0 版本开始支持，需要 Java 8 及以上版本。
 
@@ -234,6 +248,82 @@ someService.doSomething() // return type: Mono<T> or Flux<T>
    .transform(new SentinelReactorTransformer<>(resourceName)) // 在此处进行变换
    .subscribe();
 ```
+
+## API Gateway 适配
+
+Sentinel 支持对 Spring Cloud Gateway、Zuul 等主流的 API Gateway 进行限流。
+
+### Spring Cloud Gateway
+
+从 1.6.0 版本开始，Sentinel 提供了 Spring Cloud Gateway 的适配模块，可以提供两种资源维度的限流：
+
+- route 维度：即在 Spring 配置文件中配置的路由条目，资源名为对应的 routeId
+- 自定义 API 维度：用户可以利用 Sentinel 提供的 API 来自定义一些 API 分组
+
+使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+使用时只需注入对应的 `SentinelGatewayFilter` 实例以及 `SentinelGatewayBlockExceptionHandler` 实例即可。比如：
+
+```java
+@Configuration
+public class GatewayConfiguration {
+
+    private final List<ViewResolver> viewResolvers;
+    private final ServerCodecConfigurer serverCodecConfigurer;
+
+    public GatewayConfiguration(ObjectProvider<List<ViewResolver>> viewResolversProvider,
+                                ServerCodecConfigurer serverCodecConfigurer) {
+        this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
+        this.serverCodecConfigurer = serverCodecConfigurer;
+    }
+
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SentinelGatewayBlockExceptionHandler sentinelGatewayBlockExceptionHandler() {
+        // Register the block exception handler for Spring Cloud Gateway.
+        return new SentinelGatewayBlockExceptionHandler(viewResolvers, serverCodecConfigurer);
+    }
+
+    @Bean
+    @Order(-1)
+    public GlobalFilter sentinelGatewayFilter() {
+        return new SentinelGatewayFilter();
+    }
+}
+```
+
+Demo 示例：[sentinel-demo-spring-cloud-gateway](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-spring-cloud-gateway)
+
+详细文档可以参考 [网关限流 - Spring Cloud Gateway 文档](https://github.com/alibaba/Sentinel/wiki/网关限流#spring-cloud-gateway)。
+
+## Zuul 1.x
+
+Sentinel 提供了 Zuul 1.x 的适配模块，可以为 Zuul Gateway 提供两种资源维度的限流：
+
+- route 维度：即在 Spring 配置文件中配置的路由条目，资源名为对应的 route ID（对应 `RequestContext` 中的 `proxy` 字段）
+- 自定义 API 维度：用户可以利用 Sentinel 提供的 API 来自定义一些 API 分组
+
+使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-zuul-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+详细文档可以参考 [网关限流 - Zuul 1.x](https://github.com/alibaba/Sentinel/wiki/网关限流#zuul-1x)。
+
+如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 `spring-cloud-alibaba-sentinel-zuul` 来更方便地整合 Sentinel。请参考 [对应文档](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/tree/master/spring-cloud-alibaba-sentinel-zuul)。
 
 ## Apache RocketMQ
 
@@ -267,104 +357,3 @@ private void initFlowControlRule() {
 ```
 
 结合 RocketMQ Client 使用 Sentinel 时，用户需要在处理消息时手动埋点。详情请见 [Sentinel RocketMQ Demo](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-rocketmq)。相关 Blog 见 [Sentinel 为 RocketMQ 保驾护航](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E4%B8%BA-RocketMQ-%E4%BF%9D%E9%A9%BE%E6%8A%A4%E8%88%AA)。
-
-## Zuul 1.x
-
-Sentinel 提供与 [Netflix Zuul 1.x](https://github.com/Netflix/zuul) 的整合，可以对网关的转发请求进行流量控制，默认提供 Service 和 URL 两个维度上的限流。
-
-使用时需引入以下模块（以 Maven 为例）：
-
-```xml
-<dependency>
-    <groupId>com.alibaba.csp</groupId>
-    <artifactId>sentinel-zuul-adapter</artifactId>
-    <version>x.y.z</version>
-</dependency>
-```
-
-下面数据是 Sentinel 生成的链路数据，其中 `coke` 和 `book` 是对应的微服务（服务 ID 存储在 Zuul 的 `Context` 中，对应的 key 为：`ctx.get("serviceId")`）；`--/coke/app` 是服务对应的请求路径：
-
-```bash
-EntranceNode: machine-root
--EntranceNode: coke
---coke
----/coke/app
--EntranceNode: book
---book
----/book/app
-```
-
-可以针对服务 `coke` 调用进行限流，也可以直接对 URL 限流，或者根据需要同时限流。
-
-Zuul Adapter 通过实现 `ZuulFilter` 来完成来完成 Sentinel 的整合，所以我们需要注册 `ZuulFilter`：
-
-```java
-// 获取 FilterRegistry
-final FilterRegistry r = FilterRegistry.instance();
-// 开关,顺序等ZuulFilter的配置信息。
-SentinelZuulProperties properties = new SentinelZuulProperties();
-// 开启Sentinel。
-properties.setEnabled(true);
-// 配置URL解析器（限流对应的资源）,可以自定义，这里使用默认的解析器。
-UrlCleaner defaultUrlCleaner = new DefaultUrlCleaner();
-// 配置默认的orgin解析器（ContextUtil.enter(serviceTarget, origin) ）
-RequestOriginParser defaultRequestOriginParser = new DefaultRequestOriginParser();
-
-// 注册ZuulFilter, 三个ZuulFilter 必须全部注册，才能完整的统计链路信息。
-SentinelPreFilter sentinelPreFilter = new SentinelPreFilter(properties, defaultUrlCleaner, defaultRequestOriginParser);
-r.put("sentinelPreFilter", sentinelPreFilter);
-SentinelPostFilter postFilter = new SentinelPostFilter(properties);
-r.put("sentinelPostFilter", postFilter);
-SentinelErrorFilter errorFilter = new SentinelErrorFilter(properties);
-r.put("sentinelErrorFilter", errorFilter);
-```
-
-发生限流之后的处理流程 ：
-
-- 发生限流之后可自定义返回参数，通过实现 `SentinelFallbackProvider` 接口，默认的实现是 `DefaultBlockFallbackProvider`
-- 可以针对不同的路径有不同的返回，默认的 fallback route 的规则是 `ServiveId + URI PATH`，例如 `/book/app`，其中 `book` 是serviceId，`/app` 是 URI PATH
-比如：
-
-```java
-// 自定义 FallbackProvider 
-public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
-
-    private Logger logger = LoggerFactory.getLogger(DefaultBlockFallbackProvider.class);
-    
-    // you can define route as service level 
-    @Override
-    public String getRoute() {
-        return "/book/app";
-    }
-
-    @Override
-        public BlockResponse fallbackResponse(String route, Throwable cause) {
-            RecordLog.info(String.format("[Sentinel DefaultBlockFallbackProvider] Run fallback route: %s", route));
-            if (cause instanceof BlockException) {
-                return new BlockResponse(429, "Sentinel block exception", route);
-            } else {
-                return new BlockResponse(500, "System Error", route);
-            }
-        }
- }
- 
- // 注册 FallbackProvider
- ZuulBlockFallbackManager.registerProvider(new MyBlockFallbackProvider());
-```
-
-限流发生之后的默认返回：
-
-```json
-{
-    "code":429,
-    "message":"Sentinel block exception",
-    "route":"/"
-}
-```
-
-**注意**：Sentinel Zuul Filter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 `UrlCleaner` 接口清洗一下资源（比如将满足 `/foo/:id` 的 URL 都归到 `/foo/*` 资源下），
-然后将其传入至 `SentinelPreFilter` 的构造参数中。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将 **不会生效**。
-
-若希望对 HTTP 请求按照来源限流，则可以自己实现 `RequestOriginParser` 接口从 HTTP 请求中解析 origin 然后将其传入至`SentinelPreFilter`的构造参数中。
-
-如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 `spring-cloud-alibaba-sentinel-zuul` 来更方便地整合 Sentinel。请参考 [对应文档](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/tree/master/spring-cloud-alibaba-sentinel-zuul)。

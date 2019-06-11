@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-6-0-release.md",
+  "__html": "<h1>Sentinel 1.6.0 版本发布，引入 Spring Cloud Gateway 支持</h1>\n<p>流控降级组件 Sentinel 的又一个里程碑版本 1.6.0 正式发布，带来了定制化的网关流控支持、注解 fallback 改进等多项新特性。</p>\n<h2>网关流控</h2>\n<p>Sentinel 1.6.0 针对 API Gateway 场景引入了定制化的网关流控特性，支持针对不同的路由和自定义的 API 分组进行流控，支持针对请求属性（如 URL 参数，Client IP，Header 等）进行流控。更多特性可以参考 <a href=\"https://github.com/alibaba/Sentinel/wiki/%E7%BD%91%E5%85%B3%E9%99%90%E6%B5%81\">Sentinel 网关流控文档</a>。</p>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/58381714-266d7980-7ff3-11e9-8617-d0d7c325d703.png\" alt=\"sentinel-api-gateway-common-arch\"></p>\n<p>详细信息请参考 <a href=\"https://github.com/alibaba/Sentinel/wiki/Release-Notes#160\">Release Notes</a>，欢迎大家使用并提出建议，也欢迎大家一起参与贡献。</p>\n"
+}

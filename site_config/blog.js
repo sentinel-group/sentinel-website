@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.6.0 正式发布，引入网关流控场景支持',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.6.0 版本正式发布，引入网关流控场景支持以及注解 fallback 改进。',
+        dateStr: '2019.04.24',
+        link: '/zh-cn/blog/sentinel-1-6-0-release.html',
+      },
+      {
         title: 'Sentinel 1.5.1 正式发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.5.1 版本正式发布，主要包含一些 bug 修复和功能改进，同时添加了兼容 Dubbo 2.7.x 的适配模块。',

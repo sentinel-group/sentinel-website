@@ -1,0 +1,4 @@
+{
+  "filename": "developers.md",
+  "__html": "<h1>Sentinel 开发人员</h1>\n<p>本页面展示了 Sentinel 的开发团队。请通过提交 pull request 的方式把自己的信息添加到列表上。</p>\n<p>感谢所有开发者对社区的贡献！</p>\n<blockquote>\n<p>注：排名不分先后。</p>\n</blockquote>\n<h2>PMC</h2>\n<ul>\n<li>Eric Zhao (<a href=\"https://github.com/sczyh30\">@sczyh30</a>)</li>\n<li>Carpenter Lee (<a href=\"https://github.com/CarpenterLee\">@CarpenterLee</a>)</li>\n<li>Jialiang Lin (<a href=\"https://github.com/jialianglinjl\">@jialianglinjl</a>)</li>\n</ul>\n<h2>Committer</h2>\n<ul>\n<li>Jason Joo (<a href=\"https://github.com/jasonjoo2010\">@jasonjoo2010</a>)</li>\n<li>Jihan Xie (<a href=\"https://github.com/cdfive\">@cdfive</a>)</li>\n</ul>\n<h2>Contributor</h2>\n<p>See <a href=\"https://github.com/alibaba/Sentinel/graphs/contributors\">the contributor list</a>.</p>\n"
+}

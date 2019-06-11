@@ -1,20 +1,5 @@
 # 基本使用 - 资源与规则
 
-## 目录
-
-* [简介](#简介)
-* [定义资源](#定义资源)
-  * [抛出异常的方式定义资源](#抛出异常的方式定义资源)
-  * [返回布尔值方式定义资源](#返回布尔值方式定义资源)
-  * [注解方式定义资源](#注解方式定义资源)
-  * [判断限流降级异常](#判断限流降级异常)
-  * [异步调用支持](#异步调用支持)
-* [定义规则](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99)
-  *  [规则的定义](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E8%A7%84%E5%88%99%E7%9A%84%E5%AE%9A%E4%B9%89)
-  * [查询修改规则](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99)
-  * [定制规则推送方式](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E8%A7%84%E5%88%99)
-* [规则生效的效果](#规则生效的效果)
-
 ## 简介
 
 我们说的资源，可以是任何东西，服务，服务里的方法，甚至是一段代码。使用 Sentinel 来进行资源保护，主要分为两个步骤:
@@ -30,7 +15,23 @@
 
 ### 抛出异常的方式定义资源
 
-用这种方式，当资源发生了限流之后会抛出 `BlockException`。这个时候可以捕捉异常，进行限流之后的逻辑处理。示例代码如下:
+`SphU` 包含了 try-catch 风格的 API。用这种方式，当资源发生了限流之后会抛出 `BlockException`。这个时候可以捕捉异常，进行限流之后的逻辑处理。示例代码如下:
+
+```java
+// 1.5.0 版本开始可以利用 try-with-resources 特性
+// 资源名可使用任意有业务语义的字符串，比如方法名、接口名或其它可唯一标识的字符串。
+try (Entry entry = SphU.entry("resourceName")) {
+  // 被保护的业务逻辑
+  // do something here...
+} catch (BlockException ex) {
+  // 资源访问阻止，被限流或被降级
+  // 在此处进行相应的处理操作
+}
+```
+
+**特别地**，若 entry 的时候传入了热点参数，那么 exit 的时候也一定要带上对应的参数（`exit(count, args)`），否则可能会有统计错误。这个时候不能使用 try-with-resources 的方式。另外通过 `Tracer.trace(ex)` 来统计异常信息时，由于 try-with-resources 语法中 catch 调用顺序的问题，会导致无法正确统计异常数，因此统计异常信息时也不能在 try-with-resources 的 catch 块中调用 `Tracer.trace(ex)`。
+
+1.5.0 之前的版本的示例：
 
 ```java
 Entry entry = null;
@@ -38,9 +39,8 @@ Entry entry = null;
 try {
   // 资源名可使用任意有业务语义的字符串
   entry = SphU.entry("自定义资源名");
-  /**
-   * 被保护的业务逻辑
-   */
+  // 被保护的业务逻辑
+  // do something...
 } catch (BlockException e1) {
   // 资源访问阻止，被限流或被降级
   // 进行相应的处理操作
@@ -50,6 +50,8 @@ try {
   }
 }
 ```
+
+**注意：** `SphU.entry(xxx)` 需要与 `entry.exit()` 方法成对出现，匹配调用，否则会导致调用链记录异常，抛出 `ErrorEntryFreeException` 异常。
 
 ### 返回布尔值方式定义资源
 
@@ -74,7 +76,22 @@ try {
 
 ### 注解方式定义资源
 
-Sentinel 支持通过 `@SentinelResource` 注解定义资源并配置 `blockHandler` 和 `fallback` 函数。详情可以参见 [Sentinel 注解支持文档](./annotation-support.md)。
+Sentinel 支持通过 `@SentinelResource` 注解定义资源并配置 `blockHandler` 和 `fallback` 函数来进行限流之后的处理。示例：
+
+```java
+// 原本的业务方法.
+@SentinelResource(blockHandler = "blockHandlerForGetUser")
+public User getUserById(String id) {
+    throw new RuntimeException("getUserById command failed");
+}
+
+// blockHandler 函数，原方法调用被限流/降级/系统保护的时候调用
+public User blockHandlerForGetUser(String id, BlockException ex) {
+    return new User("admin");
+}
+```
+
+注意 `blockHandler` 函数会在原方法被限流/降级/系统保护的时候调用，而 `fallback` 函数会针对所有类型的异常。请注意 `blockHandler` 和 `fallback` 函数的形式要求，更多指引可以参见 [Sentinel 注解扩展文档](./annotation-support.md)。
 
 ### 业务异常统计
 

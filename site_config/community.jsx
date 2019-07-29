@@ -176,6 +176,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel 1.6.3 正式发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.6.3 版本发布，引入网关流控控制台支持。',
+          dateStr: 'July 29th，2019',
+          link: '/zh-cn/blog/sentinel-1-6-3-release.html',
+        },
+        {
           title: 'Sentinel 1.6.0 正式发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel 1.6.0 版本正式发布，引入对 Spring Cloud Gateway 等主流 API Gateway 的场景化流控支持。',

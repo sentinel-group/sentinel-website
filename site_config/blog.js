@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.6.3 版本发布，引入网关流控控制台支持',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.6.3 版本发布，引入网关流控控制台支持。',
+        dateStr: '2019.07.29',
+        link: '/zh-cn/blog/sentinel-1-6-3-release.html',
+      },
+      {
         title: 'Sentinel 1.6.0 正式发布，引入网关流控场景支持',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.6.0 版本正式发布，引入网关流控场景支持以及注解 fallback 改进。',

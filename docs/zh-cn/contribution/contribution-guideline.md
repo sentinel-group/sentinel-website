@@ -18,7 +18,7 @@
 
 ## 从哪里入手？
 
-如果您是初次贡献，可以先从 [good first issue](https://github.com/alibaba/Sentinel/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) 中认领一个比较简单的任务。
+如果您是初次贡献，可以先从 [`good first issue`](https://github.com/alibaba/Sentinel/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) 或 [`help wanted`](https://github.com/alibaba/Sentinel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) 列表中认领一个比较小的任务来快速参与社区贡献。您可以直接在相应 issue 中回复参与意愿，然后参照下面的 GitHub 工作流指引解决 issue 并按照规范提交 PR，通过 review 后就会被 merge 到 master 分支。
 
 ## GitHub 工作流
 
@@ -28,17 +28,17 @@
 
 1. 将仓库 fork 到自己的 GitHub 下
 2. 将 fork 后的仓库 clone 到本地
-3. 创建新的分支，在新的分支上进行开发操作
+3. 创建新的分支，在新的分支上进行开发操作（**请确保对应的变更都有测试用例或 demo 进行验证**）
 4. 保持分支与远程 master 分支一致（通过 `fetch` 和 `rebase` 操作）
-5. 在本地提交变更（注意 commit log 保持简练、规范）
+5. 在本地提交变更（**注意 commit log 保持简练、规范**），**注意提交的 email 需要和 GitHub 的 email 保持一致**
 6. 将提交 push 到 fork 的仓库下
 7. 创建一个 pull request (PR)
 
 提交 PR 的时候请参考 [PR 模板](https://github.com/alibaba/Sentinel/blob/master/.github/PULL_REQUEST_TEMPLATE.md)。在进行较大的变更的时候请确保 PR 有一个对应的 Issue。
 
-在提交 PR 后，会自动为 PR 分配一个或多个 reviewer。Reviewer 会对提交的代码进行 review。
+若您是初次提交 PR，**请先签署 CLA**（PR 页面会有自动回复指引）。在提交 PR 后，系统会自动运行持续集成，请确保所有的 CI 均为 pass 状态。一切就绪后，我们会为 PR 分配一个或多个 reviewer。Reviewer 会对提交的代码进行 review。
 
-在合并 PR 的时候，把多余的提交记录都 squash 成一个。最终的提交信息需要保证简练、规范。
+在合并 PR 的时候，请把多余的提交记录都 squash 成一个。最终的提交信息需要保证简练、规范。
 
 ## 创建 Issue / PR
 
@@ -46,7 +46,11 @@
 
 如果您发现了文档中有表述错误，或者代码发现了 BUG，或者希望开发新的特性，或者希望提建议，可以[创建一个 Issue](https://github.com/alibaba/Sentinel/issues/new)。请参考 Issue 模板中对应的指导信息来完善 Issue 的内容，来帮助我们更好地理解您的 Issue。
 
-如果您想要贡献代码，您可以参考上面的 [GitHub 工作流](#github-工作流)，提交对应的 PR。若是对当前开发版本进行提交，则目标分支为 `master`。如果您的 PR 包含非常大的变更，比如模块的重构或者添加新的组件，请**务必先提出相关 issue，发起详细讨论，达成一致后再进行变更**，并为其编写详细的文档来阐述其设计、解决的问题和用途。注意一个 PR 尽量不要过于大。如果的确需要有大的变更，可以将其按功能拆分成多个单独的 PR。
+如果您想要贡献代码，您可以参考上面的 GitHub 工作流，提交对应的 PR。若是对当前开发版本进行提交，则目标分支为 `master`。如果您的 PR 包含非常大的变更，比如模块的重构或者添加新的组件，请**务必先提出相关 issue，发起详细讨论，达成一致后再进行变更**，并为其编写详细的文档来阐述其设计、解决的问题和用途。注意一个 PR 尽量不要过于大。如果的确需要有大的变更，可以将其按功能拆分成多个单独的 PR。
+
+## 报告安全问题
+
+特别地，若您发现 Sentinel 及其生态项目中有任何的安全漏洞（或潜在的安全问题），请第一时间通过 sentinel@linux.alibaba.com 邮箱私下联系我们。在对应代码修复之前，**请不要将对应安全问题对外披露，也不鼓励公开提 issue 报告安全问题**。
 
 ## Code review
 

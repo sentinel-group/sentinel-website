@@ -4,7 +4,7 @@ export default {
   'zh-cn': {
     brand: {
       brandName: 'Sentinel',
-      briefIntroduction: '面向分布式服务架构的轻量级流量控制组件',
+      briefIntroduction: '面向分布式服务架构的流量控制组件',
       buttons: [
         {
           text: '快速开始',

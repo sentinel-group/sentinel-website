@@ -2,11 +2,11 @@
 
 ## 目录
 
-- 集群流量控制介绍
-- 集群限流（普通模式）
-- 集群限流（热点模式）
+- [集群流控介绍](#介绍)
 - [集群流控规则配置](#集群流控规则)
-- [集群流控管理（控制台）](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%EF%BC%88%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7%E7%AE%A1%E7%90%86%EF%BC%89)
+- [集群流控示例](#示例)
+- [集群流控管理（控制台）](#集群限流控制台)
+- [Envoy RLS token server](https://github.com/alibaba/Sentinel/wiki/Envoy-RLS-Token-Server)
 
 ## 介绍
 
@@ -18,6 +18,8 @@
 
 - Token Client：集群流控客户端，用于向所属 Token Server 通信请求 token。集群限流服务端会返回给客户端结果，决定是否限流。
 - Token Server：即集群流控服务端，处理来自 Token Client 的请求，根据配置的集群规则判断是否应该发放 token（是否允许通过）。
+
+![image](https://user-images.githubusercontent.com/9434884/65305357-8f39bc80-dbb5-11e9-96d6-d1111fc365a9.png)
 
 ## 模块结构
 
@@ -91,7 +93,7 @@ ClusterFlowRuleManager.setPropertySupplier(namespace -> {
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-cluster-client-default</artifactId>
-    <version>1.4.1</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
@@ -132,7 +134,7 @@ http://<ip>:<port>/cluster/client/modifyConfig?data=<config>
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-cluster-server-default</artifactId>
-    <version>1.4.1</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
@@ -174,9 +176,24 @@ http://<ip>:<port>/setClusterMode?mode=<xxx>
 
 从 1.4.1 版本开始，Sentinel 支持给 token server 配置最大允许的总 QPS（`maxAllowedQps`），来对 token server 的资源使用进行限制，防止在嵌入模式下影响应用本身。
 
+## Token Server 分配配置
+
+![image](https://user-images.githubusercontent.com/9434884/58071181-60dbae80-7bce-11e9-9dc8-8e27e2161b0d.png)
+
+## 示例
+
+sentinel-demo-cluster 提供了嵌入模式和独立模式的示例：
+
+- [sentinel-demo-cluster-server-alone](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-cluster/sentinel-demo-cluster-server-alone/src/main/java/com/alibaba/csp/sentinel/demo/cluster/ClusterServerDemo.java)：独立模式 Demo
+- [sentinel-demo-cluster-embedded](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-cluster/sentinel-demo-cluster-embedded)：嵌入模式 Demo，以 Web 应用为示例，可以启动多个实例分别作为 Token Server 和 Token Client。数据源的相关配置可以参考 [DemoClusterInitFunc](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-cluster/sentinel-demo-cluster-embedded/src/main/java/com/alibaba/csp/sentinel/demo/cluster/init/DemoClusterInitFunc.java)。
+
+> 注意：若在本地启动多个 Demo 示例，需要加上 `-Dcsp.sentinel.log.use.pid=true` 参数，否则控制台显示监控会不准确。
+
 ## 集群限流控制台
 
-参见 [Sentinel 控制台（集群流控管理）](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%EF%BC%88%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7%E7%AE%A1%E7%90%86%EF%BC%89)。
+开源版本控制台 。使用集群限流功能需要对 Sentinel 控制台进行相关的改造，推送规则时直接推送至配置中心，接入端引入 push 模式的动态数据源。可以参考 [Sentinel 控制台（集群流控管理文档）](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%EF%BC%88%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7%E7%AE%A1%E7%90%86%EF%BC%89)。
+
+为了大家更好地理解集群流控的使用，我们提供了云上版本的 Sentinel 集群限流控制台示例。只需要简单的几步即可快速接入 AHAS Sentinel 集群限流控制台 Demo，无需手动配置动态数据源。可以参考 [AHAS Sentinel 集群限流控制台示例文档](https://github.com/alibaba/Sentinel/wiki/AHAS-Sentinel-%E9%9B%86%E7%BE%A4%E9%99%90%E6%B5%81%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%A4%BA%E4%BE%8B)。
 
 ## 扩展接口设计
 

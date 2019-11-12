@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-7-0-release.md",
+  "__html": "<h1>Sentinel 1.7.0 released with Envoy service mesh support</h1>\n<p>Sentinel 1.7.0 has been released with cool features <a href=\"https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls\">Envoy global rate limiting support</a>. See <a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.7.0\">Release Notes</a> for more details.</p>\n<div style=\"text-align: center;\">\n<img src=\"https://user-images.githubusercontent.com/9434884/68639837-d2266980-0540-11ea-8997-05084e2e47bb.png\" alt=\"Envoy RLS Sentinel overview\" style=\"width: 60%;\" />\n</div>"
+}

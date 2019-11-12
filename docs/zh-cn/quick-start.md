@@ -19,7 +19,7 @@ Sentinel 的使用可以分为两个部分:
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.6.1</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-transport-simple-http</artifactId>
-    <version>1.6.1</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
@@ -143,10 +143,11 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 
 ### 1. 下载 Demo jar
 
-您可以 [点击此处下载 Sentinel 公网 Demo jar 包](http://ahasoss-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/sdk/1.0.1/ahas-sentinel.zip)。
+您可以 [点击此处下载 Sentinel 公网 Demo jar 包](https://ahasoss-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/sdk/latest/ahas-sentinel-sdk-demo.jar)。
 
 此 Demo Jar 主要包含的内容有:
-1. [本地 demo 客户端](#本地Demo) 中已有的 `sentinel-core`
+
+1. [本地 demo 客户端](#本地Demo) 中已有的 `sentinel-core`；
 2. 接入 AHAS Sentinel 控制台所需的通信模块 `ahas-sentinel-client`，用于向控制台上报心跳信息。心跳信息、规则和监控均存于您个人的账号下，其它人均无法访问。
 3. 一个简单的 main 函数，程序类似于：
 
@@ -156,16 +157,16 @@ public static void main(String[] args) {
     while (true) {
         Entry entry = null;
         try {
-	    entry = SphU.entry("HelloWorld");
+	        entry = SphU.entry("HelloWorld");
             // 资源中的逻辑.
             System.out.println("hello world");
-	} catch (BlockException e1) {
-	    System.out.println("blocked!");
-	} finally {
-	   if (entry != null) {
-	       entry.exit();
-	   }
-	}
+        } catch (BlockException ex) {
+            System.err.println("blocked!");
+        } finally {
+            if (entry != null) {
+                entry.exit();
+            }
+        }
     }
 }
 ```
@@ -211,4 +212,3 @@ AHAS Sentinel 控制台提供了一个我们推荐的推送规则的做法，即
 ![Remote push rules to config center](https://user-images.githubusercontent.com/9434884/53381986-a0b73f00-39ad-11e9-90cf-b49158ae4b6f.png)
 
 详细介绍和使用文档可参考：[AHAS Sentinel 控制台文档](https://github.com/alibaba/Sentinel/wiki/AHAS-Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0)。
-下面的例子将展示应用如何三步接入 Sentinel。同时，Sentinel 也提供一个所见即所得的控制台，可以实时监控资源以及管理规则。

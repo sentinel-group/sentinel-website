@@ -7,6 +7,13 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.7.0 released',
+          img: '/img/sentinel-envoy-rls-overview.png',
+          content: 'Sentinel 1.7.0 released with Envoy global rate limiting support.',
+          dateStr: 'Nov 11th，2019',
+          link: '/en-us/blog/sentinel-1-7-0-release.html',
+        },
+        {
           title: 'Sentinel 1.6.0 released',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel 1.6.0 released with flow control support for API gateways including Spring Cloud Gateway and Zuul.',
@@ -100,7 +107,7 @@ export default {
           content: <span>Sentinel provides integration modules for commonly-used frameworks and libraries.</span>,
           tags: [
             {
-              text: 'Dubbo',
+              text: 'Apache Dubbo',
               link: 'https://github.com/dubbo/dubbo-sentinel-support',
               bgColor: '#7A63FC',
             },
@@ -147,22 +154,37 @@ export default {
           tags: [
             {
               text: 'Nacos',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos',
               bgColor: '#7A63FC',
             },
             {
               text: 'ZooKeeper',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-zookeeper',
               bgColor: '#00D0D9',
             },
             {
               text: 'Apollo',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-apollo',
               bgColor: '#00D0D9',
             },
             {
               text: 'Redis',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-redis',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'etcd',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-etcd',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Consul',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-consul',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Spring Cloud Config',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-spring-cloud-config',
               bgColor: '#00D0D9',
             },
           ],
@@ -175,6 +197,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.7.0 正式发布',
+          img: '/img/sentinel-envoy-rls-overview.png',
+          content: 'Sentinel 1.7.0 版本发布，引入了 Envoy 集群流量控制支持等多项新特性与改进。',
+          dateStr: 'Nov 11th，2019',
+          link: '/zh-cn/blog/sentinel-1-7-0-release.html',
+        },
         {
           title: 'Sentinel 1.6.3 正式发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',
@@ -344,22 +373,37 @@ export default {
           tags: [
             {
               text: 'Nacos',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos',
               bgColor: '#7A63FC',
             },
             {
               text: 'ZooKeeper',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-zookeeper',
               bgColor: '#00D0D9',
             },
             {
               text: 'Apollo',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-apollo',
               bgColor: '#00D0D9',
             },
             {
               text: 'Redis',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-redis',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'etcd',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-etcd',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Consul',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-consul',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Spring Cloud Config',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-spring-cloud-config',
               bgColor: '#00D0D9',
             },
           ],

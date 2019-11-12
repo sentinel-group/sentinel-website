@@ -1,20 +1,5 @@
 # 开源框架适配
 
-## 目录
-
-- [Web Servlet](#web-servlet)
-- [Dubbo](#dubbo)
-- [Spring Boot / Spring Cloud](#spring-cloud)
-- [Spring WebFlux](#spring-webflux)
-- [gRPC](#grpc)
-- [Reactive 适配](#reactive-适配)
-  - [Reactor](#reactor)
-- [API Gateway 适配](#api-gateway-适配)
-  - [Spring Cloud Gateway](#spring-cloud-gateway)
-  - [Netflix Zuul 1.x](#zuul-1x)
-- [Netflix Zuul 1.x](#zuul-1x)
-- [Apache RocketMQ](#apache-rocketmq)
-
 > **注：适配模块仅提供相应适配功能，若希望接入 Sentinel 控制台，请务必参考 [Sentinel 控制台文档](./dashboard.md)。**
 
 ## Web Servlet
@@ -62,13 +47,38 @@ public class FilterConfig {
 }
 ```
 
-默认情况下，当请求被限流时会返回默认的提示页面。您也可以通过 `WebServletConfig.setBlockPage(blockPage)` 方法设定自定义的跳转 URL，当请求被限流时会自动跳转至设定好的 URL。同样也可以实现 `UrlBlockHandler` 接口并编写定制化的限流处理逻辑，然后将其注册至 `WebCallbackManager` 中。
+**限流处理逻辑**：默认情况下，当请求被限流时会返回默认的提示页面 `Blocked by Sentinel (flow limiting)`。您也可以通过 JVM 参数 `-Dcsp.sentinel.web.servlet.block.page` 或代码中调用 `WebServletConfig.setBlockPage(blockPage)` 方法设定自定义的跳转 URL，当请求被限流时会自动跳转至设定好的 URL。同样您也可以实现 `UrlBlockHandler` 接口并编写定制化的限流处理逻辑，然后将其注册至 `WebCallbackManager` 中。
+
+> 提示：1.7.0 版本开始默认的限流页面 HTTP 返回码是 **429**。您可以通过 `csp.sentinel.web.servlet.block.status` 配置项自定义限流页面的 HTTP 状态码。
+
+**按来源限流**：若希望对 HTTP 请求按照来源限流，则可以自己实现 `RequestOriginParser` 接口从 HTTP 请求中解析 origin 并注册至 `WebCallbackManager` 中。**注意来源数目不能太多，若太多请自定义埋点作为参数传入并使用热点规则。**
 
 **注意**：Sentinel Web Filter 会将每个到来的不同的 URL 都作为不同的资源处理，因此对于 REST 风格的 API，需要自行实现 `UrlCleaner` 接口清洗一下资源（比如将满足 `/foo/:id` 的 URL 都归到 `/foo/*` 资源下），然后将其注册至 `WebCallbackManager` 中。否则会导致资源数量过多，超出资源数量阈值（目前是 6000）时多出的资源的规则将 **不会生效**。
 
-若希望对 HTTP 请求按照来源限流，则可以自己实现 `RequestOriginParser` 接口从 HTTP 请求中解析 origin 并注册至 `WebCallbackManager` 中。
+从 1.6.3 版本开始，`UrlCleaner` 还可以来过滤掉不希望统计的 URL，只需要在 UrlCleaner 中将不希望统计的 URL 转换成空字符串（""）即可。示例：
 
-如果您正在使用 Spring Boot / Spring Cloud，那么可以通过引入 Spring Cloud Sentinel Starter 来更方便地整合 Sentinel，详情请见 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibabacloud/blob/master/README-zh.md)。
+```java
+WebCallbackManager.setUrlCleaner(new UrlCleaner() {
+    @Override
+    public String clean(String originUrl) {
+        if (originUrl == null || originUrl.isEmpty()) {
+            return originUrl;
+        }
+
+        // 比如将满足 /foo/{id} 的 URL 都归到 /foo/*
+        if (originUrl.startsWith("/foo/")) {
+            return "/foo/*";
+        }
+        // 不希望统计 *.ico 的资源文件，可以将其转换为 empty string (since 1.6.3)
+        if (originUrl.endsWith(".ico")) {
+            return "";
+        }
+        return originUrl;
+    }
+});
+```
+
+如果您正在使用 Spring Boot / Spring Cloud，那么可以通过引入 Spring Cloud Alibaba Sentinel 来更方便地整合 Sentinel，详情请见 [Spring Cloud Alibaba 文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel#如何使用-sentinel)。
 
 ## Dubbo
 
@@ -125,9 +135,11 @@ Sentinel Dubbo Adapter 还支持配置全局的 fallback 函数，可以在 Dubb
 
 ## Spring Cloud
 
-[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供微服务开发的一站式解决方案。Sentinel 与 Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/wiki/Sentinel)。
+[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供微服务开发的一站式解决方案。Sentinel 与 Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)。
 
-Spring Cloud Alibaba 默认为 Sentinel 整合了 Servlet 、RestTemplate 和 FeignClient。Sentinel 在 Spring Cloud 生态中，不仅补全了 Hystrix 在 Servlet 和 RestTemplate 这一块的空白，而且还完全兼容了 Hystrix 在 FeignClient 中限流降级的用法,最后还支持运行时灵活地配置和调整限流降级规则。
+Spring Cloud Alibaba 默认为 Sentinel 整合了 Servlet、RestTemplate、FeignClient 和 Spring WebFlux。Sentinel 在 Spring Cloud 生态中，不仅补全了 Hystrix 在 Servlet 和 RestTemplate 这一块的空白，而且还完全兼容了 Hystrix 在 FeignClient 中限流降级的用法，并且支持运行时灵活地配置和调整限流降级规则。
+
+Spring Cloud Alibaba Sentinel 的示例可以参考 [sentinel-guide-spring-cloud](https://github.com/sentinel-group/sentinel-guides/tree/master/sentinel-guide-spring-cloud)
 
 ## Spring WebFlux
 

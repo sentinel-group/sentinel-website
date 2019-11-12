@@ -15,14 +15,15 @@ Sentinel 1.6.0 引入了 Sentinel API Gateway Adapter Common 模块，此模块�
 - `resourceMode`：规则是针对 API Gateway 的 route（`RESOURCE_MODE_ROUTE_ID`）还是用户在 Sentinel 中定义的 API 分组（`RESOURCE_MODE_CUSTOM_API_NAME`），默认是 route。
 - `grade`：限流指标维度，同限流规则的 `grade` 字段。
 - `count`：限流阈值
-- `intervalSec`：统计时间窗口，单位是秒，默认是 1 秒（目前仅对参数限流生效）。
+- `intervalSec`：统计时间窗口，单位是秒，默认是 1 秒。
 - `controlBehavior`：流量整形的控制效果，同限流规则的 `controlBehavior` 字段，目前支持快速失败和匀速排队两种模式，默认是快速失败。
-- `burst`：应对突发请求时额外允许的请求数目（目前仅对参数限流生效）。
+- `burst`：应对突发请求时额外允许的请求数目。
 - `maxQueueingTimeoutMs`：匀速排队模式下的最长排队时间，单位是毫秒，仅在匀速排队模式下生效。
 - `paramItem`：参数限流配置。若不提供，则代表不针对参数进行限流，该网关规则将会被转换成普通流控规则；否则会转换成热点规则。其中的字段：
   - `parseStrategy`：从请求中提取参数的策略，目前支持提取来源 IP（`PARAM_PARSE_STRATEGY_CLIENT_IP`）、Host（`PARAM_PARSE_STRATEGY_HOST`）、任意 Header（`PARAM_PARSE_STRATEGY_HEADER`）和任意 URL 参数（`PARAM_PARSE_STRATEGY_URL_PARAM`）四种模式。
   - `fieldName`：若提取策略选择 Header 模式或 URL 参数模式，则需要指定对应的 header 名称或 URL 参数名称。
-  - `pattern` 和 `matchStrategy`：为后续参数匹配特性预留，目前未实现。
+  - `pattern`：参数值的匹配模式，只有匹配该模式的请求属性值会纳入统计和流控；若为空则统计该请求属性的所有值。（1.6.2 版本开始支持）
+  - `matchStrategy`：参数值的匹配策略，目前支持精确匹配（`PARAM_MATCH_STRATEGY_EXACT`）、子串匹配（`PARAM_MATCH_STRATEGY_CONTAINS`）和正则匹配（`PARAM_MATCH_STRATEGY_REGEX`）。（1.6.2 版本开始支持）
 
 用户可以通过 `GatewayRuleManager.loadRules(rules)` 手动加载网关规则，或通过 `GatewayRuleManager.register2Property(property)` 注册动态规则源动态推送（推荐方式）。
 
@@ -228,6 +229,8 @@ public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
 
 ## 网关流控实现原理
 
+## 网关流控实现原理
+
 当通过 `GatewayRuleManager` 加载网关流控规则（`GatewayFlowRule`）时，无论是否针对请求属性进行限流，Sentinel 底层都会将网关流控规则转化为热点参数规则（`ParamFlowRule`），存储在 `GatewayRuleManager` 中，与正常的热点参数规则相隔离。转换时 Sentinel 会根据请求属性配置，为网关流控规则设置参数索引（`idx`），并同步到生成的热点参数规则中。
 
 外部请求进入 API Gateway 时会经过 Sentinel 实现的 filter，其中会依次进行 **路由/API 分组匹配**、**请求属性解析**和**参数组装**。Sentinel 会根据配置的网关流控规则来解析请求属性，并依照参数索引顺序组装参数数组，最终传入 `SphU.entry(res, args)` 中。Sentinel API Gateway Adapter Common 模块向 Slot Chain 中添加了一个 `GatewayFlowSlot`，专门用来做网关规则的检查。`GatewayFlowSlot` 会从 `GatewayRuleManager` 中提取生成的热点参数规则，根据传入的参数依次进行规则检查。若某条规则不针对请求属性，则会在参数最后一个位置置入预设的常量，达到普通流控的效果。
@@ -236,4 +239,25 @@ public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
 
 ## 网关流控控制台
 
-可以参考 [AHAS 网关流控](https://help.aliyun.com/document_detail/118482.html)。
+Sentinel 1.6.3 引入了网关流控控制台的支持，用户可以直接在 Sentinel 控制台上查看 API Gateway 实时的 route 和自定义 API 分组监控，管理网关规则和 API 分组配置。
+
+在 API Gateway 端，用户只需要在[原有启动参数](https://github.com/alibaba/Sentinel/wiki/控制台#32-配置启动参数)的基础上添加如下启动参数即可标记应用为 API Gateway 类型：
+
+```bash
+# 注：通过 Spring Cloud Alibaba Sentinel 自动接入的 API Gateway 整合则无需此参数
+-Dcsp.sentinel.app.type=1
+```
+
+添加正确的启动参数并有访问量后，我们就可以在 Sentinel 上面看到对应的 API Gateway 了。我们可以查看实时的 route 和自定义 API 分组的监控和调用信息：
+
+![sentinel-dashboard-api-gateway-route-list](https://sentinelguard.io/blog/zh-cn/img/sentinel-dashboard-api-gateway-route-list.png)
+
+我们可以在控制台配置自定义的 API 分组，将一些 URL 匹配模式归为一个 API 分组：
+
+![sentinel-dashboard-api-gateway-customized-api-group](https://sentinelguard.io/blog/zh-cn/img/sentinel-dashboard-api-gateway-customized-api-group.png)
+
+然后我们可以在控制台针对预设的 route ID 或自定义的 API 分组配置网关流控规则：
+
+![sentinel-dashboard-api-gateway-flow-rule](https://sentinelguard.io/blog/zh-cn/img/sentinel-dashboard-api-gateway-flow-rule.png)
+
+云上版本可以参考 [AHAS 网关流控](https://help.aliyun.com/document_detail/118482.html)。

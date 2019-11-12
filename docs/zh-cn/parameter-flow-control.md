@@ -1,12 +1,5 @@
 # 热点参数限流
 
-## 目录
-
-- [Overview](#overview)
-- [基本使用](#基本使用)
-- [热点参数规则](#热点参数规则)
-- [示例](#示例)
-
 ## Overview
 
 何为热点？热点即经常访问的数据。很多时候我们希望统计某个热点数据中访问频次最高的 Top K 数据，并对其访问进行限制。比如：
@@ -18,11 +11,11 @@
 
 ![Sentinel Parameter Flow Control](https://github.com/alibaba/Sentinel/wiki/image/sentinel-hot-param-overview-1.png)
 
-Sentinel 利用 LRU 策略，结合底层的滑动窗口机制来实现热点参数统计。LRU 策略可以统计单位时间内，最近最常访问的热点参数，而滑动窗口机制可以帮助统计每个参数的 QPS。
+Sentinel 利用 LRU 策略统计最近最常访问的热点参数，结合令牌桶算法来进行参数级别的流控。
 
 ## 基本使用
 
-要使用热点限流功能，需要引入以下依赖：
+要使用热点参数限流功能，需要引入以下依赖：
 
 ```xml
 <dependency>
@@ -48,7 +41,33 @@ public static Entry entry(Method method, EntryType type, int count, Object... ar
 
 ```java
 // paramA in index 0, paramB in index 1.
+// 若需要配置例外项或者使用集群维度流控，则传入的参数只支持基本类型。
 SphU.entry(resourceName, EntryType.IN, 1, paramA, paramB);
+```
+
+**注意**：若 entry 的时候传入了热点参数，那么 exit 的时候也一定要带上对应的参数（`exit(count, args)`），否则可能会有统计错误。正确的示例：
+
+```java
+Entry entry = null;
+try {
+    entry = SphU.entry(resourceName, EntryType.IN, 1, paramA, paramB);
+    // Your logic here.
+} catch (BlockException ex) {
+    // Handle request rejection.
+} finally {
+    if (entry != null) {
+        entry.exit(1, paramA, paramB);
+    }
+}
+```
+
+对于 `@SentinelResource` 注解方式定义的资源，若注解作用的方法上有参数，Sentinel 会将它们作为参数传入 `SphU.entry(res, args)`。比如以下的方法里面 `uid` 和 `type` 会分别作为第一个和第二个参数传入 Sentinel API，从而可以用于热点规则判断：
+
+```java
+@SentinelResource("myMethod")
+public Result doSomething(String uid, int type) {
+  // some logic here...
+}
 ```
 
 ## 热点参数规则
@@ -59,11 +78,16 @@ SphU.entry(resourceName, EntryType.IN, 1, paramA, paramB);
 | :----: | :----| :----|
 | resource | 资源名，必填 ||
 | count | 限流阈值，必填 ||
-| grade | 限流模式（保留字段，目前只支持 QPS 模式）| QPS 模式 |
-| paramIdx | 热点参数的索引，必填，对应 `SphU.entry(xxx, args)` 中的参数索引 ||
-| paramFlowItemList | 参数例外项，可以针对指定的参数值单独设置限流阈值 ||
+| grade | 限流模式 | QPS 模式 |
+| durationInSec | 统计窗口时间长度（单位为秒），1.6.0 版本开始支持 | 1s |
+| controlBehavior | 流控效果（支持快速失败和匀速排队模式），1.6.0 版本开始支持 | 快速失败 |
+| maxQueueingTimeMs | 最大排队等待时长（仅在匀速排队模式生效），1.6.0 版本开始支持 | 0ms |
+| paramIdx | 热点参数的索引，必填，对应 `SphU.entry(xxx, args)` 中的参数索引位置 ||
+| paramFlowItemList | 参数例外项，可以针对指定的参数值单独设置限流阈值，不受前面 `count` 阈值的限制。**仅支持基本类型和字符串类型** ||
+| clusterMode | 是否是集群参数流控规则 | `false` |
+| clusterConfig | 集群流控相关配置 ||
 
-可以通过 `ParamFlowRuleManager` 的 `loadRules` 方法更新热点参数规则，下面是一个示例：
+我们可以通过 `ParamFlowRuleManager` 的 `loadRules` 方法更新热点参数规则，下面是一个示例：
 
 ```java
 ParamFlowRule rule = new ParamFlowRule(resourceName)

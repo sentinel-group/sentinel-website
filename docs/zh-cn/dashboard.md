@@ -144,3 +144,39 @@ Sentinel 同时还提供应用维度规则推送的示例页面（流控规则�
 - `-Dserver.servlet.session.timeout=7200` 用于指定 Spring Boot 服务端 session 的过期时间，如 `7200` 表示 7200 秒；`60m` 表示 60 分钟，默认为 30 分钟；
 
 同样也可以直接在 Spring properties 文件中进行配置。
+
+## 控制台配置项
+
+控制台的一些特性可以通过配置项来进行配置，配置项主要有两个来源：`System.getProperty()` 和 `System.getenv()`，同时存在时后者可以覆盖前者。
+
+> 通过环境变量进行配置时，因为不支持 `.` 所以需要将其更换为 `_`。
+
+| 配置项 | 类型 | 默认值 | 最小值 | 描述 |
+| --- | --- | --- | --- | --- |
+auth.enabled | boolean | true | - | 是否开启登录鉴权，仅用于日常测试，生产上不建议关闭
+sentinel.dashboard.auth.username | String | sentinel | - | 登录控制台的用户名，默认为 `sentinel`
+sentinel.dashboard.auth.password | String | sentinel | - | 登录控制台的密码，默认为 `sentinel`
+sentinel.dashboard.app.hideAppNoMachineMillis | Integer | 0 | 60000 | 是否隐藏无健康节点的应用，距离最近一次主机心跳时间的毫秒数，默认关闭
+sentinel.dashboard.removeAppNoMachineMillis | Integer | 0 | 120000 | 是否自动删除无健康节点的应用，距离最近一次其下节点的心跳时间毫秒数，默认关闭
+sentinel.dashboard.unhealthyMachineMillis | Integer | 60000 | 30000 | 主机失联判定，不可关闭
+sentinel.dashboard.autoRemoveMachineMillis | Integer | 0 | 300000 | 距离最近心跳时间超过指定时间是否自动删除失联节点，默认关闭
+
+配置示例：
+
+- 命令行方式：
+
+```shell
+java -Dsentinel.dashboard.app.hideAppNoMachineMillis=60000
+```
+
+- Java 方式：
+
+```java
+System.setProperty("sentinel.dashboard.app.hideAppNoMachineMillis", "60000");
+```
+
+- 环境变量方式：
+
+```shell
+sentinel_dashboard_app_hideAppNoMachineMillis=60000
+```

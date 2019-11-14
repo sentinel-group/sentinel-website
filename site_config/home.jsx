@@ -20,7 +20,7 @@ export default {
     },
     introduction: {
       title: '简介',
-      desc: 'Sentinel 是面向分布式服务架构的轻量级流量控制组件，主要以流量为切入点，从流量控制、熔断降级、系统自适应保护等多个维度来帮助用户保障服务的稳定性。',
+      desc: 'Sentinel 是面向分布式服务架构的流量控制组件，主要以流量为切入点，从流量控制、熔断降级、系统自适应保护等多个维度来帮助用户保障微服务的稳定性。',
       img: '/img/sentinel-flow-index-overview-cn.jpg',
     },
     features: {
@@ -73,7 +73,7 @@ export default {
   'en-us': {
     brand: {
       brandName: 'Sentinel',
-      briefIntroduction: 'The Flow Sentinel of Your Services',
+      briefIntroduction: 'The Flow Sentinel of Your Microservices',
       buttons: [
         {
           text: 'Quick Start',
@@ -89,7 +89,7 @@ export default {
     },
     introduction: {
       title: 'Overview',
-      desc: 'Sentinel is a lightweight powerful flow-control component enabling reliability (flow control, circuit breaking, adaptive system protection) and real-time monitoring for microservices',
+      desc: 'Sentinel is a powerful flow-control component enabling reliability (flow control, circuit breaking, adaptive system protection) and real-time monitoring for microservices',
       img: '/img/sentinel-flow-index-overview-en.jpg',
     },
     features: {
@@ -103,7 +103,7 @@ export default {
         {
           img: '/img/feature_transpart.png',
           title: 'Easy to use',
-          content: 'Provides annotation support and out-of-box integrations with popular open-source frameworks such as Dubbo, Spring Cloud and gRPC.',
+          content: 'Provides annotation support and out-of-box integrations with popular open-source frameworks such as Spring Cloud, gRPC, Dubbo and Zuul.',
         },
         {
           img: '/img/feature_service.png',

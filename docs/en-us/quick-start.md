@@ -12,7 +12,7 @@ If your application is build in maven, just add the following code in pom.xml.
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>x.y.z</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ If not, you can download JAR in [Maven Center Repository](https://mvnrepository.
 
 ## 2. Define Resource
 
-Wrap code snippet via Sentinel API: `SphU.entry("resourceName")` and `entry.exit()`. In below example, it is `System.out.println("hello world");`:
+Wrap our code snippet with Sentinel API: `SphU.entry("resourceName")` and `entry.exit()`. In below example, it is `System.out.println("hello world");`:
 
 ```java
 Entry entry = null;
@@ -44,7 +44,7 @@ So far the code modification is done. We also provide [annotation support module
 
 ## 3. Define Rules
 
-If we want to limit the access times of the resource, we can define rules. The following code defines a rule that limits access to the reource to 20 times per second at the maximum. 
+To limit the QPS of the resources, we could add flow rules. The following code defines a rule that limits access to the reource to 20 times per second at the maximum. 
 
 ```java
 List<FlowRule> rules = new ArrayList<FlowRule>();
@@ -74,6 +74,7 @@ After running the demo for a while, you can see the following records in `~/logs
 
 p stands for incoming request, block for blocked by rules, success for success handled by Sentinel, e for exception count, rt for average response time (ms)
 ```
+
 This shows that the demo can print "hello world" 20 times per second.
 
 More examples and information can be found in the [How To Use](./basic-api-resource-rule.md) section.

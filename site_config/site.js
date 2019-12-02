@@ -45,7 +45,7 @@ export default {
         },
         {
           text: 'Developer guide',
-          link: '/en-us/docs/dir/demo3.html',
+          link: '/en-us/docs/contribution/contribution-guideline.html',
         },
       ],
     },

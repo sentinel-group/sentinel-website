@@ -2,49 +2,64 @@ export default {
   'en-us': {
     sidemenu: [
       {
+        title: 'Overview',
+        children: [
+          {
+            title: 'Introduction to Sentinel',
+            link: '/en-us/docs/introduction.html',
+          },
+          {
+            title: 'Quick Start',
+            link: '/en-us/docs/quick-start.html',
+          }
+        ]
+      },
+      {
         title: 'User Guide',
         children: [
           {
-            title: 'Tutorial',
-            children: [
-              {
-                title: 'Introduction to Sentinel',
-                link: '/en-us/docs/introduction.html',
-              },
-              {
-                title: 'Quick Start',
-                link: '/en-us/docs/quick-start.html',
-              },
-              {
-                title: 'How Sentinel Works',
-                link: '/en-us/docs/basic-implementation.html',
-              },
-            ]
+            title: 'How Sentinel Works',
+            link: '/en-us/docs/basic-implementation.html',
           },
           {
-            title: 'Feature Documentation',
-            children: [
-              {
-                title: 'How to use (resource and rule)',
-                link: '/en-us/docs/basic-api-resource-rule.html',
-              },
-              {
-                title: 'Flow Control',
-                link: '/en-us/docs/flow-control.html',
-              },
-              {
-                title: 'Circuit Breaking',
-                link: '/en-us/docs/circuit-breaking.html',
-              },
-              {
-                title: 'System Adaptive Protection',
-                link: '/en-us/docs/system-adaptive-protection.html',
-              },
-            ]
+            title: 'API Guide (resource and rule)',
+            link: '/en-us/docs/basic-api-resource-rule.html',
+          },
+          {
+            title: 'Flow Control',
+            link: '/en-us/docs/flow-control.html',
+          },
+          {
+            title: 'Parameter Flow Control',
+            link: '/en-us/docs/param-flow-control.html',
+          },
+          {
+            title: 'Cluster Flow Control',
+            link: '/en-us/docs/cluster-flow-control.html',
+          },
+          {
+            title: 'API Gateway Flow Control',
+            link: '/en-us/docs/api-gateway-flow-control.html',
+          },
+          {
+            title: 'Circuit Breaking',
+            link: '/en-us/docs/circuit-breaking.html',
+          },
+          {
+            title: 'System Adaptive Protection',
+            link: '/en-us/docs/system-adaptive-protection.html',
+          },
+          {
+            title: 'Microservice Framework Integrations',
+            link: '/en-us/docs/microservice-framework-integrations.html',
           },
           {
             title: 'Dashboard',
             link: '/en-us/docs/dashboard.html',
+          },
+          {
+            title: 'Logs',
+            link: '/en-us/docs/logs.html',
           },
         ],
       },

@@ -14,10 +14,13 @@ We've provided a demo for system adaptive protection: [SystemGuardDemo](https://
 
 There are several kinds of global protection item:
 
-- System load
-- Global QPS
+- System load (load1)
+- System CPU usage
+- Global inbound QPS
 - Global average response time
-- Global max thread count
+- Global max concurrency (of inbound traffic)
+
+Note that the system rules will take effect only for **inbound traffic** (`EntryType.IN`).
 
 ## Principle
 
@@ -28,7 +31,7 @@ There are several kinds of global protection item:
 The request will be blocked under the condition:
 
 - Current system load (`load1`) exceeds the threshold (`highestSystemLoad`);
-- Current concurrent requests exceeds the capacity (`thread count > minRt * maxQps`)
+- Current concurrent requests exceed the estimated capacity (`thread count > minRt * maxQps`)
 
 ### Global Metrics Protection
 

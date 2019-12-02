@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="cluster-flow-control" />
+	<meta name="description" content="cluster-flow-control" />
+	<!-- 网页标签标题 -->
+	<title>cluster-flow-control</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>Overview</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/introduction.html" target="_self">Introduction to Sentinel</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/quick-start.html" target="_self">Quick Start</a></li></ul></li><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-implementation.html" target="_self">How Sentinel Works</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-api-resource-rule.html" target="_self">API Guide (resource and rule)</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/param-flow-control.html" target="_self">Parameter Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/cluster-flow-control.html" target="_self">Cluster Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/api-gateway-flow-control.html" target="_self">API Gateway Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/microservice-framework-integrations.html" target="_self">Microservice Framework Integrations</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/dashboard.html" target="_self">Dashboard</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Cluster Flow Control</h1>
+<h2>Introduction</h2>
+<p>Cluster flow control is useful in plenty of scenarios. For example:</p>
+<ul>
+<li>There are 50 instances in the service cluster, and you're going to limit the frequency of one invocation to 10 per second in total.</li>
+<li>The traffic towards each instance might be uneven, so if we set local flow rules, requests might be blocked when specific instances are targeted with large traffic, while the total QPS has not reached the threshold sum.</li>
+</ul>
+<img src="https://user-images.githubusercontent.com/9434884/65305357-8f39bc80-dbb5-11e9-96d6-d1111fc365a9.png" alt="clustr-token-server-overview" height="75%" width="75%">
+<h2>Cluster Flow Rule</h2>
+<p>In <code>FlowRule</code>:</p>
+<pre><code class="language-java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> clusterMode; <span class="hljs-comment">// whether to enable the cluster mode</span>
+<span class="hljs-keyword">private</span> ClusterFlowConfig clusterConfig; <span class="hljs-comment">// items about the cluster flow control</span>
+</code></pre>
+<p>In <code>ClusterFlowConfig</code>:</p>
+<pre><code class="language-java"><span class="hljs-comment">// Required and unique. Usually assigned by the dashboard</span>
+<span class="hljs-keyword">private</span> Long flowId;
+
+<span class="hljs-comment">// Threshold type. 0 for average threshold (per instance), 1 for global threshold.</span>
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> thresholdType = ClusterRuleConstant.FLOW_THRESHOLD_AVG_LOCAL;
+
+<span class="hljs-comment">// Whether to fallback to local flow control if the transport between token client and server failed</span>
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> fallbackToLocalWhenFail = <span class="hljs-keyword">true</span>;
+</code></pre>
+<h2>Flow control for service mesh</h2>
+<ul>
+<li><a href="./envoy-global-rate-limiting-support.md">Envoy Global Rate Limiting Support</a></li>
+</ul>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/demo3.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

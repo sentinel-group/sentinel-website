@@ -31,7 +31,7 @@ export default {
           },
           {
             title: 'Parameter Flow Control',
-            link: '/en-us/docs/param-flow-control.html',
+            link: '/en-us/docs/parameter-flow-control.html',
           },
           {
             title: 'Cluster Flow Control',
@@ -51,11 +51,15 @@ export default {
           },
           {
             title: 'Microservice Framework Integrations',
-            link: '/en-us/docs/microservice-framework-integrations.html',
+            link: '/en-us/docs/open-source-framework-integrations.html',
           },
           {
             title: 'Dashboard',
             link: '/en-us/docs/dashboard.html',
+          },
+          {
+            title: 'General Configuration',
+            link: '/en-us/docs/general-configuration.html',
           },
           {
             title: 'Logs',
@@ -90,7 +94,7 @@ export default {
           },
           {
             title: 'FAQ',
-            link: '/zh-cn/docs/FAQ.html',
+            link: '/zh-cn/docs/faq.html',
           },
           {
             title: '使用文档',
@@ -117,7 +121,7 @@ export default {
               },
               {
                 title: '网关流量控制',
-                link: '/zh-cn/docs/gateway-flow-control.html',
+                link: '/zh-cn/docs/api-gateway-flow-control.html',
               },
               {
                 title: '热点参数限流',
@@ -145,7 +149,7 @@ export default {
               },
               {
                 title: '启动配置项',
-                link: '/zh-cn/docs/startup-configuration.html',
+                link: '/zh-cn/docs/general-configuration.html',
               },
             ],
           },

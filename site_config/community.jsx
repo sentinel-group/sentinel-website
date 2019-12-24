@@ -7,6 +7,13 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.7.1 released',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.7.1 released Spring WebMvc integration and improvements for Dubbo 2.7.x asynchronous mode.',
+          dateStr: 'Dec 25th，2019',
+          link: '/en-us/blog/sentinel-1-7-1-release.html',
+        },
+        {
           title: 'Sentinel 1.7.0 released',
           img: '/img/sentinel-envoy-rls-overview.png',
           content: 'Sentinel 1.7.0 released with Envoy global rate limiting support.',
@@ -197,6 +204,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.7.1 正式发布',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.7.1 版本发布，带来了 Spring Web 模块适配、Dubbo 异步模式适配改进、控制台 ACL 注解扩展等多项特性和改进。',
+          dateStr: 'Dec 25th，2019',
+          link: '/zh-cn/blog/sentinel-1-7-1-release.html',
+        },
         {
           title: 'Sentinel 1.7.0 正式发布',
           img: '/img/sentinel-envoy-rls-overview.png',

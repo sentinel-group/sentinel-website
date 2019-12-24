@@ -2,6 +2,13 @@
 
 Sentinel supports flow control for API gateways including Spring Cloud Gateway and Zuul 1.x.
 
+![image](https://user-images.githubusercontent.com/9434884/70883552-4ce61700-200e-11ea-8324-e803d0753a20.png)
+
+Sentinel 1.6.0 introduced the `sentinel-api-gateway-adapter-common` module, which includes common management logic for gateway rules and customized API groups.
+
+- `GatewayFlowRule`: The flow rule specifically designed for API gateway, enabling flow control for different routes or customized API groups. It also supports flow control by request attributes (e.g. HTTP header, client IP and URL parameters).
+- `ApiDefinition`: The user-defined API group, which can be regarded as a group of URL patterns.
+
 ## Spring Cloud Gateway
 
 Sentinel provides the integration module with Spring Cloud Gateway, providing two levels of flow control:

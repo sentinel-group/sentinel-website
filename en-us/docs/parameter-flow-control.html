@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="parameter-flow-control" />
+	<meta name="description" content="parameter-flow-control" />
+	<!-- 网页标签标题 -->
+	<title>parameter-flow-control</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>Overview</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/introduction.html" target="_self">Introduction to Sentinel</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/quick-start.html" target="_self">Quick Start</a></li></ul></li><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-implementation.html" target="_self">How Sentinel Works</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-api-resource-rule.html" target="_self">API Guide (resource and rule)</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/parameter-flow-control.html" target="_self">Parameter Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/cluster-flow-control.html" target="_self">Cluster Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/api-gateway-flow-control.html" target="_self">API Gateway Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/open-source-framework-integrations.html" target="_self">Microservice Framework Integrations</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/dashboard.html" target="_self">Dashboard</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/general-configuration.html" target="_self">General Configuration</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/logs.html" target="_self">Logs</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Parameter Flow Control</h1>
+<p>Sentinel provides support for flow control by frequent (&quot;hot spot&quot;) parameters.</p>
+<h2>Usage</h2>
+<p>To use Sentinel Parameter Flow Control, you need to add the following dependency to <code>pom.xml</code>:</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-parameter-flow-control<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<p>First you need to pass parameters with the following <code>SphU.entry</code> overloaded methods:</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Entry <span class="hljs-title">entry</span><span class="hljs-params">(String name, EntryType type, <span class="hljs-keyword">int</span> count, Object... args)</span> <span class="hljs-keyword">throws</span> BlockException
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Entry <span class="hljs-title">entry</span><span class="hljs-params">(Method method, EntryType type, <span class="hljs-keyword">int</span> count, Object... args)</span> <span class="hljs-keyword">throws</span> BlockException
+</span></code></pre>
+<p>For example, if there are two parameters to provide, you can:</p>
+<pre><code class="language-java"><span class="hljs-comment">// paramA in index 0, paramB in index 1.</span>
+SphU.entry(resourceName, EntryType.IN, <span class="hljs-number">1</span>, paramA, paramB);
+</code></pre>
+<p>Then you can configure parameter flow control rules via <code>loadRules</code> method in <code>ParamFlowRuleManager</code>:</p>
+<pre><code class="language-java"><span class="hljs-comment">// QPS mode, threshold is 5 for every frequent "hot spot" parameter in index 0 (the first arg).</span>
+ParamFlowRule rule = <span class="hljs-keyword">new</span> ParamFlowRule(RESOURCE_KEY)
+    .setParamIdx(<span class="hljs-number">0</span>)
+    .setCount(<span class="hljs-number">5</span>);
+<span class="hljs-comment">// We can set threshold count for specific parameter value individually.</span>
+<span class="hljs-comment">// Here we add an exception item. That means: QPS threshold of entries with parameter `PARAM_B` (type: int)</span>
+<span class="hljs-comment">// in index 0 will be 10, rather than the global threshold (5).</span>
+ParamFlowItem item = <span class="hljs-keyword">new</span> ParamFlowItem().setObject(String.valueOf(PARAM_B))
+    .setClassType(<span class="hljs-keyword">int</span>.class.getName())
+    .setCount(<span class="hljs-number">10</span>);
+rule.setParamFlowItemList(Collections.singletonList(item));
+ParamFlowRuleManager.loadRules(Collections.singletonList(rule));
+</code></pre>
+<p>The description for fields of <code>ParamFlowRule</code>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Field</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:left">resource name (<strong>required</strong>)</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">flow control threshold (<strong>required</strong>)</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:left">metric type (QPS or thread count)</td>
+<td style="text-align:left">QPS mode</td>
+</tr>
+<tr>
+<td style="text-align:center">paramIdx</td>
+<td style="text-align:left">the index of provided parameter in <code>SphU.entry(xxx, args)</code> (<strong>required</strong>)</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center">paramFlowItemList</td>
+<td style="text-align:left">the exception items of parameter; you can set threshold to a specific parameter value</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>Now the parameter flow control rules will take effect.</p>
+<p>You could refer to the sample here: <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-parameter-flow-control">sentinel-demo-parameter-flow-control</a></p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/contribution/contribution-guideline.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

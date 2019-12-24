@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.7.1 发布，多项特性与改进',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.7.1 版本发布，带来了 Spring Web 模块适配、Dubbo 异步模式适配改进、控制台 ACL 注解扩展等多项特性和改进。',
+        dateStr: '2019.12.25',
+        link: '/zh-cn/blog/sentinel-1-7-1-release.html',
+      },
+      {
         title: 'Sentinel 1.7.0 发布，支持 Envoy 集群流量控制',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.7.0 版本发布，引入了 Envoy 集群流量控制支持、properties 文件配置、Consul/Etcd/Spring Cloud Config 动态数据源适配等多项新特性与改进。',

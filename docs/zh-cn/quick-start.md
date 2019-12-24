@@ -5,7 +5,7 @@
 Sentinel 的使用可以分为两个部分:
 
 - 核心库（Java 客户端）：不依赖任何框架/库，能够运行于 Java 7 及以上的版本的运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持（见 [主流框架适配](./open-source-framework-integrations.md)）。
-- 控制台（Dashboard）：Dashboard主要负责管理推送规则；监控；管理机器信息等。
+- 控制台（Dashboard）：Dashboard 主要负责管理推送规则、监控、管理机器信息等。
 
 我们将会提供 [本地运行 demo](#本地-demo) 和 [公网 demo](#公网-demo) 来帮助新手快速入门。这两种方式都只需要您执行2到5个步骤。
 
@@ -19,7 +19,7 @@ Sentinel 的使用可以分为两个部分:
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
 </dependency>
 ```
 

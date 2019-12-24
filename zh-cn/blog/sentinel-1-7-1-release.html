@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="sentinel-1-7-1-release" />
+	<meta name="description" content="sentinel-1-7-1-release" />
+	<!-- 网页标签标题 -->
+	<title>sentinel-1-7-1-release</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Sentinel 1.7.1 版本发布</h1>
+<p><a href="https://github.com/alibaba/Sentinel/releases/tag/1.7.1">Sentinel 1.7.1</a> 正式发布，带来了 Spring Web 模块适配、Dubbo 异步模式适配改进、控制台 ACL 注解扩展等多项特性和改进。主要变更如下：</p>
+<h2>特性/功能改进</h2>
+<ul>
+<li>新增原生的 Spring Web 模块适配（<a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-webmvc-adapter">sentinel-spring-webmvc-adapter</a>），自动提取 controller 中的 URL pattern 作为资源名，对于 REST API 无需再通过 <code>UrlCleaner</code> 归一资源名</li>
+<li>改进 <code>sentinel-apache-dubbo-adapter</code> 模块中 Dubbo 异步模式的统计处理方式（仅支持 Dubbo 2.7.2 及以上版本）</li>
+<li>支持配置 transport 心跳组件发送心跳的路径</li>
+<li>控制台新增 ACL 注解方式扩展，方便用户定制细粒度的权限控制</li>
+<li>控制台 SentinelApiClient 推规则时默认编码采用 UTF-8，以支持中文字符</li>
+</ul>
+<h2>Bug 修复</h2>
+<ul>
+<li>修复 <code>sentinel-transport-simple-http</code> 模块匹配 Content-Type 时逻辑不正确导致 POST 请求信息无法正确解析的 bug</li>
+</ul>
+<p>详情请参考 <a href="https://github.com/alibaba/Sentinel/wiki/Release-Notes#171">Release Notes</a>。</p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: '迈向云原生，Sentinel Golang 首个版本发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 多语言俱乐部迎来新的一员 —— Sentinel Golang 首个原生版本 0.1.0 正式发布！',
+        dateStr: '2020.02.13',
+        link: '/zh-cn/blog/sentinel-golang-v1-go-go-go.html',
+      },
+      {
         title: 'Sentinel 1.7.1 发布，多项特性与改进',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.7.1 版本发布，带来了 Spring Web 模块适配、Dubbo 异步模式适配改进、控制台 ACL 注解扩展等多项特性和改进。',

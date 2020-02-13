@@ -12,7 +12,7 @@
 <img src="https://user-images.githubusercontent.com/9434884/68639837-d2266980-0540-11ea-8997-05084e2e47bb.png" alt="Envoy RLS Sentinel overview" style="width: 60%;" />
 </div>
 
-用户只需要拉起 Sentinel RLS token server 实例并配置集群流控规则，然后在 Envoy 中进行相应的配置即可快速接入 Sentinel 的集群限流。集群流控规则项与 Envoy 的 [rate limit action](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/route/route.proto#envoy-api-msg-route-ratelimit) 生成的 descriptor 相对应，支持 `source_cluster`、`destination_cluster`、`request_headers`、`remote_address`、`generic_key` 等几种策略（支持组合）。示例规则项：
+用户只需要拉起 Sentinel RLS token server 实例并配置集群流控规则，然后在 Envoy 中进行相应的配置即可快速接入 Sentinel 的集群限流。集群流控规则项与 Envoy 的 [rate limit action](https://www.envoyproxy.io/docs/envoy/v1.12.1/api-v2/api/v2/route/route.proto#envoy-api-msg-route-ratelimit) 生成的 descriptor 相对应，支持 `source_cluster`、`destination_cluster`、`request_headers`、`remote_address`、`generic_key` 等几种策略（支持组合）。示例规则项：
 
 ```yaml
 domain: foo

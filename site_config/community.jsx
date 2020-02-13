@@ -205,6 +205,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: '迈向云原生，Sentinel Golang 首个版本发布',
+          img: '/img/sentinel-go-logo.png',
+          content: 'Sentinel 多语言俱乐部迎来新的一员 —— Sentinel Golang 首个原生版本 0.1.0 正式发布！',
+          dateStr: 'Feb 13th，2020',
+          link: '/zh-cn/blog/sentinel-golang-v1-go-go-go.html',
+        },
+        {
           title: 'Sentinel 1.7.1 正式发布',
           img: '/img/brhtqqzh.jpeg',
           content: 'Sentinel 1.7.1 版本发布，带来了 Spring Web 模块适配、Dubbo 异步模式适配改进、控制台 ACL 注解扩展等多项特性和改进。',

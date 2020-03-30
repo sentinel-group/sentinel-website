@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 0.2.0 发布，完善易用性与开源生态',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go 0.2.0 版本发布，新增 gRPC、Gin、Dubbo-go 等框架的适配，新增动态文件数据源支持。',
+        dateStr: '2020.03.30',
+        link: '/zh-cn/blog/sentinel-golang-0-2-0-release.html',
+      },
+      {
         title: '迈向云原生，Sentinel Golang 首个版本发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 多语言俱乐部迎来新的一员 —— Sentinel Golang 首个原生版本 0.1.0 正式发布！',

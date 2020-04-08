@@ -16,7 +16,7 @@
 
 ![arch overview](./img/sentinel-slot-chain-architecture.png)
 
-Sentinel 将 `SlotChainBuilder` 作为 SPI 接口进行扩展，使得 Slot Chain 具备了扩展的能力。您可以自行加入自定义的 slot 并编排 slot 间的顺序，从而可以给 Sentinel 添加自定义的功能。
+Sentinel 将 `ProcessorSlot` 作为 SPI 接口进行扩展（1.7.2 版本以前 `SlotChainBuilder` 作为 SPI），使得 Slot Chain 具备了扩展的能力。您可以自行加入自定义的 slot 并编排 slot 间的顺序，从而可以给 Sentinel 添加自定义的功能。
 
 ![Slot Chain SPI](https://user-images.githubusercontent.com/9434884/46783631-93324d00-cd5d-11e8-8ad1-a802bcc8f9c9.png)
 
@@ -129,9 +129,10 @@ Sentinel 底层采用高性能的滑动窗口数据结构 `LeapArray` 来统计�
 
 ## SystemSlot
 
-这个 slot 会根据对于当前系统的整体情况，对入口的资源进行调配。其原理是让入口的流量和当前系统的 load 达到一个动态平衡。
+这个 slot 会根据对于当前系统的整体情况，对入口资源的调用进行动态调配。其原理是让入口的流量和当前系统的预计容量达到一个动态平衡。
 
-注意这个功能的两个限制:
+注意系统规则只对入口流量起作用（调用类型为 `EntryType.IN`），对出口流量无效。可通过 `SphU.entry(res, entryType)` 指定调用类型，如果不指定，默认是`EntryType.OUT`。
 
-- 只对入口流量起作用（调用类型为`EntryType.IN`），对出口流量无效。可通过 `SphU.entry()` 指定调用类型，如果不指定，默认是`EntryType.OUT`。示例：`Entry entry = SphU.entry("resourceName"，EntryType.IN);`
-- 只在 Unix-like 的操作系统上生效
+## 更多
+
+- [Sentinel 核心类解析](https://github.com/alibaba/Sentinel/wiki/Sentinel-核心类解析)

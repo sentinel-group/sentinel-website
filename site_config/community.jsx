@@ -205,6 +205,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel 1.7.2 正式发布',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.7.2 版本发布，带来了 Logger SPI 扩展机制、Zuul 2.x 网关流控、SOFARPC 适配等多项特性和改进。',
+          dateStr: 'Apr 8th，2020',
+          link: '/zh-cn/blog/sentinel-1-7-2-release.html',
+        },
+        {
           title: 'Sentinel Go 0.2.0 发布，完善易用性与开源生态',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel Go 0.2.0 版本发布，新增 gRPC、Gin、Dubbo-go 等框架的适配，新增动态文件数据源支持。',

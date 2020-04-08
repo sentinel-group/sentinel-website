@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.7.2 发布，引入 Logger 扩展机制、Zuul 2.x 和 SOFARPC 支持',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.7.2 版本发布，带来了 Logger SPI 扩展机制、Zuul 2.x 网关流控、SOFARPC 适配等多项特性和改进。',
+        dateStr: '2020.04.08',
+        link: '/zh-cn/blog/sentinel-1-7-2-release.html',
+      },
+      {
         title: 'Sentinel Go 0.2.0 发布，完善易用性与开源生态',
         author: 'Eric Zhao',
         desc: 'Sentinel Go 0.2.0 版本发布，新增 gRPC、Gin、Dubbo-go 等框架的适配，新增动态文件数据源支持。',

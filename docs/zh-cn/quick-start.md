@@ -19,7 +19,7 @@ Sentinel 的使用可以分为两个部分:
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-transport-simple-http</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.2</version>
 </dependency>
 ```
 
@@ -171,7 +171,7 @@ public static void main(String[] args) {
 }
 ```
 
-若您之前接入了开源 Sentinel 控制台，您也可以简单的通过替换 pom 包中的 `sentinel-transport-simple-http` 模块为 `ahas-sentinel-client` 模块达到同样的目的。
+若您之前接入了开源 Sentinel 控制台，您也可以简单的通过将 pom 文件中 Sentinel 开源相关依赖替换为 `ahas-sentinel-client` 模块达到同样的目的。
 
 ### 2. 开通 AHAS 流控降级并获取启动参数
 
@@ -205,7 +205,7 @@ java -Dproject.name=<AppName> -Dahas.license=<License> -jar ahas-sentinel-sdk-de
 
 我们可以在监控详情页面查看聚合监控和历史监控图线：
 
-![image](https://user-images.githubusercontent.com/9434884/50626939-18e42400-0f6c-11e9-92b8-9387b676a3f5.png)
+![image](https://user-images.githubusercontent.com/9434884/70971125-2f32b380-20db-11ea-89a8-45c6aaa2ded2.png)
 
 AHAS Sentinel 控制台提供了一个我们推荐的推送规则的做法，即 **配置中心控制台/Sentinel 控制台 → 配置中心 → Sentinel 数据源 → Sentinel**，这样的流程就非常清晰了：
 

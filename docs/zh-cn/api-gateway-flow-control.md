@@ -227,7 +227,34 @@ public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
 }
 ```
 
-## 网关流控实现原理
+## Zuul 2.x
+
+> 注：从 1.7.2 版本开始支持，需要 Java 8 及以上版本。
+
+Sentinel 提供了 Zuul 2.x 的适配模块，可以为 Zuul Gateway 提供两种资源维度的限流：
+
+- route 维度：对应 SessionContext 中的 `routeVIP`
+- 自定义 API 维度：用户可以利用 Sentinel 提供的 API 来自定义一些 API 分组
+
+使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-zuul2-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+然后配置对应的 filter 即可：
+
+```java
+filterMultibinder.addBinding().toInstance(new SentinelZuulInboundFilter(500));
+filterMultibinder.addBinding().toInstance(new SentinelZuulOutboundFilter(500));
+filterMultibinder.addBinding().toInstance(new SentinelZuulEndpoint());
+```
+
+可以参考 [sentinel-demo-zuul2-gateway 示例](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-zuul2-gateway)。
 
 ## 网关流控实现原理
 

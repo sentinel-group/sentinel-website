@@ -26,7 +26,7 @@
 <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.7.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.7.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
 </code></pre>
 <p>如果您未使用依赖管理工具，请到 <a href="https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core">Maven Center Repository</a> 直接下载 JAR 包。</p>
@@ -96,7 +96,7 @@
 <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-transport-simple-http<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.7.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.7.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
 </code></pre>
 <ul>
@@ -143,7 +143,7 @@
     }
 }
 </code></pre>
-<p>若您之前接入了开源 Sentinel 控制台，您也可以简单的通过替换 pom 包中的 <code>sentinel-transport-simple-http</code> 模块为 <code>ahas-sentinel-client</code> 模块达到同样的目的。</p>
+<p>若您之前接入了开源 Sentinel 控制台，您也可以简单的通过将 pom 文件中 Sentinel 开源相关依赖替换为 <code>ahas-sentinel-client</code> 模块达到同样的目的。</p>
 <h3>2. 开通 AHAS 流控降级并获取启动参数</h3>
 <p>接下来您需要到 <a href="https://ahas.console.aliyun.com/">阿里云控制台</a> 开通 AHAS 功能。可以根据 <a href="https://help.aliyun.com/document_detail/90323.html">开通 AHAS 文档</a> 和 <a href="https://help.aliyun.com/document_detail/101410.html">流控降级 Demo 快速入门</a> 里面的指引进行开通。</p>
 <blockquote>
@@ -162,7 +162,7 @@
 <p>点击应用卡片，进入详情页面后点击左侧侧边栏的“机器列表”。我们可以在机器列表页面看到刚刚接入的机器，代表接入成功：</p>
 <p><img src="https://user-images.githubusercontent.com/9434884/50626928-036efa00-0f6c-11e9-9dd8-3291654a8902.png" alt="image"></p>
 <p>我们可以在监控详情页面查看聚合监控和历史监控图线：</p>
-<p><img src="https://user-images.githubusercontent.com/9434884/50626939-18e42400-0f6c-11e9-92b8-9387b676a3f5.png" alt="image"></p>
+<p><img src="https://user-images.githubusercontent.com/9434884/70971125-2f32b380-20db-11ea-89a8-45c6aaa2ded2.png" alt="image"></p>
 <p>AHAS Sentinel 控制台提供了一个我们推荐的推送规则的做法，即 <strong>配置中心控制台/Sentinel 控制台 → 配置中心 → Sentinel 数据源 → Sentinel</strong>，这样的流程就非常清晰了：</p>
 <p><img src="https://user-images.githubusercontent.com/9434884/53381986-a0b73f00-39ad-11e9-90cf-b49158ae4b6f.png" alt="Remote push rules to config center"></p>
 <p>详细介绍和使用文档可参考：<a href="https://github.com/alibaba/Sentinel/wiki/AHAS-Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0">AHAS Sentinel 控制台文档</a>。</p>

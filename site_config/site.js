@@ -62,7 +62,7 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
   'zh-cn': {
     pageMenu: [
@@ -85,6 +85,11 @@ export default {
         key: 'community',
         text: '社区',
         link: '/zh-cn/community/index.html',
+      },
+      {
+        key: 'ahas',
+        text: '企业版 Sentinel',
+        link: 'https://www.aliyun.com/product/ahas',
       },
     ],
     disclaimer: {
@@ -121,6 +126,6 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2019 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
 };

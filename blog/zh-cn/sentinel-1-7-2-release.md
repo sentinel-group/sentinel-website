@@ -6,7 +6,7 @@
 
 到目前为止，Sentinel 已覆盖微服务、API Gateway 和 Service Mesh 三大板块的核心生态，同时多语言已推出 Java、C++、Go 三种语言的原生实现。
 
-
+![sentine-oss-ecosystem](https://user-images.githubusercontent.com/9434884/78636450-ef3a4b00-78da-11ea-89ce-c7a2b58c2deb.png)
 
 得益于社区的贡献，Sentinel 1.7.2 带来了更多的适配模块：
 

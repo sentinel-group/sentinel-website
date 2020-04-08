@@ -90,6 +90,7 @@ export default {
         key: 'ahas',
         text: '企业版 Sentinel',
         link: 'https://www.aliyun.com/product/ahas',
+        imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
     ],
     disclaimer: {

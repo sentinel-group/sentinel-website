@@ -190,7 +190,7 @@ class Header extends React.Component {
                   })}
                   key={item.key}
                 >
-                  <a href={getLink(item.link)} target={item.target || '_self'}>{item.text}</a>
+                  <a href={getLink(item.link)} target={item.target || '_self'}>{item.text}</a>{item.imgUrl ? <img className={'menu-img'} src={item.imgUrl} /> : null}
                 </li>))}
             </ul>
           </div>

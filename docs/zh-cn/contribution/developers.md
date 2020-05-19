@@ -17,6 +17,8 @@
 - Jason Joo ([@jasonjoo2010](https://github.com/jasonjoo2010))
 - Jihan Xie ([@cdfive](https://github.com/cdfive))
 - Lin Liang ([@linlinisme](https://github.com/linlinisme))
+- Yuting Lou ([@louyuting](https://github.com/louyuting))
+- Yuguang Zhao ([@zhaoyuguang](https://github.com/zhaoyuguang))
 
 ## Contributor
 

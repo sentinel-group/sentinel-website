@@ -4,14 +4,14 @@
 
 Sentinel 提供一个轻量级的开源控制台，它提供机器发现以及健康情况管理、监控（单机和集群），规则管理和推送的功能。另外，鉴权在生产环境中也必不可少。这里，我们将会详细讲述如何通过简单的步骤就可以使用这些功能。
 
-接下来，我们将会逐一介绍如何整合 Sentinel 客户端和 Dashboard，让它发挥最大的作用。同时我们也提供阿里云上版本控制台：[AHAS Sentinel 控制台](https://github.com/alibaba/Sentinel/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97#%E5%85%AC%E7%BD%91-demo)，您只需要几个简单的步骤，就能最直观地看到控制台如何实现这些功能。
+接下来，我们将会逐一介绍如何整合 Sentinel 核心库和 Dashboard，让它发挥最大的作用。同时我们也在阿里云上提供企业级的控制台：[AHAS Sentinel 控制台](https://github.com/alibaba/Sentinel/wiki/AHAS-Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0)，您只需要几个简单的步骤，就能最直观地看到控制台如何实现这些功能。
 
-Sentinel 控制台最少应该包含如下功能:
+Sentinel 控制台包含如下功能:
 
-- [**查看机器列表以及健康情况**](#4-查看机器列表以及健康情况)：收集 Sentinel 客户端发送的心跳包，用于判断机器是否在线。
-- [**监控 (单机和集群聚合)**](#5-监控)：通过 Sentinel 客户端暴露的监控 API，定期拉取并且聚合应用监控信息，最终可以实现秒级的实时监控。
-- [**规则管理和推送**](#6-规则管理及推送)：统一管理推送规则。
-- [**鉴权**](#鉴权)：生产环境中鉴权非常重要。这里每个开发者需要根据自己的实际情况进行定制。
+- **查看机器列表以及健康情况**：收集 Sentinel 客户端发送的心跳包，用于判断机器是否在线。
+- **监控 (单机和集群聚合)**：通过 Sentinel 客户端暴露的监控 API，定期拉取并且聚合应用监控信息，最终可以实现秒级的实时监控。
+- **规则管理和推送**：统一管理推送规则。
+- **鉴权**：生产环境中鉴权非常重要。这里每个开发者需要根据自己的实际情况进行定制。
 
 ## 2. 启动控制台
 
@@ -153,13 +153,15 @@ Sentinel 同时还提供应用维度规则推送的示例页面（流控规则�
 
 | 配置项 | 类型 | 默认值 | 最小值 | 描述 |
 | --- | --- | --- | --- | --- |
-auth.enabled | boolean | true | - | 是否开启登录鉴权，仅用于日常测试，生产上不建议关闭
-sentinel.dashboard.auth.username | String | sentinel | - | 登录控制台的用户名，默认为 `sentinel`
-sentinel.dashboard.auth.password | String | sentinel | - | 登录控制台的密码，默认为 `sentinel`
-sentinel.dashboard.app.hideAppNoMachineMillis | Integer | 0 | 60000 | 是否隐藏无健康节点的应用，距离最近一次主机心跳时间的毫秒数，默认关闭
-sentinel.dashboard.removeAppNoMachineMillis | Integer | 0 | 120000 | 是否自动删除无健康节点的应用，距离最近一次其下节点的心跳时间毫秒数，默认关闭
-sentinel.dashboard.unhealthyMachineMillis | Integer | 60000 | 30000 | 主机失联判定，不可关闭
-sentinel.dashboard.autoRemoveMachineMillis | Integer | 0 | 300000 | 距离最近心跳时间超过指定时间是否自动删除失联节点，默认关闭
+auth.enabled | boolean | true | - | 是否开启登录鉴权，仅用于日常测试，生产上不建议关闭 |
+sentinel.dashboard.auth.username | String | sentinel | - | 登录控制台的用户名，默认为 `sentinel` |
+sentinel.dashboard.auth.password | String | sentinel | - | 登录控制台的密码，默认为 `sentinel` |
+sentinel.dashboard.app.hideAppNoMachineMillis | Integer | 0 | 60000 | 是否隐藏无健康节点的应用，距离最近一次主机心跳时间的毫秒数，默认关闭 |
+sentinel.dashboard.removeAppNoMachineMillis | Integer | 0 | 120000 | 是否自动删除无健康节点的应用，距离最近一次其下节点的心跳时间毫秒数，默认关闭 |
+sentinel.dashboard.unhealthyMachineMillis | Integer | 60000 | 30000 | 主机失联判定，不可关闭 |
+sentinel.dashboard.autoRemoveMachineMillis | Integer | 0 | 300000 | 距离最近心跳时间超过指定时间是否自动删除失联节点，默认关闭 |
+sentinel.dashboard.unhealthyMachineMillis | Integer | 60000 | 30000 | 主机失联判定，不可关闭 |
+server.servlet.session.cookie.name | String | sentinel_dashboard_cookie | - | 控制台应用的 cookie 名称，可单独设置避免同一域名下 cookie 名冲突 |
 
 配置示例：
 

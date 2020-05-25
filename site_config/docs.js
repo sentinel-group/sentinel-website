@@ -161,6 +161,10 @@ export default {
             title: '开源框架适配',
             link: '/zh-cn/docs/open-source-framework-integrations.html',
           },
+          {
+            title: '多语言支持',
+            link: '/zh-cn/docs/polyglot-support.html',
+          },
         ],
       },
       {
@@ -169,10 +173,6 @@ export default {
           {
             title: '开源贡献指南',
             link: '/zh-cn/docs/contribution/contribution-guideline.html',
-          },
-          {
-            title: '开发人员',
-            link: '/zh-cn/docs/contribution/developers.html',
           },
         ],
       },

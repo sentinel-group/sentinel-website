@@ -9,6 +9,8 @@ import Bar from '../../components/bar';
 import Sidemenu from '../../components/sidemenu';
 import Footer from '../../components/footer';
 import docsConfig from '../../../site_config/docs';
+// 开发者页面借用文档页面
+import developerConfig from '../../../site_config/developers';
 import './index.scss';
 
 // 锚点正则
@@ -87,12 +89,14 @@ class Documentation extends Language {
 
   render() {
     const language = this.getLanguage();
-    const dataSource = docsConfig[language];
+    // 开发者页借助文档页载体
+    const isDeveloperPage = window.location.pathname.split('/').pop().lastIndexOf('_dev.html') !== -1;
+    const dataSource = isDeveloperPage ? developerConfig[language] : docsConfig[language];
     const __html = this.props.__html || this.state.__html;
     return (
       <div className="documentation-page">
         <Header
-          currentKey="docs"
+          currentKey={isDeveloperPage ? 'developers' : 'docs'}
           type="normal"
           logo="/img/sentinel_colorful.png"
           language={language}

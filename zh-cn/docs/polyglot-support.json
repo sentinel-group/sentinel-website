@@ -1,0 +1,4 @@
+{
+  "filename": "polyglot-support.md",
+  "__html": "<h1>多语言支持</h1>\n<p>Sentinel 目前提供 Java、Go、C++ 等语言的原生支持。</p>\n<ul>\n<li>Sentinel Go: <a href=\"https://github.com/alibaba/sentinel-golang\">https://github.com/alibaba/sentinel-golang</a></li>\n<li>Sentinel C++: <a href=\"https://github.com/alibaba/sentinel-cpp\">https://github.com/alibaba/sentinel-cpp</a></li>\n</ul>\n"
+}

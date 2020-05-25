@@ -18,6 +18,11 @@ export default {
         link: '/en-us/docs/introduction.html',
       },
       {
+        key: 'developers',
+        text: 'DEVELOPERS',
+        link: '/en-us/docs/developers/developers_dev.html',
+      },
+      {
         key: 'blog',
         text: 'BLOG',
         link: '/en-us/blog/index.html',
@@ -75,6 +80,11 @@ export default {
         key: 'docs',
         text: '文档',
         link: '/zh-cn/docs/introduction.html',
+      },
+      {
+        key: 'developers',
+        text: '开发者',
+        link: '/zh-cn/docs/developers/developers_dev.html',
       },
       {
         key: 'blog',

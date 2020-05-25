@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 0.3.0 发布，支持熔断降级能力',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go 0.3.0 版本发布，带来了熔断降级规则、etcd 动态数据源等全新特性。',
+        dateStr: '2020.05.25',
+        link: '/zh-cn/blog/sentinel-golang-0-3-0-release.html',
+      },
+      {
         title: 'Sentinel 1.7.2 发布，引入 Logger 扩展机制、Zuul 2.x 和 SOFARPC 支持',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.7.2 版本发布，带来了 Logger SPI 扩展机制、Zuul 2.x 网关流控、SOFARPC 适配等多项特性和改进。',

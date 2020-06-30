@@ -205,6 +205,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel Go 0.4.0 发布，支持热点流量防护能力',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel Go 0.4.0 版本发布，带来了热点参数流控特性。',
+          dateStr: 'June 29th，2020',
+          link: '/zh-cn/blog/sentinel-golang-0-4-0-release.html',
+        },
+        {
           title: 'Sentinel Go 0.3.0 发布，支持熔断降级能力',
           img: '/img/unstable-dependency-cascade-failure.png',
           content: 'Sentinel Go 0.3.0 版本发布，带来了熔断降级规则、etcd 动态数据源等全新特性。',
@@ -415,6 +422,22 @@ export default {
             {
               text: 'Zuul 2.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul2-adapter',
+              bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
+          title: 'Service Mesh 生态',
+          content: <span>Sentinel 支持对 Service Mesh 提供流量控制的能力。</span>,
+          tags: [
+            {
+              text: 'Istio/Envoy',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls',
+              bgColor: '#7A63FC',
+            },
+            {
+              text: 'SOFA MOSN',
+              link: 'https://github.com/mosn/mosn/',
               bgColor: '#00D0D9',
             },
           ],

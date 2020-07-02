@@ -26,7 +26,7 @@ export default {
       {
         title: 'Sentinel Go 0.4.0 发布，支持热点流量防护能力',
         author: 'Eric Zhao',
-        desc: 'Sentinel Go 0.4.0 版本发布，带来了热点参数流控等全新特性。',
+        desc: 'Sentinel Go 0.4.0 版本发布，带来了热点参数流控特性。',
         dateStr: '2020.06.29',
         link: '/zh-cn/blog/sentinel-golang-0-4-0-release.html',
       },

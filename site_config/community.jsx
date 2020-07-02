@@ -436,7 +436,7 @@ export default {
               bgColor: '#7A63FC',
             },
             {
-              text: 'SOFA MOSN',
+              text: 'MOSN',
               link: 'https://github.com/mosn/mosn/',
               bgColor: '#00D0D9',
             },

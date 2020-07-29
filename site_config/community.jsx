@@ -205,6 +205,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel Go 0.5.0 发布',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel Go 0.5.0 版本发布，完善核心功能及性能，同时带来了 Consul 和 Nacos 数据源扩展支持。',
+          dateStr: 'July 29th，2020',
+          link: '/zh-cn/blog/sentinel-golang-0-5-0-release.html',
+        },
+        {
           title: 'Sentinel Go 0.4.0 发布，支持热点流量防护能力',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel Go 0.4.0 版本发布，带来了热点参数流控特性。',

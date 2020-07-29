@@ -24,6 +24,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 0.5.0 发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go 0.5.0 发布，完善核心功能及性能，同时也带来了 Consul 和 Nacos 数据源扩展支持',
+        dateStr: '2020.07.29',
+        link: '/zh-cn/blog/sentinel-golang-0-5-0-release.html',
+      },
+      {
         title: 'Sentinel Go 0.4.0 发布，支持热点流量防护能力',
         author: 'Eric Zhao',
         desc: 'Sentinel Go 0.4.0 版本发布，带来了热点参数流控特性。',

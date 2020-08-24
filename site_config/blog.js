@@ -4,6 +4,13 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Sentinel 1.8.0 released',
+        author: 'Eric Zhao',
+        dateStr: 'Aug 20th，2020',
+        desc: 'Sentinel 1.8.0 annual version released with cool features like circuit breaking improvements and Quarkus support.',
+        link: '/en-us/blog/sentinel-1-8-0-release.html',
+      },
+      {
         title: 'Guideline: Migration from Hystrix to Sentinel',
         author: 'Eric Zhao',
         dateStr: 'Nov 29th，2018',
@@ -23,6 +30,13 @@ export default {
     barText: '博客',
     postsTitle: '所有文章',
     list: [
+      {
+        title: 'Sentinel 1.8.0 年度版本发布，熔断降级重构升级',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.0 年度版本发布，带来了完善升级版的熔断降级及云原生开源生态。',
+        dateStr: '2020.08.20',
+        link: '/zh-cn/blog/sentinel-1-8-0-release.html',
+      },
       {
         title: 'Sentinel Go 0.5.0 发布',
         author: 'Eric Zhao',

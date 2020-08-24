@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-8-0-release.md",
+  "__html": "<h1>Sentinel 1.8.0 Released</h1>\n<p>We're happy to announce that <a href=\"https://github.com/alibaba/Sentinel/releases/tag/v1.8.0\">Sentinel 1.8.0</a> has been released. This nouveau release ships with countless features and improvements, specifically for circuit breaking. We've made progress on refactoring and improving circuit breaking feature, including arbitrary statistic duration support, half-open recovery, enhanced slow request ratio strategy, state change observer and more. We've also brought various versatile integrations including Java EE (JAX-RS and CDI), Quarkus and HTTP client (Apache HttpClient and OkHttp). See <a href=\"https://github.com/alibaba/Sentinel/releases/tag/v1.8.0\">Release Notes</a> for more details.</p>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/91042203-f670b400-e643-11ea-959a-c24c7c67e3f4.png\" alt=\"sentinel-open-source-eco\"></p>\n"
+}

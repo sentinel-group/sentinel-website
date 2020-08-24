@@ -1,0 +1,5 @@
+# Sentinel 1.8.0 Released
+
+We're happy to announce that [Sentinel 1.8.0](https://github.com/alibaba/Sentinel/releases/tag/v1.8.0) has been released. This nouveau release ships with countless features and improvements, specifically for circuit breaking. We've made progress on refactoring and improving circuit breaking feature, including arbitrary statistic duration support, half-open recovery, enhanced slow request ratio strategy, state change observer and more. We've also brought various versatile integrations including Java EE (JAX-RS and CDI), Quarkus and HTTP client (Apache HttpClient and OkHttp). See [Release Notes](https://github.com/alibaba/Sentinel/releases/tag/v1.8.0) for more details.
+
+![sentinel-open-source-eco](https://user-images.githubusercontent.com/9434884/91042203-f670b400-e643-11ea-959a-c24c7c67e3f4.png)

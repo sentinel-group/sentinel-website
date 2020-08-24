@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-7-1-release copy.md",
+  "__html": "<h1>Sentinel 1.7.1 Released</h1>\n<p><a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.7.1\">Sentinel 1.7.1</a> has been released with cool features including Spring Web adapter and improvements for Dubbo 2.7.x asynchronous mode. See <a href=\"https://github.com/alibaba/Sentinel/wiki/Release-Notes#171\">Release Notes</a> for more details.</p>\n"
+}

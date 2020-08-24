@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-7-2-release.md",
+  "__html": "<h1>Sentinel 1.7.2 Released</h1>\n<p>We're happy to announce that <a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.7.2\">Sentinel 1.7.2</a> has been released with cool features including Logger SPI support, SOFARPC integration, Zuul 2.x gateway flow control and other enhancements. See <a href=\"https://github.com/alibaba/Sentinel/wiki/Release-Notes#172\">Release Notes</a> for more details.</p>\n"
+}

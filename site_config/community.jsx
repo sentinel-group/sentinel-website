@@ -7,9 +7,23 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.8.0 released',
+          img: '/img/sentinel-and-quarkus.png',
+          content: 'Sentinel 1.8.0 annual version released with cool features like circuit breaking improvements and Quarkus support.',
+          dateStr: 'Aug 20th，2020',
+          link: '/en-us/blog/sentinel-1-8-0-release.html',
+        },
+        {
+          title: 'Sentinel 1.7.2 released',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.7.2 released with cool features including Logger SPI support, SOFARPC integration and Zuul 2.x gateway flow control.',
+          dateStr: 'Apr 8th，2020',
+          link: '/en-us/blog/sentinel-1-7-2-release.html',
+        },
+        {
           title: 'Sentinel 1.7.1 released',
           img: '/img/brhtqqzh.jpeg',
-          content: 'Sentinel 1.7.1 released Spring WebMvc integration and improvements for Dubbo 2.7.x asynchronous mode.',
+          content: 'Sentinel 1.7.1 released with Spring WebMvc integration and improvements for Dubbo 2.7.x asynchronous mode.',
           dateStr: 'Dec 25th，2019',
           link: '/en-us/blog/sentinel-1-7-1-release.html',
         },
@@ -114,13 +128,18 @@ export default {
           content: <span>Sentinel provides integration modules for commonly-used microservice frameworks and libraries.</span>,
           tags: [
             {
-              text: 'Apache Dubbo',
-              link: 'https://github.com/dubbo/dubbo-sentinel-support',
+              text: 'Spring Cloud',
+              link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
               bgColor: '#7A63FC',
             },
             {
-              text: 'Spring Cloud',
-              link: 'https://github.com/alibaba/spring-cloud-alibaba',
+              text: 'gRPC',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-grpc-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Quarkus',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter',
               bgColor: '#00D0D9',
             },
             {
@@ -129,10 +148,11 @@ export default {
               bgColor: '#00D0D9',
             },
             {
-              text: 'gRPC',
-              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-grpc-adapter',
+              text: 'Apache Dubbo',
+              link: 'https://github.com/dubbo/dubbo-sentinel-support',
               bgColor: '#00D0D9',
             },
+
             {
               text: 'Spring WebFlux',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-webflux-adapter',
@@ -146,11 +166,6 @@ export default {
             {
               text: 'SOFARPC',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-sofa-rpc-adapter',
-              bgColor: '#00D0D9',
-            },
-            {
-              text: 'Quarkus',
-              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter',
               bgColor: '#00D0D9',
             },
           ],
@@ -223,6 +238,27 @@ export default {
             },
           ],
         },
+        {
+          title: 'Polyglot Support',
+          content: <span>Sentinel provides polyglot implementations.</span>,
+          tags: [
+            {
+              text: 'Java',
+              link: 'https://github.com/alibaba/Sentinel',
+              bgColor: '#7A63FC',
+            },
+            {
+              text: 'Go',
+              link: 'https://github.com/alibaba/sentinel-golang',
+              bgColor: '#7A63FC',
+            },
+            {
+              text: 'C++',
+              link: 'https://github.com/alibaba/sentinel-cpp',
+              bgColor: '#00D0D9',
+            },
+          ],
+        },
       ],
     },
   },
@@ -231,6 +267,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.8.0 年度版本发布，熔断降级重构升级',
+          img: '/img/unstable-dependency-cascade-failure.png',
+          content: 'Sentinel 1.8.0 年度版本发布，带来了完善升级版的熔断降级及云原生开源生态。',
+          dateStr: 'Aug 20th，2020',
+          link: '/zh-cn/blog/sentinel-1-8-0-release.html',
+        },
         {
           title: 'Sentinel Go 0.5.0 发布',
           img: '/img/brhtqqzh.jpeg',
@@ -416,12 +459,12 @@ export default {
             {
               text: 'Apache Dubbo',
               link: 'https://github.com/dubbo/dubbo-sentinel-support',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Quarkus',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Servlet',
@@ -462,7 +505,7 @@ export default {
             {
               text: 'Spring Cloud Gateway',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-cloud-gateway-adapter',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Zuul 2.x',

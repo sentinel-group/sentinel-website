@@ -1,4 +1,16 @@
-# Microservice Framework Integrations
+# Open-Source Integrations
+
+## Microservices
+
+### Spring Cloud
+
+Spring Cloud Alibaba Sentinel provides out-of-box integration with Sentinel for Spring Cloud applications and services (Spring Web, Spring WebFlux, RestTemplate, Feign, Spring Cloud Gateway, Reactor, Zuul).
+
+Please refer to [Spring Cloud Alibaba](https://github.com/alibaba/spring-cloud-alibaba) for more information. Demo: [sentinel-guide-spring-cloud](https://github.com/sentinel-group/sentinel-guides/tree/master/sentinel-guide-spring-cloud)
+
+### Quarkus
+
+Sentinel provides out-of-box support for Quarkus. See [sentinel-quarkus-adapter](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter) for more details (since 1.8.0).
 
 ## Web frameworks
 
@@ -58,12 +70,6 @@ the amount of context and resources will exceed the threshold.
 
 The `RequestOriginParser` interface is useful for extracting request origin (e.g. IP or appName from HTTP Header)
 from the HTTP request. You can implement your own `RequestOriginParser` and register to `WebCallbackManager`.
-
-### Spring Cloud
-
-Spring Cloud Alibaba Sentinel provides out-of-box integration with Sentinel for Spring Cloud applications and services (Spring Web, Spring WebFlux, RestTemplate, Feign, Spring Cloud Gateway).
-
-Please refer to [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) for more information. Demo: [sentinel-guide-spring-cloud](https://github.com/sentinel-group/sentinel-guides/tree/master/sentinel-guide-spring-cloud)
 
 ### Spring WebFlux
 

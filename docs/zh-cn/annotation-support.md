@@ -1,4 +1,4 @@
-# 注解支持
+# 注解埋点支持
 
 Sentinel 提供了 `@SentinelResource` 注解用于定义资源，并提供了 AspectJ 的扩展用于自动定义资源、处理 `BlockException` 等。使用 [Sentinel Annotation AspectJ Extension](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-annotation-aspectj) 的时候需要引入以下依赖：
 
@@ -11,6 +11,8 @@ Sentinel 提供了 `@SentinelResource` 注解用于定义资源，并提供了 A
 ```
 
 ## @SentinelResource 注解
+
+> 注意：注解方式埋点不支持 private 方法。
 
  `@SentinelResource` 用于定义资源，并提供可选的异常处理和 fallback 配置项。 `@SentinelResource` 注解包含以下属性：
 

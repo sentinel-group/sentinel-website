@@ -7,13 +7,13 @@ Sentinel 提供如下的配置方式：
 - JVM -D 参数方式
 - properties 文件方式（1.7.0 版本开始支持）
 
-其中，`project.name` 参数只能通过 JVM -D 参数方式配置，其它参数支持所有的配置方式。
+其中，`project.name` 参数只能通过 JVM -D 参数方式配置（since 1.8.0 取消该限制），其它参数支持所有的配置方式。
 
 **优先级顺序**：JVM -D 参数的优先级最高。若 properties 和 JVM 参数中有相同项的配置，以 JVM 参数配置的为准。
 
 用户可以通过 `-Dcsp.sentinel.config.file` 参数配置 properties 文件的路径，支持 classpath 路径配置（如 `classpath:sentinel.properties`）。默认 Sentinel 会尝试从 `classpath:sentinel.properties` 文件读取配置，读取编码默认为 UTF-8。
 
-> 注：1.7.0 以下版本可以通过 `${user_home}/logs/csp/${project.name}.properties` 配置文件进行配置（除 `project.name` 和日志相关配置项）。
+> 注：1.7.0 以下版本可以通过旧的 `${user_home}/logs/csp/${project.name}.properties` 配置文件进行配置（除 `project.name` 和日志相关配置项）。
 
 > 注：若您的应用为 Spring Boot 或 Spring Cloud 应用，您可以使用 [Spring Cloud Alibaba](https://github.com/alibaba/spring-cloud-alibaba)，通过 Spring 配置文件来指定配置，详情请参考 [Spring Cloud Alibaba Sentinel 文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)。
 

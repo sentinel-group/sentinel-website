@@ -12,9 +12,9 @@ Sentinel 的理念是开发者只需要关注资源的定义，当资源定义�
 ```Java
 FlowRuleManager.loadRules(List<FlowRule> rules); // 修改流控规则
 DegradeRuleManager.loadRules(List<DegradeRule> rules); // 修改降级规则
-SystemRuleManager.loadRules(List<SystemRule> rules); // 修改系统规则
-AuthorityRuleManager.loadRules(List<AuthorityRule> rules); // 修改授权规则
 ```
+
+手动修改规则（硬编码方式）一般仅用于测试和演示，生产上一般通过动态规则源的方式来动态管理规则。
 
 ## DataSource 扩展
 
@@ -29,11 +29,16 @@ AuthorityRuleManager.loadRules(List<AuthorityRule> rules); // 修改授权规则
 - **拉模式**：客户端主动向某个规则管理中心定期轮询拉取规则，这个规则中心可以是 RDBMS、文件，甚至是 VCS 等。这样做的方式是简单，缺点是无法及时获取变更；
 - **推模式**：规则中心统一推送，客户端通过注册监听器的方式时刻监听变化，比如使用 [Nacos](https://github.com/alibaba/nacos)、Zookeeper 等配置中心。这种方式有更好的实时性和一致性保证。
 
-### 拉模式拓展
+Sentinel 目前支持以下数据源扩展：
+
+- Pull-based: 动态文件数据源、[Consul](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-consul), [Eureka](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-eureka)
+- Push-based: [ZooKeeper](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-zookeeper), [Redis](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-redis), [Nacos](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos), [Apollo](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-apollo), [etcd](https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-etcd)
+
+### 拉模式扩展
 
 实现拉模式的数据源最简单的方式是继承 [`AutoRefreshDataSource`](https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AutoRefreshDataSource.java) 抽象类，然后实现 `readSource()` 方法，在该方法里从指定数据源读取字符串格式的配置数据。比如 [基于文件的数据源](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dynamic-file-rule/src/main/java/com/alibaba/csp/sentinel/demo/file/rule/FileDataSourceDemo.java)。
 
-### 推模式拓展
+### 推模式扩展
 
 实现推模式的数据源最简单的方式是继承 [`AbstractDataSource`](https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AbstractDataSource.java) 抽象类，在其构造方法中添加监听器，并实现 `readSource()` 从指定数据源读取字符串格式的配置数据。比如 [基于 Nacos 的数据源](https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-nacos/src/main/java/com/alibaba/csp/sentinel/datasource/nacos/NacosDataSource.java)。
 
@@ -78,7 +83,7 @@ com.test.init.DataSourceInitFunc
 
 ###  API 模式：使用客户端规则 API 配置规则
 
-[Sentinel Dashboard](https://github.com/alibaba/Sentinel/tree/master/sentinel-dashboard) 通过客户端自带的[规则 API](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99)来实时查询和更改内存中的规则。
+[Sentinel Dashboard](./dashboard.md) 通过 Sentinel 客户端自带的规则 API 来实时查询和更改内存中的规则。
 
 注意: 要使客户端具备规则 API，需在客户端引入以下依赖：
 

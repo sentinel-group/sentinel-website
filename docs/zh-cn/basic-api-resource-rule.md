@@ -235,45 +235,49 @@ private static void initFlowQpsRule() {
 
 | Field | 说明 | 默认值 |
 | :----: | :----| :----|
-| resource | 资源名，即限流规则的作用对象 ||
-| count | 阈值 ||
-| grade | 熔断策略，支持秒级 RT/秒级异常比例/分钟级异常数 |秒级平均 RT|
-| timeWindow | 降级的时间，单位为 s||
+| resource | 资源名，即规则的作用对象 ||
+| grade | 熔断策略，支持慢调用比例/异常比例/异常数策略 | 慢调用比例 |
+| count | 慢调用比例模式下为慢调用临界 RT（超出该值计为慢调用）；异常比例/异常数模式下为对应的阈值 ||
+| timeWindow | 熔断时长，单位为 s||
+| minRequestAmount | 熔断触发的最小请求数，请求数小于该值时即使异常比率超出阈值也不会熔断（1.7.0 引入） | 5 |
+| statIntervalMs | 统计时长（单位为 ms），如 60*1000 代表分钟级（1.8.0 引入）| 1000 ms |
+| slowRatioThreshold | 慢调用比例阈值，仅慢调用比例模式有效（1.8.0 引入） |  |
 
 同一个资源可以同时有多个降级规则。
 
 理解上面规则的定义之后，我们可以通过调用 `DegradeRuleManager.loadRules()` 方法来用硬编码的方式定义流量控制规则。
 
 ```java
- private static void initDegradeRule() {
-        List<DegradeRule> rules = new ArrayList<>();
-        DegradeRule rule = new DegradeRule();
-        rule.setResource(KEY);
-        // set threshold rt, 10 ms
-        rule.setCount(10);
-        rule.setGrade(RuleConstant.DEGRADE_GRADE_RT);
-        rule.setTimeWindow(10);
-        rules.add(rule);
-        DegradeRuleManager.loadRules(rules);
-    }
+private static void initDegradeRule() {
+    List<DegradeRule> rules = new ArrayList<>();
+    DegradeRule rule = new DegradeRule(resource);
+        .setGrade(CircuitBreakerStrategy.ERROR_RATIO.getType());
+        .setCount(0.7); // Threshold is 70% error ratio
+        .setMinRequestAmount(100)
+        .setStatIntervalMs(30000) // 30s
+        .setTimeWindow(10);
+    rules.add(rule);
+    DegradeRuleManager.loadRules(rules);
+}
 ```
 
 更多详情可以参考 [熔断降级](./circuit-breaking.md)。
 
 ### 系统保护规则 (SystemRule)
 
-规则包含下面几个重要的属性：
+Sentinel 系统自适应限流从整体维度对应用入口流量进行控制，结合应用的 Load、CPU 使用率、总体平均 RT、入口 QPS 和并发线程数等几个维度的监控指标，通过自适应的流控策略，让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。
+
+系统规则包含下面几个重要的属性：
 
 | Field | 说明 | 默认值 |
 | :----: | :----| :----|
-| highestSystemLoad | `load1` 阈值，参考值 |-1 (不生效)|
+| highestSystemLoad | `load1` 触发值，用于触发自适应控制阶段 |-1 (不生效)|
 | avgRt | 所有入口流量的平均响应时间 |-1 (不生效)|
 | maxThread | 入口流量的最大并发数 |-1 (不生效)|
 | qps | 所有入口资源的 QPS | -1 (不生效) |
 | highestCpuUsage | 当前系统的 CPU 使用率（0.0-1.0）| -1 (不生效) |
 
-
-理解上面规则的定义之后，我们可以通过调用 `SystemRuleManager.loadRules()` 方法来用硬编码的方式定义流量控制规则。
+理解上面规则的定义之后，我们可以通过调用 `SystemRuleManager.loadRules()` 方法来用硬编码的方式定义流量控制规则：
 
 ```java
 private void initSystemProtectionRule() {

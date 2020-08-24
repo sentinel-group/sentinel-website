@@ -31,9 +31,8 @@
 <p>通过 API 修改比较直观，可以通过以下几个 API 修改不同的规则：</p>
 <pre><code class="language-Java">FlowRuleManager.loadRules(List&lt;FlowRule&gt; rules); <span class="hljs-comment">// 修改流控规则</span>
 DegradeRuleManager.loadRules(List&lt;DegradeRule&gt; rules); <span class="hljs-comment">// 修改降级规则</span>
-SystemRuleManager.loadRules(List&lt;SystemRule&gt; rules); <span class="hljs-comment">// 修改系统规则</span>
-AuthorityRuleManager.loadRules(List&lt;AuthorityRule&gt; rules); <span class="hljs-comment">// 修改授权规则</span>
 </code></pre>
+<p>手动修改规则（硬编码方式）一般仅用于测试和演示，生产上一般通过动态规则源的方式来动态管理规则。</p>
 <h2>DataSource 扩展</h2>
 <p>上述 <code>loadRules()</code> 方法只接受内存态的规则对象，但更多时候规则存储在文件、数据库或者配置中心当中。<code>DataSource</code> 接口给我们提供了对接任意配置源的能力。相比直接通过 API 修改规则，实现 <code>DataSource</code> 接口是更加可靠的做法。</p>
 <p>我们推荐<strong>通过控制台设置规则后将规则推送到统一的规则中心，客户端实现</strong> <code>ReadableDataSource</code> <strong>接口端监听规则中心实时获取变更</strong>，流程如下：</p>
@@ -43,9 +42,14 @@ AuthorityRuleManager.loadRules(List&lt;AuthorityRule&gt; rules); <span class="hl
 <li><strong>拉模式</strong>：客户端主动向某个规则管理中心定期轮询拉取规则，这个规则中心可以是 RDBMS、文件，甚至是 VCS 等。这样做的方式是简单，缺点是无法及时获取变更；</li>
 <li><strong>推模式</strong>：规则中心统一推送，客户端通过注册监听器的方式时刻监听变化，比如使用 <a href="https://github.com/alibaba/nacos">Nacos</a>、Zookeeper 等配置中心。这种方式有更好的实时性和一致性保证。</li>
 </ul>
-<h3>拉模式拓展</h3>
+<p>Sentinel 目前支持以下数据源扩展：</p>
+<ul>
+<li>Pull-based: 动态文件数据源、<a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-consul">Consul</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-eureka">Eureka</a></li>
+<li>Push-based: <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-zookeeper">ZooKeeper</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-redis">Redis</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos">Nacos</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-apollo">Apollo</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-etcd">etcd</a></li>
+</ul>
+<h3>拉模式扩展</h3>
 <p>实现拉模式的数据源最简单的方式是继承 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AutoRefreshDataSource.java"><code>AutoRefreshDataSource</code></a> 抽象类，然后实现 <code>readSource()</code> 方法，在该方法里从指定数据源读取字符串格式的配置数据。比如 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dynamic-file-rule/src/main/java/com/alibaba/csp/sentinel/demo/file/rule/FileDataSourceDemo.java">基于文件的数据源</a>。</p>
-<h3>推模式拓展</h3>
+<h3>推模式扩展</h3>
 <p>实现推模式的数据源最简单的方式是继承 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AbstractDataSource.java"><code>AbstractDataSource</code></a> 抽象类，在其构造方法中添加监听器，并实现 <code>readSource()</code> 从指定数据源读取字符串格式的配置数据。比如 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-nacos/src/main/java/com/alibaba/csp/sentinel/datasource/nacos/NacosDataSource.java">基于 Nacos 的数据源</a>。</p>
 <h3>注册数据源</h3>
 <p>通常需要调用以下方法将数据源注册至指定的规则管理器中：</p>
@@ -75,7 +79,7 @@ FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
 <p>这样，当初次访问任意资源的时候，Sentinel 就可以自动去注册对应的数据源了。</p>
 <h2>示例</h2>
 <h3>API 模式：使用客户端规则 API 配置规则</h3>
-<p><a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-dashboard">Sentinel Dashboard</a> 通过客户端自带的<a href="https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99">规则 API</a>来实时查询和更改内存中的规则。</p>
+<p><a href="./dashboard.md">Sentinel Dashboard</a> 通过 Sentinel 客户端自带的规则 API 来实时查询和更改内存中的规则。</p>
 <p>注意: 要使客户端具备规则 API，需在客户端引入以下依赖：</p>
 <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>

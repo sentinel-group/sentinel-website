@@ -1,10 +1,57 @@
 # 开源框架适配
 
+- 云原生微服务体系
+  - Spring Boot/Spring Cloud
+  - Quarkus
+- Web 适配
+  - Web Servlet
+  - Spring Web
+  - Spring WebFlux
+  - JAX-RS (Java EE)
+- RPC 适配
+  - Apache Dubbo
+  - gRPC
+  - Feign
+  - SOFARPC
+- HTTP client 适配
+  - Apache HttpClient
+  - OkHttp
+- Reactive 适配
+  - Reactor
+- API Gateway 适配
+  - Spring Cloud Gateway
+  - Netflix Zuul 1.x
+  - Netflix Zuul 2.x
+- Apache RocketMQ
+
 > **注：适配模块仅提供相应适配功能，若希望接入 Sentinel 控制台，请务必参考 [Sentinel 控制台文档](./dashboard.md)。**
 
-## Web Servlet
+## 云原生微服务体系
 
-Sentinel 提供与 Servlet 的整合，可以对 Web 请求进行流量控制。使用时需引入以下模块（以 Maven 为例）：
+### Spring Cloud
+
+[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供微服务开发的一站式解决方案。Sentinel 与 Spring Boot/Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)。
+
+Spring Cloud Alibaba 默认为 Sentinel 整合了 Servlet、RestTemplate、FeignClient 和 Spring WebFlux。Sentinel 在 Spring Cloud 生态中，不仅补全了 Hystrix 在 Servlet 和 RestTemplate 这一块的空白，而且还完全兼容了 Hystrix 在 FeignClient 中限流降级的用法，并且支持运行时灵活地配置和调整限流降级规则。
+
+Spring Cloud Alibaba Sentinel 的示例可以参考 [sentinel-guide-spring-cloud](https://github.com/sentinel-group/sentinel-guides/tree/master/sentinel-guide-spring-cloud)
+
+### Quarkus
+
+> 注：从 1.8.0 版本开始支持，需要 Java 8 及以上版本。
+
+Sentinel 提供[针对 Quarkus 微服务的适配模块](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter)（支持 native image），可以很方便地将 JAX-RS Web 服务接入并进行高可用防护，同时支持注解方式自定义埋点（基于 CDI）。
+
+相关模块：
+
+- `sentinel-jax-rs-quarkus-adapter`
+- `sentinel-annotation-quarkus-adapter`
+
+## Web 适配
+
+### Web Servlet
+
+Sentinel 提供针对 Servlet 的原生整合，可以对 Web 请求进行流量控制。使用时需引入以下模块（以 Maven 为例）：
 
 ```xml
 <dependency>
@@ -47,6 +94,8 @@ public class FilterConfig {
 }
 ```
 
+接入 filter 之后，所有访问的 Web URL 就会被自动统计为 Sentinel 的资源，可以针对单个 URL 维度进行流控。若希望区分不同 HTTP Method，可以将 `HTTP_METHOD_SPECIFY` 这个 init parameter 设为 true，给每个 URL 资源加上前缀，比如 `GET:/foo`。
+
 **限流处理逻辑**：默认情况下，当请求被限流时会返回默认的提示页面 `Blocked by Sentinel (flow limiting)`。您也可以通过 JVM 参数 `-Dcsp.sentinel.web.servlet.block.page` 或代码中调用 `WebServletConfig.setBlockPage(blockPage)` 方法设定自定义的跳转 URL，当请求被限流时会自动跳转至设定好的 URL。同样您也可以实现 `UrlBlockHandler` 接口并编写定制化的限流处理逻辑，然后将其注册至 `WebCallbackManager` 中。
 
 > 提示：1.7.0 版本开始默认的限流页面 HTTP 返回码是 **429**。您可以通过 `csp.sentinel.web.servlet.block.status` 配置项自定义限流页面的 HTTP 状态码。
@@ -80,68 +129,7 @@ WebCallbackManager.setUrlCleaner(new UrlCleaner() {
 
 如果您正在使用 Spring Boot / Spring Cloud，那么可以通过引入 Spring Cloud Alibaba Sentinel 来更方便地整合 Sentinel，详情请见 [Spring Cloud Alibaba 文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel#如何使用-sentinel)。
 
-## Dubbo
-
-Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。相关模块：
-
-- `sentinel-apache-dubbo-adapter`（兼容 Apache Dubbo 2.7.x 及以上版本，自 Sentinel 1.5.1 开始支持）
-- `sentinel-dubbo-adapter`（兼容 Dubbo 2.6.x 版本）
-
-对于 Apache Dubbo **2.7.x** 及以上版本，使用时需引入以下模块（以 Maven 为例）：
-
-```xml
-<dependency>
-    <groupId>com.alibaba.csp</groupId>
-    <artifactId>sentinel-apache-dubbo-adapter</artifactId>
-    <version>x.y.z</version>
-</dependency>
-```
-
-对于 Dubbo **2.6.x** 及以下版本，使用时需引入以下模块（以 Maven 为例）：
-
-```xml
-<dependency>
-    <groupId>com.alibaba.csp</groupId>
-    <artifactId>sentinel-dubbo-adapter</artifactId>
-    <version>x.y.z</version>
-</dependency>
-```
-
-引入此依赖后，Dubbo 的服务接口和方法（包括调用端和服务端）就会成为 Sentinel 中的资源，在配置了规则后就可以自动享受到 Sentinel 的防护能力。
-
-> **注：若希望接入 Dashboard，请参考 [接入控制台的步骤](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dubbo/README.md#sentinel-dashboard)。只引入 Sentinel Dubbo Adapter 无法接入控制台！**
-
-若不希望开启 Sentinel Dubbo Adapter 中的某个 Filter，可以手动关闭对应的 Filter，比如：
-
-```xml
-<!-- 关闭 Sentinel 对应的 Service Consumer Filter -->
-<dubbo:consumer filter="-sentinel.dubbo.consumer.filter"/>
-```
-
-限流粒度可以是服务接口和服务方法两种粒度：
-
-- 服务接口：resourceName 为 `接口全限定名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService`
-- 服务方法：resourceName 为 `接口全限定名:方法签名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService:sayHello(java.lang.String)`
-
-Sentinel Dubbo Adapter 还支持配置全局的 fallback 函数，可以在 Dubbo 服务被限流/降级/负载保护的时候进行相应的 fallback 处理。用户只需要实现自定义的 [`DubboFallback`](https://github.com/alibaba/Sentinel/blob/master/sentinel-adapter/sentinel-dubbo-adapter/src/main/java/com/alibaba/csp/sentinel/adapter/dubbo/fallback/DubboFallback.java) 接口，并通过 `DubboFallbackRegistry` 注册即可。默认情况会直接将 `BlockException` 包装后抛出。同时，我们还可以配合 [Dubbo 的 fallback 机制](http://dubbo.incubator.apache.org/zh-cn/docs/user/demos/local-mock.html) 来为降级的服务提供替代的实现。
-
-> 注：一般情况下熔断降级 / fallback 用于调用端（客户端）。
-
-我们提供了 Dubbo 的相关示例，请见 [sentinel-demo-dubbo](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-dubbo)。
-
-有关 Sentinel 在 Dubbo 中的最佳实践，请参考 [Sentinel: Dubbo 服务的流量哨兵](http://dubbo.incubator.apache.org/zh-cn/blog/sentinel-introduction-for-dubbo.html)。
-
-关于 Dubbo Filter 的更多信息，请参考 [Dubbo Filter 文档](http://dubbo.incubator.apache.org/zh-cn/docs/dev/impls/filter.html)。
-
-## Spring Cloud
-
-[Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 致力于提供微服务开发的一站式解决方案。Sentinel 与 Spring Cloud 的整合见 [Sentinel Spring Cloud Starter](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)。
-
-Spring Cloud Alibaba 默认为 Sentinel 整合了 Servlet、RestTemplate、FeignClient 和 Spring WebFlux。Sentinel 在 Spring Cloud 生态中，不仅补全了 Hystrix 在 Servlet 和 RestTemplate 这一块的空白，而且还完全兼容了 Hystrix 在 FeignClient 中限流降级的用法，并且支持运行时灵活地配置和调整限流降级规则。
-
-Spring Cloud Alibaba Sentinel 的示例可以参考 [sentinel-guide-spring-cloud](https://github.com/sentinel-group/sentinel-guides/tree/master/sentinel-guide-spring-cloud)
-
-## Spring WebFlux
+### Spring WebFlux
 
 > 注：从 1.5.0 版本开始支持，需要 Java 8 及以上版本。
 
@@ -196,7 +184,66 @@ public class WebFluxConfig {
 
 相关示例：[sentinel-demo-spring-webflux](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-spring-webflux)
 
-## gRPC
+### JAX-RS (Java EE)
+
+> 注：从 1.8.0 版本开始原生支持。若您的服务是 Spring Web 服务，可参考 Spring Web 适配文档接入。
+
+[sentinel-jax-rs-adapter](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-jax-rs-adapter)
+
+## RPC 适配
+
+### Dubbo
+
+Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。相关模块：
+
+- `sentinel-apache-dubbo-adapter`（兼容 Apache Dubbo 2.7.x 及以上版本，自 Sentinel 1.5.1 开始支持）
+- `sentinel-dubbo-adapter`（兼容 Dubbo 2.6.x 版本）
+
+对于 Apache Dubbo **2.7.x** 及以上版本，使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-apache-dubbo-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+对于 Dubbo **2.6.x** 及以下版本，使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-dubbo-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+引入此依赖后，Dubbo 的服务接口和方法（包括调用端和服务端）就会成为 Sentinel 中的资源，在配置了规则后就可以自动享受到 Sentinel 的防护能力。
+
+> **注：若希望接入 Dashboard，请参考 [接入控制台的步骤](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dubbo/README.md#sentinel-dashboard)。只引入 Sentinel Dubbo Adapter 无法接入控制台！**
+
+若不希望开启 Sentinel Dubbo Adapter 中的某个 Filter，可以手动关闭对应的 Filter，比如：
+
+```xml
+<!-- 关闭 Sentinel 对应的 Service Consumer Filter -->
+<dubbo:consumer filter="-sentinel.dubbo.consumer.filter"/>
+```
+
+限流粒度可以是服务接口和服务方法两种粒度：
+
+- 服务接口：resourceName 为 `接口全限定名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService`
+- 服务方法：resourceName 为 `接口全限定名:方法签名`，如 `com.alibaba.csp.sentinel.demo.dubbo.FooService:sayHello(java.lang.String)`
+
+Sentinel Dubbo Adapter 还支持配置全局的 fallback 函数，可以在 Dubbo 服务被限流/降级/负载保护的时候进行相应的 fallback 处理。用户只需要实现自定义的 [`DubboFallback`](https://github.com/alibaba/Sentinel/blob/master/sentinel-adapter/sentinel-dubbo-adapter/src/main/java/com/alibaba/csp/sentinel/adapter/dubbo/fallback/DubboFallback.java) 接口，并通过 `DubboFallbackRegistry` 注册即可。默认情况会直接将 `BlockException` 包装后抛出。同时，我们还可以配合 [Dubbo 的 fallback 机制](http://dubbo.incubator.apache.org/zh-cn/docs/user/demos/local-mock.html) 来为降级的服务提供替代的实现。
+
+我们提供了 Dubbo 的相关示例，请见 [sentinel-demo-dubbo](https://github.com/alibaba/Sentinel/tree/master/sentinel-demo/sentinel-demo-dubbo)。
+
+有关 Sentinel 在 Dubbo 中的最佳实践，请参考 [Sentinel: Dubbo 服务的流量哨兵](http://dubbo.incubator.apache.org/zh-cn/blog/sentinel-introduction-for-dubbo.html)。
+
+关于 Dubbo Filter 的更多信息，请参考 [Dubbo Filter 文档](http://dubbo.incubator.apache.org/zh-cn/docs/dev/impls/filter.html)。
+
+### gRPC
 
 Sentinel 提供与 [gRPC Java](https://github.com/grpc/grpc-java) 的整合，以 gRPC [ServerInterceptor](https://grpc.io/grpc-java/javadoc/io/grpc/ServerInterceptor.html) 和 [ClientInterceptor](https://grpc.io/grpc-java/javadoc/io/grpc/ClientInterceptor.html) 的形式保护 gRPC 服务资源。使用时需引入以下模块（以 Maven 为例）：
 
@@ -235,7 +282,57 @@ Server server = ServerBuilder.forPort(port)
      .build();
 ```
 
-注意：由于 gRPC 拦截器中 ClientCall/ServerCall 以回调的形式进行请求响应信息的获取，每次 gRPC 服务调用计算出的 RT 可能会不准确。Sentinel gRPC Adapter 目前只支持 unary call。
+注意：Sentinel gRPC Adapter 目前只支持 unary call。
+
+### Feign
+
+Feign 适配整合在 Spring Cloud Alibaba 中，可以参考 [Spring Cloud Alibaba Sentinel 文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel) 进行接入。
+
+### SOFARPC
+
+从 1.7.2 版本开始，Sentinel 提供 SOFARPC 的适配模块 [sentinel-sofa-rpc-adapter](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-sofa-rpc-adapter)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-sofa-rpc-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+引入此依赖后，Sentinel 会自动统计 SOFARPC 的服务接口和方法调用（包括调用端和服务端），在配置了规则后就可以自动享受到 Sentinel 的防护能力。
+
+## HTTP Client 适配
+
+### Apache HttpClient
+
+> 注：从 Sentinel 1.8.0 版本开始支持。
+
+Sentinel 提供 Apache HttpClient 的适配模块 [sentinel-apache-httpclient-adapter](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-apache-httpclient-adapter)，可以针对 HTTP client 请求进行流控和熔断。使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-apache-httpclient-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+注意目前暂不支持 AsyncHttpClient。
+
+### OkHttp
+
+> 注：从 Sentinel 1.8.0 版本开始支持。
+
+Sentinel 提供 OkHttp 的适配模块 [sentinel-okhttp-adapter](https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-okhttp-adapter)，可以针对 HTTP client 请求进行流控和熔断。使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-okhttp-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
 
 ## Reactive 适配
 
@@ -336,6 +433,27 @@ Sentinel 提供了 Zuul 1.x 的适配模块，可以为 Zuul Gateway 提供两�
 详细文档可以参考 [网关限流 - Zuul 1.x](https://github.com/alibaba/Sentinel/wiki/网关限流#zuul-1x)。
 
 如果您正在使用 Spring Cloud Zuul Starter，那么可以通过引入 `spring-cloud-alibaba-sentinel-zuul` 来更方便地整合 Sentinel。请参考 [对应文档](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/tree/master/spring-cloud-alibaba-sentinel-zuul)。
+
+## Zuul 2.x
+
+> 注：从 1.7.2 版本开始支持，需要 Java 8 及以上版本。
+
+Sentinel 提供了 Zuul 2.x 的适配模块，可以为 Zuul Gateway 提供两种资源维度的限流：
+
+- route 维度：对应 SessionContext 中的 `routeVIP`
+- 自定义 API 维度：用户可以利用 Sentinel 提供的 API 来自定义一些 API 分组
+
+使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-zuul2-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+详细文档可以参考 [网关限流 - Zuul 2.x](https://github.com/alibaba/Sentinel/wiki/网关限流#zuul-2x)。
 
 ## Apache RocketMQ
 

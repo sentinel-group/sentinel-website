@@ -110,8 +110,8 @@ export default {
       title: 'Eco System',
       list: [
         {
-          title: 'Integrations',
-          content: <span>Sentinel provides integration modules for commonly-used frameworks and libraries.</span>,
+          title: 'Microservices',
+          content: <span>Sentinel provides integration modules for commonly-used microservice frameworks and libraries.</span>,
           tags: [
             {
               text: 'Apache Dubbo',
@@ -120,17 +120,17 @@ export default {
             },
             {
               text: 'Spring Cloud',
-              link: '',
+              link: 'https://github.com/alibaba/spring-cloud-alibaba',
               bgColor: '#00D0D9',
             },
             {
               text: 'Servlet',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-web-servlet',
               bgColor: '#00D0D9',
             },
             {
               text: 'gRPC',
-              link: '',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-grpc-adapter',
               bgColor: '#00D0D9',
             },
             {
@@ -144,14 +144,41 @@ export default {
               bgColor: '#00D0D9',
             },
             {
+              text: 'SOFARPC',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-sofa-rpc-adapter',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Quarkus',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter',
+              bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
+          title: 'API Gateway',
+          content: <span>Sentinel provides integration modules for widely-used API gateways.</span>,
+          tags: [
+            {
               text: 'Zuul 1.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
-              bgColor: '#00D0D9',
+              bgColor: '#7A63FC',
             },
             {
               text: 'Spring Cloud Gateway',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-cloud-gateway-adapter',
               bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
+          title: 'Service Mesh',
+          content: <span>Sentinel provides integration modules for service mesh.</span>,
+          tags: [
+            {
+              text: 'Istio/Envoy',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls',
+              bgColor: '#7A63FC',
             },
           ],
         },
@@ -378,18 +405,23 @@ export default {
       title: '生态系统',
       list: [
         {
-          title: '开源整合',
-          content: <span>Sentinel 针对常用的框架和库进行了适配。</span>,
+          title: '微服务生态',
+          content: <span>Sentinel 针对微服务生态中常用的框架和库进行了适配。</span>,
           tags: [
+            {
+              text: 'Spring Cloud',
+              link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
+              bgColor: '#7A63FC',
+            },
             {
               text: 'Apache Dubbo',
               link: 'https://github.com/dubbo/dubbo-sentinel-support',
               bgColor: '#7A63FC',
             },
             {
-              text: 'Spring Cloud',
-              link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
-              bgColor: '#00D0D9',
+              text: 'Quarkus',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-quarkus-adapter',
+              bgColor: '#7A63FC',
             },
             {
               text: 'Servlet',
@@ -412,19 +444,25 @@ export default {
               bgColor: '#00D0D9',
             },
             {
+              text: 'SOFARPC',
+              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-sofa-rpc-adapter',
+              bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
+          title: 'API Gateway 生态',
+          content: <span>Sentinel 针对常用的 API Gateway 提供开箱即用的集成模块。</span>,
+          tags: [
+            {
               text: 'Zuul 1.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
-              bgColor: '#00D0D9',
+              bgColor: '#7A63FC',
             },
             {
               text: 'Spring Cloud Gateway',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-spring-cloud-gateway-adapter',
-              bgColor: '#00D0D9',
-            },
-            {
-              text: 'SOFARPC',
-              link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-sofa-rpc-adapter',
-              bgColor: '#00D0D9',
+              bgColor: '#7A63FC',
             },
             {
               text: 'Zuul 2.x',

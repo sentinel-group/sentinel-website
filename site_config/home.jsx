@@ -62,7 +62,10 @@ export default {
       desc: <p>请在 <a href="https://github.com/alibaba/Sentinel/issues/18">此处</a> 登记并提供反馈来帮助 Sentinel 做的更好 :)</p>,
       list: [
         'https://docs.alibabagroup.com/assets2/images/en/global/logo_header.png',
+        'https://user-images.githubusercontent.com/9434884/90598732-30961c00-e226-11ea-8c86-0b1d7f7875c7.png',
         'http://www.cntaiping.com/tplresource/cms/www/taiping/img/home_new/tp_logo_img.png',
+        'http://cdn.pinduoduo.com/assets/img/pdd_logo_v3.png',
+        'https://user-images.githubusercontent.com/9434884/90598445-a51c8b00-e225-11ea-9327-3543525f3f2a.png',
         'https://user-images.githubusercontent.com/9434884/48463502-2f48eb80-e817-11e8-984f-2f9b1b789e2d.png',
         'https://user-images.githubusercontent.com/9434884/48463559-6cad7900-e817-11e8-87e4-42952b074837.png',
         'https://user-images.githubusercontent.com/9434884/49358468-bc43de00-f70d-11e8-97fe-0bf05865f29f.png',
@@ -103,7 +106,7 @@ export default {
         {
           img: '/img/feature_transpart.png',
           title: 'Easy to use',
-          content: 'Provides annotation support and out-of-box integrations with popular open-source frameworks such as Spring Cloud, gRPC, Dubbo and Zuul.',
+          content: 'Provides annotation support and out-of-box integrations with popular open-source frameworks such as Spring Cloud, gRPC, Quarkus and Zuul.',
         },
         {
           img: '/img/feature_service.png',
@@ -131,12 +134,13 @@ export default {
       desc: <p>Please <a href="https://github.com/alibaba/Sentinel/issues/18">leave a comment here</a> to tell us your scenario to make Sentinel better :)</p>,
       list: [
         'https://docs.alibabagroup.com/assets2/images/en/global/logo_header.png',
+        'https://user-images.githubusercontent.com/9434884/90598732-30961c00-e226-11ea-8c86-0b1d7f7875c7.png',
         'http://www.cntaiping.com/tplresource/cms/www/taiping/img/home_new/tp_logo_img.png',
+        'http://cdn.pinduoduo.com/assets/img/pdd_logo_v3.png',
+        'https://user-images.githubusercontent.com/9434884/90598445-a51c8b00-e225-11ea-9327-3543525f3f2a.png',
         'https://user-images.githubusercontent.com/9434884/48463502-2f48eb80-e817-11e8-984f-2f9b1b789e2d.png',
         'https://user-images.githubusercontent.com/9434884/48463559-6cad7900-e817-11e8-87e4-42952b074837.png',
-        'https://home.missfresh.cn/statics/img/logo.png',
         'https://user-images.githubusercontent.com/9434884/49358468-bc43de00-f70d-11e8-97fe-0bf05865f29f.png',
-        'https://user-images.githubusercontent.com/9434884/49355264-c6f87600-f701-11e8-8109-054cf91df868.png',
         'http://cdn.52shangou.com/shandianbang/official-source/3.1.1/build/images/logo.png',
       ],
     },

@@ -28,11 +28,11 @@
 <li>JVM -D 参数方式</li>
 <li>properties 文件方式（1.7.0 版本开始支持）</li>
 </ul>
-<p>其中，<code>project.name</code> 参数只能通过 JVM -D 参数方式配置，其它参数支持所有的配置方式。</p>
+<p>其中，<code>project.name</code> 参数只能通过 JVM -D 参数方式配置（since 1.8.0 取消该限制），其它参数支持所有的配置方式。</p>
 <p><strong>优先级顺序</strong>：JVM -D 参数的优先级最高。若 properties 和 JVM 参数中有相同项的配置，以 JVM 参数配置的为准。</p>
 <p>用户可以通过 <code>-Dcsp.sentinel.config.file</code> 参数配置 properties 文件的路径，支持 classpath 路径配置（如 <code>classpath:sentinel.properties</code>）。默认 Sentinel 会尝试从 <code>classpath:sentinel.properties</code> 文件读取配置，读取编码默认为 UTF-8。</p>
 <blockquote>
-<p>注：1.7.0 以下版本可以通过 <code>${user_home}/logs/csp/${project.name}.properties</code> 配置文件进行配置（除 <code>project.name</code> 和日志相关配置项）。</p>
+<p>注：1.7.0 以下版本可以通过旧的 <code>${user_home}/logs/csp/${project.name}.properties</code> 配置文件进行配置（除 <code>project.name</code> 和日志相关配置项）。</p>
 </blockquote>
 <blockquote>
 <p>注：若您的应用为 Spring Boot 或 Spring Cloud 应用，您可以使用 <a href="https://github.com/alibaba/spring-cloud-alibaba">Spring Cloud Alibaba</a>，通过 Spring 配置文件来指定配置，详情请参考 <a href="https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel">Spring Cloud Alibaba Sentinel 文档</a>。</p>

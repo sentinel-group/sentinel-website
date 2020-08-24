@@ -7,7 +7,7 @@ Sentinel 的使用可以分为两个部分:
 - 核心库（Java 客户端）：不依赖任何框架/库，能够运行于 Java 7 及以上的版本的运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持（见 [主流框架适配](./open-source-framework-integrations.md)）。
 - 控制台（Dashboard）：Dashboard 主要负责管理推送规则、监控、管理机器信息等。
 
-我们将会提供 [本地运行 demo](#本地-demo) 和 [公网 demo](#公网-demo) 来帮助新手快速入门。这两种方式都只需要您执行2到5个步骤。
+我们将会提供 **本地运行 demo** 和 **公网 demo** 来帮助新手快速入门。这两种方式都只需要您执行2到5个步骤。
 
 ## 本地Demo
 
@@ -19,7 +19,7 @@ Sentinel 的使用可以分为两个部分:
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.7.2</version>
+    <version>1.8.0</version>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-transport-simple-http</artifactId>
-    <version>1.7.2</version>
+    <version>1.8.0</version>
 </dependency>
 ```
 
@@ -197,15 +197,15 @@ java -Dproject.name=<AppName> -Dahas.license=<License> -jar ahas-sentinel-sdk-de
 
 当应用开始运行后一段时间，我们刷新一下控制台页面，就可以在 AHAS Sentinel 控制台上看到我们的应用了：
 
-![image](https://user-images.githubusercontent.com/9434884/50626822-72981e80-0f6b-11e9-858b-f34cc1565f93.png)
+![image](https://user-images.githubusercontent.com/9434884/90383206-674b2580-e0b2-11ea-83ca-d3e4934a8c6d.png)
 
 点击应用卡片，进入详情页面后点击左侧侧边栏的“机器列表”。我们可以在机器列表页面看到刚刚接入的机器，代表接入成功：
 
-![image](https://user-images.githubusercontent.com/9434884/50626928-036efa00-0f6c-11e9-9dd8-3291654a8902.png)
+![image](https://user-images.githubusercontent.com/9434884/70971365-c39d1600-20db-11ea-9ddc-ec19ae9be40e.png)
 
 我们可以在监控详情页面查看聚合监控和历史监控图线：
 
-![image](https://user-images.githubusercontent.com/9434884/70971125-2f32b380-20db-11ea-89a8-45c6aaa2ded2.png)
+![AHAS Sentinel Dashboard](https://user-images.githubusercontent.com/9434884/70971125-2f32b380-20db-11ea-89a8-45c6aaa2ded2.png)
 
 AHAS Sentinel 控制台提供了一个我们推荐的推送规则的做法，即 **配置中心控制台/Sentinel 控制台 → 配置中心 → Sentinel 数据源 → Sentinel**，这样的流程就非常清晰了：
 

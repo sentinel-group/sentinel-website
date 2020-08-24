@@ -29,13 +29,14 @@
 <li>2012, Sentinel was born in Alibaba with the main purpose of flow control.</li>
 <li>2013-2017, Sentinel grew fast and became a fundamental component for all microservices in Alibaba. It was used in more than 6000 applications and covers almost all core e-commerce scenarios.</li>
 <li>2018, Sentinel evolves into an open-source project.</li>
+<li>2020, <a href="https://github.com/alibaba/sentinel-golang">Sentinel Golang</a> released.</li>
 </ul>
 <h1>Key Concepts</h1>
 <h2>Resource</h2>
 <p><strong>Resource</strong> is a key concept in Sentinel. It could be anything, such as a service, a method, or even a code snippet.</p>
 <p>Once it is wrapped by Sentinel API, it is defined as a resource and can apply for protections provided by Sentinel.</p>
 <h2>Rules</h2>
-<p>The way Sentinel protects resources is defined by rules, such as flow control, concurrency, and circuit breaking rules. Rules can be dynamically changed, and take effect in real-time.</p>
+<p>The way Sentinel protects resources is defined by rules, such as flow control, concurrency limiting, and circuit breaking rules. Rules can be dynamically changed, and take effect in real-time.</p>
 <h1>Features and Principles</h1>
 <h2>Flow Control</h2>
 <p>Sentinel provides the ability to handle random incoming requests according to the appropriate shape as needed, as illustrated below:</p>
@@ -63,7 +64,7 @@
 <h1>How Sentinel works</h1>
 <p><img src="https://user-images.githubusercontent.com/9434884/69955207-1e5d3c00-1538-11ea-9ab2-297efff32809.png" alt="image"></p>
 <h1>Ecosystem Landscape</h1>
-<p><img src="https://user-images.githubusercontent.com/9434884/54653653-57fb2d80-4af6-11e9-8141-b5675f251587.png" alt="sentinel-opensource-eco-landscape-en"></p>
+<p><img src="https://user-images.githubusercontent.com/9434884/78636450-ef3a4b00-78da-11ea-89ce-c7a2b58c2deb.png" alt="sentinel-opensource-eco-landscape-en"></p>
 </div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/contribution/contribution-guideline.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

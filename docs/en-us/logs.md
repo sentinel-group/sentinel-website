@@ -37,3 +37,7 @@ Metrics of resources are recorded in `{user_home}/logs/csp/{app_name}_{pid}_metr
 ## Other logs
 
 Other info (such as rule loading) is recorded in `${user_home}/logs/csp/sentinel-record.log.xxx`.
+
+Since 1.7.2, a new Logger SPI mechanism is introduced for flexible logging extension. The default logger implementation is still based on `java.util.logging`, and developers could introduce dependencies of logging integration to adapt to their existing logging library (e.g. slf4j). We've provided the [sentinel-logging-slf4j](https://github.com/alibaba/Sentinel/tree/master/sentinel-logging/sentinel-logging-slf4j) module.
+
+Note that the logger SPI is designed for `RecordLog` and `CommandCenterLog`. The metric log and block log will not be affected by the logger SPI.

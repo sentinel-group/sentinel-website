@@ -9,6 +9,7 @@ As distributed systems are becoming increasingly popular, the reliability betwee
 * 2012, Sentinel was born in Alibaba with the main purpose of flow control.
 * 2013-2017, Sentinel grew fast and became a fundamental component for all microservices in Alibaba. It was used in more than 6000 applications and covers almost all core e-commerce scenarios. 
 * 2018, Sentinel evolves into an open-source project.
+* 2020, [Sentinel Golang](https://github.com/alibaba/sentinel-golang) released.
 
 # Key Concepts
 
@@ -20,7 +21,7 @@ Once it is wrapped by Sentinel API, it is defined as a resource and can apply fo
 
 ## Rules
 
-The way Sentinel protects resources is defined by rules, such as flow control, concurrency, and circuit breaking rules. Rules can be dynamically changed, and take effect in real-time.
+The way Sentinel protects resources is defined by rules, such as flow control, concurrency limiting, and circuit breaking rules. Rules can be dynamically changed, and take effect in real-time.
 
 # Features and Principles
 
@@ -70,4 +71,4 @@ Sentinel can be used to protect your server in case the system load or CPU usage
 
 # Ecosystem Landscape
 
-![sentinel-opensource-eco-landscape-en](https://user-images.githubusercontent.com/9434884/54653653-57fb2d80-4af6-11e9-8141-b5675f251587.png)
+![sentinel-opensource-eco-landscape-en](https://user-images.githubusercontent.com/9434884/78636450-ef3a4b00-78da-11ea-89ce-c7a2b58c2deb.png)

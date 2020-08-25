@@ -33,7 +33,7 @@ export default {
       {
         title: 'Sentinel 1.8.0 年度版本发布，熔断降级重构升级',
         author: 'Eric Zhao',
-        desc: 'Sentinel 1.8.0 年度版本发布，带来了完善升级版的熔断降级及云原生开源生态。',
+        desc: 'Sentinel 1.8.0 年度版本发布，带来了重构升级版的熔断降级及云原生开源生态。',
         dateStr: '2020.08.20',
         link: '/zh-cn/blog/sentinel-1-8-0-release.html',
       },

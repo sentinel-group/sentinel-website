@@ -1,4 +1,4 @@
-# Sentinel 1.8.0 年度版本发布发布，熔断降级重构升级
+# Sentinel 1.8.0 年度版本发布，熔断降级重构升级
 
 在经过数月的打磨后，[Sentinel 1.8.0](https://github.com/alibaba/Sentinel/releases/tag/v1.8.0) 版本正式发布！该版本是本年度最重要的版本之一，包含大量特性改进与 bug 修复，尤其是针对熔断降级特性的完善升级（支持任意统计时长、慢调用比例降级策略、熔断器事件监听）；同时该版本进一步扩充了开源生态，提供对 Java EE (JAX-RS, CDI), Quarkus, HTTP client 等体系的原生支持。详细特性列表请参考 [Release Notes](https://github.com/alibaba/Sentinel/releases/tag/v1.8.0)，欢迎大家使用并提出建议。
 

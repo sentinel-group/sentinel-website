@@ -31,6 +31,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 0.6.0 发布，支持 Warm-Up 预热流控',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go 0.6.0 发布，带来了 Warm-Up 预热流控、go-micro 框架适配等全新特性。',
+        dateStr: '2020.09.02',
+        link: '/zh-cn/blog/sentinel-golang-0-6-0-release.html',
+      },
+      {
         title: 'Sentinel 1.8.0 年度版本发布，熔断降级重构升级',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.8.0 年度版本发布，带来了重构升级版的熔断降级及云原生开源生态。',

@@ -34,10 +34,10 @@
     (prevState, newState, rule, snapshotValue) -&gt; {
         <span class="hljs-keyword">if</span> (newState == State.OPEN) {
             <span class="hljs-comment">// 变换至 OPEN state 时会携带触发时的值</span>
-            System.err.println(String.format(<span class="hljs-string">"%s -&gt; OPEN at %d, snapshotValue=%.2f"</span>, prevState.name(),
+            System.out.println(String.format(<span class="hljs-string">"%s -&gt; OPEN at %d, snapshotValue=%.2f"</span>, prevState.name(),
                 TimeUtil.currentTimeMillis(), snapshotValue));
         } <span class="hljs-keyword">else</span> {
-            System.err.println(String.format(<span class="hljs-string">"%s -&gt; %s at %d"</span>, prevState.name(), newState.name(),
+            System.out.println(String.format(<span class="hljs-string">"%s -&gt; %s at %d"</span>, prevState.name(), newState.name(),
                 TimeUtil.currentTimeMillis()));
         }
     });

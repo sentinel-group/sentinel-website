@@ -268,6 +268,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel Go 0.6.0 发布，支持 Warm-Up 预热流控',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel Go 0.6.0 发布，带来了 Warm-Up 预热流控、go-micro 框架适配等全新特性。',
+          dateStr: 'Sep 2nd，2020',
+          link: '/zh-cn/blog/sentinel-golang-0-6-0-release.html',
+        },
+        {
           title: 'Sentinel 1.8.0 年度版本发布，熔断降级重构升级',
           img: '/img/unstable-dependency-cascade-failure.png',
           content: 'Sentinel 1.8.0 年度版本发布，带来了完善升级版的熔断降级及云原生开源生态。',

@@ -21,10 +21,10 @@ EventObserverRegistry.getInstance().addStateChangeObserver("logging",
     (prevState, newState, rule, snapshotValue) -> {
         if (newState == State.OPEN) {
             // 变换至 OPEN state 时会携带触发时的值
-            System.err.println(String.format("%s -> OPEN at %d, snapshotValue=%.2f", prevState.name(),
+            System.out.println(String.format("%s -> OPEN at %d, snapshotValue=%.2f", prevState.name(),
                 TimeUtil.currentTimeMillis(), snapshotValue));
         } else {
-            System.err.println(String.format("%s -> %s at %d", prevState.name(), newState.name(),
+            System.out.println(String.format("%s -> %s at %d", prevState.name(), newState.name(),
                 TimeUtil.currentTimeMillis()));
         }
     });

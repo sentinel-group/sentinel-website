@@ -538,6 +538,27 @@ export default {
           ],
         },
         {
+          title: '多语言生态',
+          content: <span>Sentinel 提供主流编程语言的原生支持。</span>,
+          tags: [
+            {
+              text: 'Java',
+              link: 'https://github.com/alibaba/Sentinel',
+              bgColor: '#7A63FC',
+            },
+            {
+              text: 'Go',
+              link: 'https://github.com/alibaba/sentinel-golang',
+              bgColor: '#7A63FC',
+            },
+            {
+              text: 'C++',
+              link: 'https://github.com/alibaba/sentinel-cpp',
+              bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
           title: '动态规则源',
           content: <span>Sentinel 提供多种动态规则源适配。</span>,
           tags: [

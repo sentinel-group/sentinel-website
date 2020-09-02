@@ -33,3 +33,11 @@ svr := micro.NewService(
 - 完善部分 rule entity 的定义，完善数据源模块提供的默认规则解析器
 
 Sentinel Go 版本正在快速演进中，1.0 GA 版本即将在近期发布，带来更多云原生相关的特性。我们非常欢迎感兴趣的开发者参与贡献，一起来主导未来版本的演进。若您有意愿参与贡献，欢迎联系我们加入 Sentinel 贡献小组一起成长（Sentinel 开源讨论钉钉群：30150716）。我们会定期给活跃贡献者寄送小礼品，核心贡献者会提名为 committer，一起主导社区的演进。Now let's start hacking!
+
+---
+
+Sentinel Go 相关 blog：
+
+- [Sentinel Go 0.5.0 发布，支持 Consul/Nacos 动态数据源](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-5-0-release.html)
+- [Sentinel Go 0.4.0 发布，支持热点流量防护能力](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-4-0-release.html)
+- [Sentinel Go 0.3.0 发布，支持熔断降级能力](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-3-0-release.html)

@@ -1,6 +1,8 @@
 # Sentinel Go 0.6.0 发布，支持 Warm-Up 预热流控
 
-[Sentinel Go 0.6.0](https://github.com/alibaba/sentinel-golang/releases/tag/v0.6.0) 正式发布，该版本带来了 Warm-Up 预热流控特性、go-micro 框架的适配模块，以及其它的一些特性改进。Release notes: https://github.com/alibaba/sentinel-golang/releases/tag/v0.6.0
+[Sentinel](https://github.com/alibaba/Sentinel) 是阿里巴巴开源的，面向分布式服务架构的流量控制组件，主要以流量为切入点，从限流、流量整形、熔断降级、系统自适应保护等多个维度来帮助开发者保障微服务的稳定性。Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀、冷启动、消息削峰填谷、集群流量控制、实时熔断下游不可用服务等，是保障微服务高可用的利器，原生支持 Java/Go/C++ 等多种语言，并且提供 Istio/Envoy 全局流控支持来为 Service Mesh 提供高可用防护的能力。
+
+近期，[Sentinel Go 0.6.0](https://github.com/alibaba/sentinel-golang/releases/tag/v0.6.0) 正式发布，该版本带来了 Warm-Up 预热流控特性、go-micro 框架的适配模块，以及其它的一些特性改进。Release notes: https://github.com/alibaba/sentinel-golang/releases/tag/v0.6.0
 
 该版本的主要特性之一是 Warm-Up 预热流控支持。当系统长期处于低水位的情况下，流量突然增加时，直接把系统拉升到高水位可能瞬间把系统压垮。比如刚启动的服务，数据库连接池可能还未初始化，缓存也处于空的状态，这时候激增的流量非常容易导致服务崩溃。这时我们就可以利用 Sentinel 的 Warm-Up 流控模式，控制通过的流量缓慢增加，在一定时间内逐渐增加到阈值上限，而不是在一瞬间全部放行。这样可以给冷系统一个预热的时间，避免冷系统被压垮。
 

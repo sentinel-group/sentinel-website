@@ -1,0 +1,5 @@
+- [迈向云原生，Sentinel Go 首个版本发布](https://sentinelguard.io/zh-cn/blog/sentinel-golang-v1-go-go-go.html)
+- [Sentinel Go 0.2.0 发布，完善易用性与开源生态](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-2-0-release.html)
+- [Sentinel Go 0.3.0 发布，支持熔断降级能力](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-3-0-release.html)
+- [Sentinel Go 0.4.0 发布，支持热点流量防护能力](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-4-0-release.html)
+- [Sentinel Go 0.6.0 发布，支持 Warm-Up 预热流控](https://sentinelguard.io/zh-cn/blog/sentinel-golang-0-6-0-release.html)

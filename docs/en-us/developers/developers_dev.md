@@ -17,6 +17,7 @@ This page shows Sentinel developers. Please file PR to add or change items. Than
 - Lin Liang ([@linlinisme](https://github.com/linlinisme))
 - Yuting Lou ([@louyuting](https://github.com/louyuting))
 - Yuguang Zhao ([@zhaoyuguang](https://github.com/zhaoyuguang))
+- Zhiqiang Gu ([@yunfeiyanggzq](https://github.com/yunfeiyanggzq))
 
 ## Contributor
 

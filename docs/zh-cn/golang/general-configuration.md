@@ -1,19 +1,12 @@
-## Overview
-Sentinel的运行需要一些配置启动项，比如启动监控日志，用户自定义日志目录，统计相关的一些设置等等...
+# 通用配置
+
+Sentinel 的运行需要一些配置启动项，比如启动监控日志，用户自定义日志目录，统计相关的一些设置。
 
 ## 配置项详解
+
 Sentinel 支持的配置项的定义如下：
 
-refer: [https://github.com/alibaba/sentinel-golang/blob/master/core/config/entity.go](https://github.com/alibaba/sentinel-golang/blob/master/core/config/entity.go)
-
 ```go
-type Entity struct {
-	// Version represents the format version of the entity.
-	Version string
-
-	Sentinel SentinelConfig
-}
-
 // SentinelConfig represent the general configuration of Sentinel.
 type SentinelConfig struct {
 	App struct {

@@ -1,0 +1,4 @@
+{
+  "filename": "system-adaptive-protection.md",
+  "__html": "<h1>系统自适应流控</h1>\n<p>Sentinel 系统自适应流控从整体维度对应用入口流量进行控制，结合系统的 Load、CPU 使用率以及应用的入口 QPS、平均响应时间和并发量等几个维度的监控指标，通过自适应的流控策略，让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。</p>\n<p>系统保护规则是应用整体维度的，而不是单个调用维度的，并且<strong>仅对入口流量生效</strong>。入口流量指的是进入应用的流量（埋点的 TrafficType 为 <code>Inbound</code>），比如 Web 服务或 gRPC provider 接收的请求，都属于入口流量。</p>\n<p>系统自适应保护的原理参考 <a href=\"../system-adaptive-protection.md\">此处文档</a>。</p>\n<h2>示例</h2>\n<p>规则配置示例：</p>\n<pre><code class=\"language-go\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-string\">\"github.com/alibaba/sentinel-golang/core/system\"</span>\n\n<span class=\"hljs-comment\">// 自适应流控，启发因子为 load1 &gt;= 8</span>\n_, err := system.LoadRules([]*system.SystemRule{\n\t{\n\t\tMetricType:system.Load,\n\t\tTriggerCount:<span class=\"hljs-number\">8.0</span>,\n\t\tStrategy:system.BBR,\n\t},\n})\n</code></pre>\n"
+}

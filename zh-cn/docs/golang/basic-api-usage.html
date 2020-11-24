@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163094446-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-163094446-1');
+	</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="basic-api-usage" />
+	<meta name="description" content="basic-api-usage" />
+	<!-- 网页标签标题 -->
+	<title>basic-api-usage</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/developers/developers_dev.html" target="_self">开发者</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li><li class="menu-item menu-item-normal"><a href="https://www.aliyun.com/product/ahas" target="_self">企业版 Sentinel</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>用户文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>入门<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/basic-implementation.html" target="_self">基本原理</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/faq.html" target="_self">FAQ</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>使用文档<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/basic-api-resource-rule.html" target="_self">基本使用（资源与规则）</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/flow-control.html" target="_self">流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/circuit-breaking.html" target="_self">熔断降级</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/system-adaptive-protection.html" target="_self">系统自适应保护</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/cluster-flow-control.html" target="_self">集群流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/api-gateway-flow-control.html" target="_self">网关流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/parameter-flow-control.html" target="_self">热点参数限流</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/origin-authority-control.html" target="_self">来源访问控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/annotation-support.html" target="_self">注解支持</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/dynamic-rule-configuration.html" target="_self">动态规则扩展</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/logs.html" target="_self">日志</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/metrics.html" target="_self">实时监控</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/general-configuration.html" target="_self">启动配置项</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/dashboard.html" target="_self">Sentinel 控制台</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/open-source-framework-integrations.html" target="_self">开源框架适配</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/polyglot-support.html" target="_self">多语言支持</a></li></ul></li><li class="menu-item menu-item-level-1"><span>多语言文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Sentinel Go<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/basic-api-usage.html" target="_self">基本 API 使用指南</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/flow-control.html" target="_self">流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/circuit-breaking.html" target="_self">熔断降级</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/concurrency-limiting-isolation.html" target="_self">并发隔离控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/system-adaptive-protection.html" target="_self">系统自适应保护</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/hotspot-param-flow-control.html" target="_self">热点参数流控</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/dynamic-data-source-usage.html" target="_self">动态规则扩展</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/general-configuration.html" target="_self">通用配置</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/logging.html" target="_self">日志</a></li></ul></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>API 使用指南</h1>
+<p>用户接入使用 Sentinel Go (后文均用 Sentinel 表示 Sentinel Go) 主要需要需要以下几步：</p>
+<ol>
+<li>对 Sentinel 的运行环境进行相关配置并初始化。API 接口使用细节可以参考：<a href="https://github.com/alibaba/sentinel-golang/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE">配置方式</a></li>
+<li>埋点（定义资源），该步骤主要是确定系统中有哪些资源需要防护，资源定义可参考：<a href="https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97">新手指南</a></li>
+<li>配置规则，该步骤主要是为每个资源都配置具体的规则，规则的配置可参考：<a href="https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97">新手指南</a> 以及各个模块的使用文档。</li>
+<li>编写资源防护的入口和出口代码。释放方式可参考：<a href="https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97">新手指南</a></li>
+</ol>
+<h2>通用配置及初始化</h2>
+<p>使用 Sentinel 需要在应用启动时对 Sentinel 运行环境进行相关配置并触发初始化。<code>api</code> 包下提供如下函数：</p>
+<ul>
+<li><code>InitDefault()</code>：从环境变量指定的配置文件以及环境变量中读取相应配置来初始化 Sentinel，若环境变量不存在则使用默认值。</li>
+<li><code>Init(configPath string)</code>：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。</li>
+<li><code>InitWithConfig(confEntity *config.Entity)</code>: 用户硬编码配置对象<code>*config.Entity</code>来初始化Sentinel。</li>
+</ul>
+<p>通用配置项加载策略和配置项请参考 <a href="https://github.com/alibaba/sentinel-golang/wiki/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE">配置方式使用文档</a></p>
+<p>示例代码：</p>
+<pre><code class="language-go"><span class="hljs-keyword">import</span> (
+	sentinel <span class="hljs-string">"github.com/alibaba/sentinel-golang/api"</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">initSentinel</span><span class="hljs-params">()</span></span> {
+	err := sentinel.Init(confPath)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-comment">// 初始化 Sentinel 失败</span>
+	}
+}
+</code></pre>
+<p><strong>注意</strong>：必须成功调用 Sentinel 的初始化函数以后再调用埋点 API。</p>
+<h2>埋点(定义资源)</h2>
+<p>使用 Sentinel 的 Entry API 将业务逻辑封装起来，这一步称为“埋点”。每个埋点都有一个资源名称（resource），代表触发了这个资源的调用或访问。</p>
+<p>埋点 API 位于 <code>api</code> 包中：</p>
+<ul>
+<li><code>Entry(resource string, opts ...Option) (*base.SentinelEntry, *base.BlockError)</code></li>
+</ul>
+<p>其中 <code>resource</code> 代表埋点资源名，<code>opts</code> 代表埋点配置。这里需要注意的是，返回值参数列表的第一个和第二个参数是互斥的，也就是说，如果Entry执行pass，那么Sentinel会返回(*base.SentinelEntry, nil)；如果Entry执行blocked，那么Sentinel会返回(nil, *base.BlockError)。</p>
+<p>目前支持以下埋点配置：</p>
+<ul>
+<li><code>WithTrafficType(entryType base.TrafficType)</code>：标记该埋点资源的流量类型，其中 Inbound 代表入口流量，Outbound 代表出口流量。若不指定，默认为 Outbound。</li>
+<li><code>WithResourceType(resourceType base.ResourceType)</code>：标记该埋点资源的分类。</li>
+<li><code>WithAcquireCount(acquireCount uint32)</code>：标记每次触发该埋点计为几次调用（可以理解为 batch count）。若不指定，默认为 1。</li>
+<li><code>WithArgs(args ...interface{})</code>：埋点携带的参数列表，为热点参数统计预留。</li>
+<li><code>WithSlotChain(chain *base.SlotChain)</code>：埋点执行的检查的slotchain，若不指定，默认使用全局slotchain</li>
+</ul>
+<p>埋点 API 示例：</p>
+<pre><code class="language-go"><span class="hljs-keyword">import</span> (
+	sentinel <span class="hljs-string">"github.com/alibaba/sentinel-golang/api"</span>
+)
+
+<span class="hljs-comment">// Entry 方法用于埋点</span>
+e, b := sentinel.Entry(<span class="hljs-string">"your-resource-name"</span>, sentinel.WithTrafficType(base.Inbound))
+<span class="hljs-keyword">if</span> b != <span class="hljs-literal">nil</span> {
+	<span class="hljs-comment">// 请求被流控，可以从 BlockError 中获取限流详情</span>
+	<span class="hljs-comment">// block 后不需要进行 Exit()</span>
+} <span class="hljs-keyword">else</span> {
+	<span class="hljs-comment">// 请求可以通过，在此处编写您的业务逻辑</span>
+	<span class="hljs-comment">// 务必保证业务逻辑结束后 Exit</span>
+	e.Exit()
+}
+</code></pre>
+<p>若该次调用被拒绝，则 Entry API 会返回 BlockError 代表被 Sentinel 限流。BlockError 提供了限流原因以及触发的规则等信息，可以方便开发者获取相关信息进行记录和处理。</p>
+<h2>规则配置</h2>
+<h3>硬编码方式</h3>
+<p>Sentinel 支持原始的硬编码方式加载规则，可以通过各个模块的 <code>LoadRules(rules)</code> 函数加载规则。以流控规则为例：</p>
+<pre><code class="language-go">_, err = flow.LoadRules([]*flow.Rule{
+	{
+		Resource:               <span class="hljs-string">"some-test"</span>,
+		Threshold:              <span class="hljs-number">10</span>,
+		TokenCalculateStrategy: flow.Direct,
+		ControlBehavior:        flow.Reject,
+	},
+})
+<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+	<span class="hljs-comment">// 加载规则失败，进行相关处理</span>
+}
+</code></pre>
+<h3>动态数据源</h3>
+<p>Sentinel 提供动态数据源接口进行扩展，用户可以通过动态文件、etcd、consul、nacos 等配置中心来动态地配置规则。</p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

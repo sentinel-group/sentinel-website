@@ -168,6 +168,52 @@ export default {
         ],
       },
       {
+        title: '多语言文档',
+        children: [
+          {
+            title: 'Sentinel Go',
+            children: [
+              {
+                title: '基本 API 使用指南',
+                link: '/zh-cn/docs/golang/basic-api-usage.html',
+              },
+              {
+                title: '流量控制',
+                link: '/zh-cn/docs/golang/flow-control.html',
+              },
+              {
+                title: '熔断降级',
+                link: '/zh-cn/docs/golang/circuit-breaking.html',
+              },
+              {
+                title: '并发隔离控制',
+                link: '/zh-cn/docs/golang/concurrency-limiting-isolation.html',
+              },
+              {
+                title: '系统自适应保护',
+                link: '/zh-cn/docs/golang/system-adaptive-protection.html',
+              },
+              {
+                title: '热点参数流控',
+                link: '/zh-cn/docs/golang/hotspot-param-flow-control.html',
+              },
+              {
+                title: '动态规则扩展',
+                link: '/zh-cn/docs/golang/dynamic-data-source-usage.html',
+              },
+              {
+                title: '通用配置',
+                link: '/zh-cn/docs/golang/general-configuration.html',
+              },
+              {
+                title: '日志',
+                link: '/zh-cn/docs/golang/logging.html',
+              },
+            ],
+          },
+        ],
+      },
+      {
         title: '贡献手册',
         children: [
           {

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163094446-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-163094446-1');
+	</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="circuit-breaking" />
+	<meta name="description" content="circuit-breaking" />
+	<!-- 网页标签标题 -->
+	<title>circuit-breaking</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/developers/developers_dev.html" target="_self">DEVELOPERS</a></li><li class="menu-item menu-item-normal"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>Documentation</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>Overview</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/introduction.html" target="_self">Introduction to Sentinel</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/quick-start.html" target="_self">Quick Start</a></li></ul></li><li class="menu-item menu-item-level-1"><span>User Guide</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-implementation.html" target="_self">How Sentinel Works</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/basic-api-resource-rule.html" target="_self">API Guide (resource and rule)</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/flow-control.html" target="_self">Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/parameter-flow-control.html" target="_self">Parameter Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/cluster-flow-control.html" target="_self">Cluster Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/api-gateway-flow-control.html" target="_self">API Gateway Flow Control</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/circuit-breaking.html" target="_self">Circuit Breaking</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/system-adaptive-protection.html" target="_self">System Adaptive Protection</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/open-source-framework-integrations.html" target="_self">Microservice Framework Integrations</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/dashboard.html" target="_self">Dashboard</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/general-configuration.html" target="_self">General Configuration</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/en-us/docs/logs.html" target="_self">Logs</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h1>Circuit Breaker</h1>
+<p>Excepting traffic control, circuit breaking used for unstable resource in calling link is also one of the important measures to ensure high availability.  B/C the complexity of the call link in a distributed system, if a service is unstable in the calling link, the callers who depend on that service may themselves be blocked by slow calls, eventually causing the entire link to crash.
+<img src="https://user-images.githubusercontent.com/9434884/62410811-cd871680-b61d-11e9-9df7-3ee41c618644.png" alt=""></p>
+<p>Sentinel circuit breaker will cut the calls to resource if some downstream resource occurs unstable state. the fail-fast could avoid the cascading error. If the resource was degraded, calls to the resource are automatically circuited during the next degradation time window.</p>
+<p>Below is the state machine of circuit breaker:</p>
+<pre><code class="language-go">          the error count/error ratio/ slow request ratio exceeds the threshold  
+         +-----------------------------------------------------------------------+
+         |                                                                       |
+         |                                                                       v
++----------------+                   +----------------+    Probe        +----------------+
+|                |    Probe succeed  |                |&lt;----------------|                |
+|                | Recover to Closed |                |                 |                |
+|     Closed     |&lt;------------------|    HalfOpen    |                 |      Open      |
+|                |                   |                |  Probe failed   |                |
+|                |                   |                +----------------&gt;|                |
++----------------+                   +----------------+                 +----------------+
+</code></pre>
+<h1>Circuit Strategy</h1>
+<p>Sentinel Go support three circuit strategy:</p>
+<ul>
+<li>Slow Request Ratio: If the number of requests within the unit statistical time is greater than the set minimum number of requests, and the proportion of slow calls is greater than the threshold value, then the request will be automatically fused within the following fuse time. You need to set the maximum allowed response time, and if the request response time is greater than that, it is counted as a slow call.</li>
+<li>Error Ratio: If the number of resource requests within a unit statistical time is greater than the set minimum number of requests, and the proportion of exceptions is greater than the threshold value, then the request will be automatically fused within the following circuit breaker time.</li>
+<li>Error Count: If the number of resource requests in the unit statistical time is greater than the set minimum number of requests, and the number of exceptions is greater than the threshold value, then the requests will be automatically fused in the following circuit breaker time.</li>
+</ul>
+<p>Note: A circuit breaker error is only for business exceptions, and the Sentinel limiter reversion itself of the exception (BlockError) is not valid. For custom burial points, you need to record business exceptions through api.traceError(err) in order to count the percentage or number of exceptions.</p>
+<h1>Demo</h1>
+<p>The demo refers to <a href="https://github.com/alibaba/sentinel-golang/blob/master/example/circuitbreaker/circuit_breaker_example.go">https://github.com/alibaba/sentinel-golang/blob/master/example/circuitbreaker/circuit_breaker_example.go</a></p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/quick-start.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/contribution/contribution-guideline.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

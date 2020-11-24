@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163094446-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-163094446-1');
+	</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="hotspot-param-flow-control" />
+	<meta name="description" content="hotspot-param-flow-control" />
+	<!-- 网页标签标题 -->
+	<title>hotspot-param-flow-control</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/developers/developers_dev.html" target="_self">开发者</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li><li class="menu-item menu-item-normal"><a href="https://www.aliyun.com/product/ahas" target="_self">企业版 Sentinel</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/img/system/docs.png" class="front-img"/><span>文档</span><img src="/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>用户文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>入门<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/introduction.html" target="_self">Sentinel 介绍</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/basic-implementation.html" target="_self">基本原理</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/faq.html" target="_self">FAQ</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>使用文档<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/basic-api-resource-rule.html" target="_self">基本使用（资源与规则）</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/flow-control.html" target="_self">流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/circuit-breaking.html" target="_self">熔断降级</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/system-adaptive-protection.html" target="_self">系统自适应保护</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/cluster-flow-control.html" target="_self">集群流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/api-gateway-flow-control.html" target="_self">网关流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/parameter-flow-control.html" target="_self">热点参数限流</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/origin-authority-control.html" target="_self">来源访问控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/annotation-support.html" target="_self">注解支持</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/dynamic-rule-configuration.html" target="_self">动态规则扩展</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/logs.html" target="_self">日志</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/metrics.html" target="_self">实时监控</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/general-configuration.html" target="_self">启动配置项</a></li></ul></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/dashboard.html" target="_self">Sentinel 控制台</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/open-source-framework-integrations.html" target="_self">开源框架适配</a></li><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/polyglot-support.html" target="_self">多语言支持</a></li></ul></li><li class="menu-item menu-item-level-1"><span>多语言文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><span>Sentinel Go<img style="transform:rotate(-90deg)" class="menu-toggle" src="/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/basic-api-usage.html" target="_self">基本 API 使用指南</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/flow-control.html" target="_self">流量控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/circuit-breaking.html" target="_self">熔断降级</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/concurrency-limiting-isolation.html" target="_self">并发隔离控制</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/system-adaptive-protection.html" target="_self">系统自适应保护</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/hotspot-param-flow-control.html" target="_self">热点参数流控</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/dynamic-data-source-usage.html" target="_self">动态规则扩展</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/general-configuration.html" target="_self">通用配置</a></li><li class="menu-item menu-item-level-3"><a href="/zh-cn/docs/golang/logging.html" target="_self">日志</a></li></ul></li></ul></li><li class="menu-item menu-item-level-1"><span>贡献手册</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开源贡献指南</a></li></ul></li></ul></div><div class="doc-content markdown-body"><h2>Overview</h2>
+<p>何为热点？热点即经常访问的数据。很多时候我们希望统计某个热点数据中访问频次最高的 Top K 数据，并对其访问进行限制。比如：</p>
+<ul>
+<li>商品 ID 为参数，统计一段时间内最常购买的商品 ID 并进行限制</li>
+<li>用户 ID 为参数，针对一段时间内频繁访问的用户 ID 进行限制</li>
+</ul>
+<p>热点参数限流会统计传入参数中的热点参数，并根据配置的限流阈值与模式，对包含热点参数的资源调用进行限流。热点参数限流可以看做是一种特殊的流量控制，仅对包含热点参数的资源调用生效。</p>
+<p><img src="https://github.com/alibaba/Sentinel/wiki/image/sentinel-hot-param-overview-1.png" alt=""></p>
+<p>Sentinel 利用 LRU 策略统计最近最常访问的热点参数，结合令牌桶算法来进行参数级别的流控。</p>
+<p>Sentinel 通过埋点的形式，在每次 <code>Entry(opts)</code> 的时候携带上需要流控的参数。具体可以参考：<a href="https://github.com/alibaba/sentinel-golang/blob/c37b472e97de7691a566e078dae3f1a9ed73536d/api/api.go#L75">api/api.go/#func WithArgs(args ...interface{}) EntryOption 函数</a></p>
+<p>WithArgs 函数携带的是一个参数列表。Sentinel 的热点参数流控的每个规则会对参数列表中某一位置的参数生效(根据热点参数流控规则中的参数列表 <code>ParamIndex</code> 属性来指定生效参数位置)。Sentinel 会为每个规则都创建独立的统计结构，统计结构会缓存对应参数列表的 ParamIndex 的所有值，根据值的统计做流控。</p>
+<p>这里举个例子：假设每次 Entry 的时候携带上的参数的类型列表是：<code>[string, int]</code>。现在有一个规则 R1 在 <code>ParamIndex</code> 是 0 的位置生效，规则基于并发数去做控制，限制最高并发是 100。 那么 Entry 的时候携带上的参数列表 <code>[&quot;sentinel&quot;, any number]</code>，第一个参数出现 &quot;sentinel&quot; 的请求，并发量不超过 100。</p>
+<h2>热点参数流控规则</h2>
+<p>Rule 的定义参考：<a href="https://github.com/alibaba/sentinel-golang/blob/master/core/hotspot/rule.go">hotspot.Rule</a></p>
+<pre><code class="language-go"><span class="hljs-keyword">type</span> Rule <span class="hljs-keyword">struct</span> {
+	<span class="hljs-comment">// ID is the unique id</span>
+	ID <span class="hljs-keyword">string</span> <span class="hljs-string">`json:"id,omitempty"`</span>
+	<span class="hljs-comment">// Resource is the resource name</span>
+	Resource <span class="hljs-keyword">string</span> <span class="hljs-string">`json:"resource"`</span>
+	<span class="hljs-comment">// MetricType indicates the metric type for checking logic.</span>
+	<span class="hljs-comment">// For Concurrency metric, hotspot module will check the each hot parameter's concurrency,</span>
+	<span class="hljs-comment">//		if concurrency exceeds the Threshold, reject the traffic directly.</span>
+	<span class="hljs-comment">// For QPS metric, hotspot module will check the each hot parameter's QPS,</span>
+	<span class="hljs-comment">//		the ControlBehavior decides the behavior of traffic shaping controller</span>
+	MetricType MetricType <span class="hljs-string">`json:"metricType"`</span>
+	<span class="hljs-comment">// ControlBehavior indicates the traffic shaping behaviour.</span>
+	<span class="hljs-comment">// ControlBehavior only takes effect when MetricType is QPS</span>
+	ControlBehavior ControlBehavior <span class="hljs-string">`json:"controlBehavior"`</span>
+	<span class="hljs-comment">// ParamIndex is the index in context arguments slice.</span>
+	<span class="hljs-comment">// if ParamIndex is great than or equals to zero, ParamIndex means the &lt;ParamIndex&gt;-th parameter</span>
+	<span class="hljs-comment">// if ParamIndex is the negative, ParamIndex means the reversed &lt;ParamIndex&gt;-th parameter</span>
+	ParamIndex <span class="hljs-keyword">int</span> <span class="hljs-string">`json:"paramIndex"`</span>
+	<span class="hljs-comment">// Threshold is the threshold to trigger rejection</span>
+	Threshold <span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"threshold"`</span>
+	<span class="hljs-comment">// MaxQueueingTimeMs only takes effect when MetricType is QPS and ControlBehavior is Throttling</span>
+	MaxQueueingTimeMs <span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"maxQueueingTimeMs"`</span>
+	<span class="hljs-comment">// BurstCount is the silent count</span>
+	<span class="hljs-comment">// BurstCount only takes effect when MetricType is QPS and ControlBehavior is Reject</span>
+	BurstCount <span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"burstCount"`</span>
+	<span class="hljs-comment">// DurationInSec is the time interval in statistic</span>
+	<span class="hljs-comment">// DurationInSec only takes effect when MetricType is QPS</span>
+	DurationInSec <span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"durationInSec"`</span>
+	<span class="hljs-comment">// ParamsMaxCapacity is the max capacity of cache statistic</span>
+	ParamsMaxCapacity <span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"paramsMaxCapacity"`</span>
+	<span class="hljs-comment">// SpecificItems indicates the special threshold for specific value</span>
+	SpecificItems <span class="hljs-keyword">map</span>[<span class="hljs-keyword">interface</span>{}]<span class="hljs-keyword">int64</span> <span class="hljs-string">`json:"specificItems"`</span>
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+<th>是否必填项</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resource</td>
+<td>资源名</td>
+<td>必填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>MetricType</td>
+<td>流控指标类型 (<code>MetricType</code>)，支持两种：请求数和并发数</td>
+<td>必填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ControlBehavior</td>
+<td>流控的效果 (<code>ControlBehavior</code>)，仅在请求数模式下有效。支持两种：快速失败和匀速+排队模式</td>
+<td>必填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ParamIndex</td>
+<td>热点参数的索引，对应 <code>WithArgs(args ...interface{})</code> 中的参数索引位置，从 0 开始</td>
+<td>必填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Threshold</td>
+<td>限流阈值（针对每个热点参数）</td>
+<td>必填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>MaxQueueingTimeMs</td>
+<td>最大排队等待时长（仅在匀速排队模式 + QPS 下生效）</td>
+<td>选填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>BurstCount</td>
+<td>静默值(仅在快速失败模式 + QPS 下生效)</td>
+<td>选填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>DurationInSec</td>
+<td>统计结构填充新的 token 的时间间隔 (仅在请求数(QPS)流控模式下生效)</td>
+<td>选填</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ParamsMaxCapacity</td>
+<td>统计结构的容量最大值（Top N）</td>
+<td>选填</td>
+<td>20000</td>
+</tr>
+<tr>
+<td>SpecificItems</td>
+<td>特定参数的特殊阈值配置，可以针对指定的参数值单独设置限流阈值，不受前面 Threshold 阈值的限制。</td>
+<td>选填</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<h2>热点参数流控策略</h2>
+<p>热点参数流控的控制策略由<code>MetricType</code>和<code>ControlBehavior</code>两个字段决定。</p>
+<p><code>MetricType</code>表示热点参数流控的统计metric类型，Sentinel支持两种：请求数(QPS)和并发数(Concurrency)。</p>
+<ul>
+<li>Concurrency：基于并发数控制热点参数，这种设置下会使用统计结构中当前参数的并发数来执行流控策略。<code>MetricType</code>是Concurrency时候，字段<code>ControlBehavior</code>不会生效，如果当前参数的并发数超过了阈值，那么就拒绝该请求，如果没超过阈值，就通过检查。</li>
+<li>QPS：基于请求数控制热点参数，基于token bucket记录的数据和字段<code>ControlBehavior</code>的策略执行流控。</li>
+</ul>
+<p><code>ControlBehavior</code>表示热点参数流量控制器的控制行为，Sentinel支持两种控制行为：Reject(拒绝)和Throttling(匀速排队)，需要强调的是，<code>ControlBehavior</code>仅仅在<code>MetricType</code>是QPS时候才生效。</p>
+<ul>
+<li>Reject：表示如果当前统计周期(<code>DurationInSec</code>)内，统计结构内参数的token已经用完了，就直接拒绝，如果没用完就获取token，通过检查。</li>
+<li>Throttling：表示匀速排队的统计策略。</li>
+</ul>
+<h2>热点参数流控统计结构</h2>
+<p>Sentinel 在加载规则时候会将热点参数流控规则转换成热点参数流量控制器，每个流量控制器都有自己独立的统计结构。Sentinel的热点参数流量控制器的独立统计结构是基于token bucket的思想实现的。统计结构缓存了每个埋点参数的三个metric：上次填Token时间、当前统计时间间隔内剩余Token、当前参数的并发数。</p>
+<p>流量控制器的统计结构基于LRU的策略，每个规则默认缓存20000个参数的统计数据。</p>
+<h2>常见场景规则设置</h2>
+<h3>基于并发数控制热点参数：</h3>
+<pre><code class="language-go">{
+	Resource:          <span class="hljs-string">"some-test"</span>,
+	MetricType:        hotspot.Concurrency,
+	ParamIndex:        <span class="hljs-number">0</span>,
+	Threshold:         <span class="hljs-number">100</span>,
+	DurationInSec:     <span class="hljs-number">1</span>,
+},
+</code></pre>
+<p>上面的配置表示：针对资源，some-test，在参数列表中的第一个参数(index是0)进行流控，每次更新token的周期是1秒，并发数阈值是100。对于Concurrency来说，<code>ControlBehavior</code>,<code>MaxQueueingTimeMs</code>,<code>BurstCount</code>这三个字段都是无效字段，均不用设置。</p>
+<h3>基于请求数控制热点参数</h3>
+<pre><code class="language-go">{
+	Resource:          <span class="hljs-string">"some-test"</span>,
+	MetricType:        hotspot.QPS,
+        ControlBehavior:   hotspot.Reject
+	ParamIndex:        <span class="hljs-number">1</span>,
+	Threshold:         <span class="hljs-number">100</span>,
+        BurstCount:        <span class="hljs-number">5</span>,
+	DurationInSec:     <span class="hljs-number">1</span>,
+},
+</code></pre>
+<p>上面的配置表示：针对资源，some-test，在参数列表中的第二个参数(index是1)进行流控，每次更新token的周期是1秒，统计时间间隔内请求数阈值是100。对于QPS来说，<code>MaxQueueingTimeMs</code>字段是无效字段，不用设置。</p>
+<p>这里配置的流控策略是，超过阈值，直接拒绝流量。</p>
+<h2>Usage Example</h2>
+<p>可参考 example 代码：<a href="https://github.com/alibaba/sentinel-golang/tree/master/example/hotspot_param_flow">https://github.com/alibaba/sentinel-golang/tree/master/example/hotspot_param_flow</a></p>
+</div></section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/documentation.js"></script>
+</body>
+</html>

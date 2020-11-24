@@ -1,0 +1,4 @@
+{
+  "filename": "logging.md",
+  "__html": "<h1>Logs</h1>\n<h2>Metric log</h2>\n<p>Metrics of resources are recorded in <code>~/logs/csp/{app_name}_{pid}_metrics.log</code>. Example:</p>\n<pre><code>1529573107000|2018-06-21 17:25:07|sayHello|10|3601|10|0|2\n</code></pre>\n<p>Format description:</p>\n<ol>\n<li><code>1529573107000</code>: the timestamp of this record;</li>\n<li><code>2018-06-21 17:25:07</code>: formatted date/time;</li>\n<li><code>sayHello</code>: resource name;</li>\n<li><code>10</code>: passed count;</li>\n<li><code>3601</code>: blocked count；</li>\n<li><code>10</code>: complete count (successfully handled by Sentinel);</li>\n<li><code>0</code>: error count;</li>\n<li><code>2</code>: the average response time (ms)</li>\n</ol>\n<h2>Other logs</h2>\n<p>Other info (such as rule loading) is recorded in <code>${user_home}/logs/csp/sentinel-record.log.xxx</code>.</p>\n"
+}

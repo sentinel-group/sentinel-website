@@ -1,12 +1,15 @@
-# DataSource Extension
+# Data-Source Extension Design
+
 The overall workflow is the same as the Java version. Please see the architecture below:
+
 ![](https://user-images.githubusercontent.com/9434884/45406233-645e8380-b698-11e8-8199-0c917403238f.png)
 
 This article focuses on the design of updating the property on the application side.
 
-# Abstract Model:
+## Abstract Model
 
-## Property
+### Data-Source Property
+
 ```go
 // PropertyConverter func is to converter source message bytes to the specific property.
 // the first  return value: is the real property;
@@ -85,7 +88,8 @@ That is to say, each PropertyHandler must have a Converter function and a Update
 
 In order to avoid the useless update operation, DefaultPropertyHandler instance will cache the last updated property and check the consistency between current property value and last property value.
 
-## Datasource
+### Datasource
+
 Datasource is the generic interface to describe the datasource instance. Each DataSource instance listen in one property.
 
 ```go
@@ -118,10 +122,5 @@ the workflow of updating is as below:
 2. iterate DataSourceHandler List to handle dynamic datasource message;
 3. Call Convert function of DataSourceHandler to convert raw message to specific property;
 4. Call Update function of DataSourceHandler to update specific property to downstream component.
-
-# Use case
-
-## freshable file datasource
-Refer to PR: [https://github.com/alibaba/sentinel-golang/pull/86/files](https://github.com/alibaba/sentinel-golang/pull/86/files)
 
 

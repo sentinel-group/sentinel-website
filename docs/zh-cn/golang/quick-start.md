@@ -1,16 +1,14 @@
-欢迎来到 Sentinel 的世界！这篇新手指南将指引您快速入门 Sentinel。
+# 新手指南 (Sentinel Go)
 
-Sentinel Go(后文用Sentinel表示Sentinel Go) 目前支持客户端的使用，Go语言技术栈可以快速接入。
+欢迎来到 Sentinel 的世界！这篇新手指南将指引您快速入门 Sentinel Go。
 
-## 引入Sentinel依赖：
-Sentinel支持mod的依赖，可以通过release页面获取最新release版本：[https://github.com/alibaba/sentinel-golang/releases](https://github.com/alibaba/sentinel-golang/releases)
+## 引入 Sentinel 依赖
 
-通过go mod引用依赖：
-`github.com/alibaba/sentinel-golang v0.6.1`
+Sentinel Go 支持 go modules 的依赖，可以通过 [release 页面](https://github.com/alibaba/sentinel-golang/releases) 获取最新 release 版本，并通过 go mod 引用依赖：`github.com/alibaba/sentinel-golang v1.0.0`
 
 ## 定义资源
 
-资源是 Sentinel 中的最核心概念之一，Sentinel中所有的限流熔断机制都是基于资源生效的，不同资源的限流熔断规则互相隔离互不影响。
+资源是 Sentinel 中的最核心概念之一，Sentinel 中所有的限流熔断机制都是基于资源生效的，不同资源的限流熔断规则互相隔离互不影响。
 
 资源在Sentinel中的定义很抽象，用户可以灵活的定义，资源可以是应用、接口、函数、甚至是一段代码。我们的限流熔断机制都是为了保护这段资源运行如预期一样。
 

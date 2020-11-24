@@ -1,15 +1,13 @@
-## Overview
+# Roadmap
 
 | 版本 | Milestone | 主要特性 |
 |--|--|--|
 | 0.5.0 | 2020.7 |  |
 | 0.6.0 | 2020.8 |  |
-| 1.0.0 | 2020.10.28 |  |
-
+| 1.0.0 | 2020.11 |  |
 
 ## 1.0 GA主要Feature(API Changes)
 
-* 监控指标导出标准化   @宿何
 * K8S CRD 作为动态数据源   @louyuting
 * adapter和DataSource拆分    @louyuting
 * rule cache   

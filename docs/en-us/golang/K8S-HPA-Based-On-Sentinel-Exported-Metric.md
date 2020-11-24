@@ -1,4 +1,7 @@
-# Abstract
+# RFC: Kubernetes HPA based on exported metrics of Sentinel
+
+## Abstract
+
 Typically, in a cluster, Sentinel restricts the capacity of the cluster to handle the traffic through flow control. Direct rejection or other strategies for traffic exceeding the set processing capacity. In some scenario, that works good, but there are some scenarios in K8S cluster where users expect to be able to do dynamic horizontal scaling(HPA in K8S) based on some standard monitoring log data.
 
 Key word:

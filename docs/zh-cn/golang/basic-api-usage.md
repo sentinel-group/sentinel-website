@@ -1,8 +1,8 @@
-## Overview
+# API 使用指南
 
-用户接入使用 Sentinel Go(后文均用Sentinel表示Sentinel Go)主要需要需要以下几步：
+用户接入使用 Sentinel Go (后文均用 Sentinel 表示 Sentinel Go) 主要需要需要以下几步：
 
-1. 对 Sentinel 的运行环境进行相关配置并初始化，api接口使用细节可以参考：[配置方式](https://github.com/alibaba/sentinel-golang/wiki/启动配置)
+1. 对 Sentinel 的运行环境进行相关配置并初始化。API 接口使用细节可以参考：[配置方式](https://github.com/alibaba/sentinel-golang/wiki/启动配置)
 2. 埋点（定义资源），该步骤主要是确定系统中有哪些资源需要防护，资源定义可参考：[新手指南](https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97)
 3. 配置规则，该步骤主要是为每个资源都配置具体的规则，规则的配置可参考：[新手指南](https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97) 以及各个模块的使用文档。
 4. 编写资源防护的入口和出口代码。释放方式可参考：[新手指南](https://github.com/alibaba/sentinel-golang/wiki/%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97)

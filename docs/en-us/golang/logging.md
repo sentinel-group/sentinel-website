@@ -1,3 +1,5 @@
+# Logs
+
 ## Metric log 
 
 Metrics of resources are recorded in `~/logs/csp/{app_name}_{pid}_metrics.log`. Example:

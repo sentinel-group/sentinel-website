@@ -1,17 +1,15 @@
-# 压测手册
-TODO
+# Benchmark
+## 测试环境
 
-# 测试环境
 CPU：Intel(R) Xeon(R) CPU E5-2640 v3 @ 2.60GHz (32 Cores)
-
 OS：Red Hat 4.8.2-16
+Golang version: 1.14.3
 
-golang version: 1.14.3
+## 吞吐量对比
 
-# 吞吐量对比
 测试单协程/并发模式下接入 Sentinel 与不接入 Sentinel 吞吐量的对比。我们通过执行一些 CPU 密集型操作（小数组排序）来模拟不同 QPS 下的情况。测试例子参考：[Benchmark](https://github.com/louyuting/sentinel-golang/tree/add_benchmark/tests)
 
-## 单协程吞吐量
+### 单协程吞吐量
 
 ```
 Benchmark_Single_Directly_50    	 4081059	       882 ns/op	      32 B/op	       1 allocs/op
@@ -57,7 +55,9 @@ Benchmark_Single_StatEntry_4000 	   18105	    198295 ns/op	     130 B/op	       
 Benchmark_Single_StatEntry_4000 	   18162	    198432 ns/op	     130 B/op	       4 allocs/op
 Benchmark_Single_StatEntry_4000 	   18162	    198686 ns/op	     129 B/op	       4 allocs/op
 ```
+
 这里取三组数据的中位值：
+
 | 数组长度 | Baseline(QPS) | With Sentinel(QPS) | 性能损耗 |
 |--|--|--|--|
 | 50 | 1131221 | 696864 | 38.4% |
@@ -73,6 +73,7 @@ Benchmark_Single_StatEntry_4000 	   18162	    198686 ns/op	     129 B/op	       
 而单机 QPS 在 6W 以下的时候，Sentinel 的性能损耗就比较小了，对大多数场景来说都适用。
 
 ## 多协程影响
+
 测试排序数组长度是200时候，并发4/8/16/32/32+协程并发下的性能：
 
 | 并发数 | With Sentinel(QPS) | 性能 |
@@ -85,8 +86,10 @@ Benchmark_Single_StatEntry_4000 	   18162	    198686 ns/op	     129 B/op	       
 
 32并发以上基本没有提升了。
 
-# 内存占用情况
+## 内存占用情况
+
 测试场景：6000 个资源循环跑（即单机的极端场景，目前最多支持 6000 个 entry）
+
 * 单协程不断循环运行：内存占用约 30 MB
 * 8个协程不断循环运行：内存占用约 36 MB
 

@@ -31,6 +31,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 正式 GA，助力云原生服务稳稳稳',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go 1.0 GA 版本正式发布，标志着 Go 版本正式进入生产可用阶段。',
+        dateStr: '2020.11.28',
+        link: '/zh-cn/blog/sentinel-go-ga-release.html',
+      },
+      {
         title: 'Sentinel Go 0.6.0 发布，支持 Warm-Up 预热流控',
         author: 'Eric Zhao',
         desc: 'Sentinel Go 0.6.0 发布，带来了 Warm-Up 预热流控、go-micro 框架适配等全新特性。',

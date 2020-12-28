@@ -22,6 +22,7 @@
 </head>
 <body>
 	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/developers/developers_dev.html" target="_self">开发者</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li><li class="menu-item menu-item-normal"><a href="https://www.aliyun.com/product/ahas" target="_self">企业版 Sentinel</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Guideline: 从 Hystrix 迁移到 Sentinel</h1>
+<p>(Updated in 2020/12/28)</p>
 <p>本文将帮助您从 Hystrix 迁移到 Sentinel，并帮助您快速了解 Sentinel 的使用。</p>
 <table>
 <thead>
@@ -53,7 +54,7 @@
 </tr>
 <tr>
 <td>开源框架支持</td>
-<td>Sentinel 提供 Servlet、Dubbo、Spring Cloud、gRPC 的适配模块，开箱即用；若之前使用 Spring Cloud Netflix，可迁移至 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a></td>
+<td>Sentinel 提供 Servlet、Dubbo、Spring Cloud、gRPC、Reactor 的适配模块，开箱即用；若之前使用 Spring Cloud Netflix，可快速迁移至 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a></td>
 </tr>
 </tbody>
 </table>
@@ -201,8 +202,8 @@ Observable&lt;String&gt; s = <span class="hljs-keyword">new</span> SomeCommand()
     .setCount(<span class="hljs-number">8</span>); <span class="hljs-comment">// 最大并发数</span>
 FlowRuleManager.loadRules(Collections.singletonList(rule)); <span class="hljs-comment">// 加载规则</span>
 </code></pre>
-<p>如果应用接入了 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台</a>，也可以方便地在控制台上进行配置。</p>
-<p>同个资源可以配置多种规则，多条规则。</p>
+<p>如果应用接入了 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台</a>，也可以方便地在控制台上进行配置，或对接 Nacos 等配置中心进行动态配置。</p>
+<p>同个资源可以配置多种规则，多条规则，所有规则并列生效。</p>
 <h2>熔断降级</h2>
 <p>Hystrix 熔断器支持异常比率熔断模式，主要有以下配置项：</p>
 <ul>
@@ -234,13 +235,14 @@ FlowRuleManager.loadRules(Collections.singletonList(rule)); <span class="hljs-co
 <pre><code class="language-java">DegradeRule rule = <span class="hljs-keyword">new</span> DegradeRule(<span class="hljs-string">"fooService"</span>) <span class="hljs-comment">// 资源名称</span>
     .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) <span class="hljs-comment">// 异常比率模式(秒级)</span>
     .setCount(<span class="hljs-number">0.5</span>) <span class="hljs-comment">// 异常比率阈值(50%)</span>
-    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// 熔断降级时间(10s)</span>
+    .setMinRequestAmount(<span class="hljs-number">5</span>) <span class="hljs-comment">// 单位时长的最小请求数</span>
+    .setTimeWindow(<span class="hljs-number">10</span>); <span class="hljs-comment">// 熔断时长(10s)</span>
 <span class="hljs-comment">// 加载规则.</span>
 DegradeRuleManager.loadRules(Collections.singletonList(rule));
 </code></pre>
 <p>如果接入了 <a href="https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0">Sentinel 控制台</a>，也可以在控制台上直接配置熔断降级规则。</p>
 <p><img src="https://user-images.githubusercontent.com/9434884/49210023-fa33c000-f3f6-11e8-98f4-436e5edc0b36.png" alt="image"></p>
-<p>除了异常比率模式之外，Sentinel 还支持根据平均响应时间、分钟级异常数进行自动熔断降级。</p>
+<p>除了异常比例模式之外，Sentinel 还支持根据慢调用比例以及异常数进行自动熔断降级。</p>
 <h2>注解支持</h2>
 <p>Hystrix 提供了注解的方式来封装 command 并进行配置。以下是 Hystrix 注解的示例：</p>
 <pre><code class="language-java"><span class="hljs-comment">// 原本的业务方法</span>
@@ -276,7 +278,7 @@ DegradeRuleManager.loadRules(Collections.singletonList(rule));
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"getUserById command failed"</span>);
 }
 
-<span class="hljs-comment">// fallback 方法，原方法被降级的时候调用；若需要限流/系统保护的 fallback 可以配置 blockHandler.</span>
+<span class="hljs-comment">// fallback 方法，原方法出现异常时被调用（无论是业务异常还是限流异常）.</span>
 <span class="hljs-function">User <span class="hljs-title">fallbackForGetUser</span><span class="hljs-params">(String id)</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>);
 }
@@ -295,7 +297,7 @@ DegradeRuleManager.loadRules(Collections.singletonList(rule));
 <li>通过 Sentinel 控制台进行规则配置和管理</li>
 </ul>
 <h2>开源框架适配</h2>
-<p>Sentinel 目前已经针对 Servlet、Dubbo、Spring Cloud、gRPC 等进行了适配，用户只需引入相应依赖并进行简单配置即可快速地接入 Sentinel，无需修改现有代码。若您之前在使用  Spring Cloud Netflix，可以考虑迁移到 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a> 体系中。</p>
+<p>Sentinel 目前已经针对 Web Servlet、Dubbo、Spring Boot/Spring Cloud、Feign、gRPC、Reactor、Quarkus 等进行了适配，用户只需引入相应依赖并进行简单配置即可快速地接入 Sentinel，无需修改现有代码。若您之前在使用 Spring Cloud Netflix，可以考虑迁移到 <a href="https://github.com/spring-cloud-incubator/spring-cloud-alibaba">Spring Cloud Alibaba</a> 体系中。</p>
 <h2>动态配置</h2>
 <p>Sentinel 提供 <a href="https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95">动态规则数据源</a> 支持来动态地管理、读取配置的规则。Sentinel 提供的 <code>ReadableDataSource</code> 和 <code>WritableDataSource</code> 接口简单易用，非常方便使用。</p>
 <p>Sentinel 动态规则源针对常见的配置中心和远程存储进行适配，目前已支持 <strong>Nacos、ZooKeeper、Apollo、Redis</strong> 等多种动态规则源，可以覆盖到很多的生产场景。</p>

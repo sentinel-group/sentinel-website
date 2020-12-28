@@ -1,5 +1,7 @@
 # Guideline: 从 Hystrix 迁移到 Sentinel
 
+(Updated in 2020/12/28)
+
 本文将帮助您从 Hystrix 迁移到 Sentinel，并帮助您快速了解 Sentinel 的使用。
 
 | Hystrix 功能          | 迁移方案                                                     |
@@ -9,7 +11,7 @@
 | Command 创建          | 直接使用 Sentinel `SphU` API 定义资源即可，资源定义与规则配置分离，详见[此处](#command-迁移) |
 | 规则配置              | 在 Sentinel 中可通过 API 硬编码配置规则，也支持多种动态规则源 |
 | 注解支持              | Sentinel 也提供注解支持，可以很方便地迁移，详见[此处](#注解支持)            |
-| 开源框架支持          | Sentinel 提供 Servlet、Dubbo、Spring Cloud、gRPC 的适配模块，开箱即用；若之前使用 Spring Cloud Netflix，可迁移至 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) |
+| 开源框架支持          | Sentinel 提供 Servlet、Dubbo、Spring Cloud、gRPC、Reactor 的适配模块，开箱即用；若之前使用 Spring Cloud Netflix，可快速迁移至 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) |
 
 ## 功能对比
 
@@ -114,9 +116,9 @@ FlowRule rule = new FlowRule("doSomething") // 资源名称
 FlowRuleManager.loadRules(Collections.singletonList(rule)); // 加载规则
 ```
 
-如果应用接入了 [Sentinel 控制台](https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0)，也可以方便地在控制台上进行配置。
+如果应用接入了 [Sentinel 控制台](https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0)，也可以方便地在控制台上进行配置，或对接 Nacos 等配置中心进行动态配置。
 
-同个资源可以配置多种规则，多条规则。
+同个资源可以配置多种规则，多条规则，所有规则并列生效。
 
 ## 熔断降级
 
@@ -155,7 +157,8 @@ public class FooServiceCommand extends HystrixCommand<String> {
 DegradeRule rule = new DegradeRule("fooService") // 资源名称
     .setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO) // 异常比率模式(秒级)
     .setCount(0.5) // 异常比率阈值(50%)
-    .setTimeWindow(10); // 熔断降级时间(10s)
+    .setMinRequestAmount(5) // 单位时长的最小请求数
+    .setTimeWindow(10); // 熔断时长(10s)
 // 加载规则.
 DegradeRuleManager.loadRules(Collections.singletonList(rule));
 ```
@@ -164,7 +167,7 @@ DegradeRuleManager.loadRules(Collections.singletonList(rule));
 
 ![image](https://user-images.githubusercontent.com/9434884/49210023-fa33c000-f3f6-11e8-98f4-436e5edc0b36.png)
 
-除了异常比率模式之外，Sentinel 还支持根据平均响应时间、分钟级异常数进行自动熔断降级。
+除了异常比例模式之外，Sentinel 还支持根据慢调用比例以及异常数进行自动熔断降级。
 
 ## 注解支持
 
@@ -211,7 +214,7 @@ User getUserById(String id) {
     throw new RuntimeException("getUserById command failed");
 }
 
-// fallback 方法，原方法被降级的时候调用；若需要限流/系统保护的 fallback 可以配置 blockHandler.
+// fallback 方法，原方法出现异常时被调用（无论是业务异常还是限流异常）.
 User fallbackForGetUser(String id) {
     return new User("admin");
 }
@@ -233,7 +236,7 @@ DegradeRuleManager.loadRules(Collections.singletonList(rule));
 
 ## 开源框架适配
 
-Sentinel 目前已经针对 Servlet、Dubbo、Spring Cloud、gRPC 等进行了适配，用户只需引入相应依赖并进行简单配置即可快速地接入 Sentinel，无需修改现有代码。若您之前在使用  Spring Cloud Netflix，可以考虑迁移到 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 体系中。
+Sentinel 目前已经针对 Web Servlet、Dubbo、Spring Boot/Spring Cloud、Feign、gRPC、Reactor、Quarkus 等进行了适配，用户只需引入相应依赖并进行简单配置即可快速地接入 Sentinel，无需修改现有代码。若您之前在使用 Spring Cloud Netflix，可以考虑迁移到 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba) 体系中。
 
 ## 动态配置
 

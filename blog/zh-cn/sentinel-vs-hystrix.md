@@ -30,7 +30,20 @@ Sentinel 的设计则更为简单。相比 Hystrix Command 强依赖隔离规则
 - try-catch 方式（通过 `SphU.entry(...)`），用户在 catch 块中执行异常处理 / fallback
 - if-else 方式（通过 `SphO.entry(...)`），当返回 false 时执行异常处理 / fallback
 
-从 0.1.1 版本开始，Sentinel 还支持基于注解的资源定义方式，可以通过注解参数指定异常处理函数和 fallback 函数。
+Sentinel 还支持基于注解的资源定义方式，可以通过 `@SentinelResource` 注解参数指定异常处理函数和 fallback 函数。
+
+```java
+// 原本的业务方法.
+@SentinelResource(fallback = "fallbackForGetUser")
+User getUserById(String id) {
+    throw new RuntimeException("getUserById command failed");
+}
+
+// fallback 方法，原方法出现异常时被调用（无论是业务异常还是限流异常）.
+User fallbackForGetUser(String id) {
+    return new User("admin");
+}
+```
 
 从 0.2.0 版本开始，Sentinel 引入异步调用链路支持，可以方便地统计异步调用资源的数据，维护异步调用链路，同时具备了适配异步框架/库的能力。可以参考 [相关文档](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%E6%94%AF%E6%8C%81)。
 
@@ -60,9 +73,9 @@ Sentinel 目前抽象出了 Metric 指标统计接口，底层可以有不同的
 
 ### 轻量级、高性能
 
-Sentinel 作为一个功能完备的高可用流量管控组件，其核心 `sentinel-core` 没有任何多余依赖，打包后只有不到 200 KB，非常轻量级。开发者可以放心地引入 `sentinel-core` 而不需担心依赖问题。同时，Sentinel 提供了多种扩展点，用户可以很方便地根据需求去进行扩展，并且无缝地切合到 Sentinel 中。
+Sentinel 作为一个功能完备的高可用流量管控组件，其核心 `sentinel-core` 没有任何多余依赖，，非常轻量级。开发者可以放心地引入 `sentinel-core` 而不需担心依赖问题。同时，Sentinel 提供了多种扩展点，用户可以很方便地根据需求去进行扩展，并且无缝地切合到 Sentinel 中。
 
-引入 Sentinel 带来的性能损耗非常小。只有在业务单机量级超过 25W QPS 的时候才会有一些显著的影响（5% - 10% 左右），单机 QPS 不太大的时候损耗几乎可以忽略不计。
+引入 Sentinel 带来的性能损耗非常小。只有在业务单机量级超过 20W QPS 的时候才会有一些显著的影响（5% - 10% 左右），单机 QPS 不太大的时候损耗几乎可以忽略不计。
 
 ### 流量控制
 
@@ -82,17 +95,17 @@ Sentinel 支持多样化的流量整形策略，在 QPS 过高的时候可以自
 
 Sentinel 还支持 [基于调用关系的限流](https://github.com/alibaba/Sentinel/wiki/%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6#%E5%9F%BA%E4%BA%8E%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6)，包括基于调用方限流、基于调用链入口限流、关联流量限流等，依托于 Sentinel 强大的调用链路统计信息，可以提供精准的不同维度的限流。
 
-Sentinel 0.2.0 开始支持 [热点参数限流](https://github.com/alibaba/Sentinel/wiki/%E7%83%AD%E7%82%B9%E5%8F%82%E6%95%B0%E9%99%90%E6%B5%81)，能够实时的统计热点参数并针对热点参数的资源调用进行流量控制。
+同时 Sentinel 也支持更细维度的 [热点参数限流](https://github.com/alibaba/Sentinel/wiki/%E7%83%AD%E7%82%B9%E5%8F%82%E6%95%B0%E9%99%90%E6%B5%81)，能够实时的统计热点参数并针对热点参数的资源调用进行流量控制。
 
 ### 系统负载保护
 
-Sentinel 对系统的维度提供保护，负载保护算法借鉴了 TCP BBR 的思想。当系统负载较高的时候，如果仍持续让请求进入，可能会导致系统崩溃，无法响应。在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。
+Sentinel 对系统的维度提供自适应保护策略，负载保护算法借鉴了 TCP BBR 的思想。当系统负载较高的时候，如果仍持续让请求进入，可能会导致系统崩溃，无法响应。在集群环境下，网络负载均衡会把本应这台机器承载的流量转发到其它的机器上去。如果这个时候其它的机器也处在一个边缘状态的时候，这个增加的流量就会导致这台机器也崩溃，最后导致整个集群不可用。针对这个情况，Sentinel 提供了对应的保护机制，让系统的入口流量和系统的负载达到一个平衡，保证系统在能力范围之内处理最多的请求。
 
 ![BBR 经典图](https://camo.githubusercontent.com/5b1fd9b8d18c504f0c910c00b2b58876ab4eb452/687474703a2f2f617461322d696d672e636e2d68616e677a686f752e696d672d7075622e616c6979756e2d696e632e636f6d2f62313766326563396132346261376639373033643034626334343239633637342e6a7067)
 
 ### 实时监控与控制面板
 
-Sentinel 提供 HTTP API 用于获取[实时的监控信息](https://github.com/alibaba/Sentinel/wiki/%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7)，如调用链路统计信息、簇点信息、规则信息等。如果用户正在使用 Spring Boot/Spring Cloud 并使用了 [Sentinel Spring Cloud Starter](https://github.com/spring-cloud-incubator/spring-cloud-alibaba)，还可以方便地通过其暴露的 Actuator Endpoint 来获取运行时的一些信息，如动态规则等。未来 Sentinel 还会支持标准化的指标监控 API，可以方便地整合各种监控系统和可视化系统，如 Prometheus、Grafana 等。
+Sentinel 提供 HTTP API 用于获取[实时的监控信息](https://github.com/alibaba/Sentinel/wiki/%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7)，如调用链路统计信息、簇点信息、规则信息等。如果用户正在使用 Spring Boot/Spring Cloud 并使用了 [Spring Cloud Alibaba](https://github.com/spring-cloud-incubator/spring-cloud-alibaba)，还可以方便地通过其暴露的 Actuator Endpoint 来获取运行时的一些信息，如动态规则等。未来 Sentinel 还会支持标准化的指标监控 API，可以方便地整合各种监控系统和可视化系统，如 Prometheus、Grafana 等。
 
 [Sentinel 控制台](https://github.com/alibaba/Sentinel/wiki/%E6%8E%A7%E5%88%B6%E5%8F%B0)（Dashboard）提供了机器发现、配置规则、查看实时监控、查看调用链路信息等功能，使得用户可以非常方便地去查看监控和进行配置。
 
@@ -100,7 +113,7 @@ Sentinel 提供 HTTP API 用于获取[实时的监控信息](https://github.com/
 
 ### 生态
 
-Sentinel 目前已经针对 Servlet、Dubbo、Spring Boot/Spring Cloud、gRPC 等进行了适配，用户只需引入相应依赖并进行简单配置即可非常方便地享受 Sentinel 的高可用流量防护能力。未来 Sentinel 还会对更多常用框架进行适配，并且会为 Service Mesh 提供集群流量防护的能力。
+Sentinel 目前已经针对 Servlet、Dubbo、Spring Boot/Spring Cloud、gRPC、Reactor、Quarkus 等进行了适配，用户只需引入相应依赖并进行简单配置即可非常方便地享受 Sentinel 的高可用流量防护能力。未来 Sentinel 还会对更多常用框架进行适配，并且会为 Service Mesh 提供集群流量防护的能力。
 
 ## 总结
 
@@ -109,14 +122,14 @@ Sentinel 目前已经针对 Servlet、Dubbo、Spring Boot/Spring Cloud、gRPC �
 |  | Sentinel | Hystrix |
 | -------- | -------- | -------- |
 | 隔离策略     | 信号量隔离     | 线程池隔离/信号量隔离     |
-| 熔断降级策略    | 基于响应时间或失败比率     | 基于失败比率     |
+| 熔断降级策略    | 基于慢调用比例或异常比例     | 基于失败比率     |
 | 实时指标实现    | 滑动窗口     | 滑动窗口（基于 RxJava）     |
 | 规则配置    | 支持多种数据源     | 支持多种数据源     |
 | 扩展性    | 多个扩展点     | 插件的形式     |
 | 基于注解的支持    | 支持     | 支持     |
 | 限流    | 基于 QPS，支持基于调用关系的限流    | 有限的支持     |
-| 流量整形    | 支持慢启动、匀速器模式     | 不支持     |
-| 系统负载保护    | 支持     | 不支持     |
+| 流量整形    | 支持慢启动、匀速排队模式     | 不支持     |
+| 系统自适应保护    | 支持     | 不支持     |
 | 控制台  | 开箱即用，可配置规则、查看秒级监控、机器发现等     | 不完善     |
 | 常见框架的适配    | Servlet、Spring Cloud、Dubbo、gRPC 等     | Servlet、Spring Cloud Netflix  |
 

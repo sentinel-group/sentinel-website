@@ -191,9 +191,9 @@ sentinel-demo-cluster 提供了嵌入模式和独立模式的示例：
 
 ## 集群限流控制台
 
-开源版本控制台 。使用集群限流功能需要对 Sentinel 控制台进行相关的改造，推送规则时直接推送至配置中心，接入端引入 push 模式的动态数据源。可以参考 [Sentinel 控制台（集群流控管理文档）](https://github.com/alibaba/Sentinel/wiki/Sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%EF%BC%88%E9%9B%86%E7%BE%A4%E6%B5%81%E6%8E%A7%E7%AE%A1%E7%90%86%EF%BC%89)。
+使用集群限流功能需要对 Sentinel 控制台进行相关的改造，推送规则时直接推送至配置中心，接入端引入 push 模式的动态数据源。可以参考 [Sentinel 控制台（集群流控管理文档）](https://github.com/alibaba/Sentinel/wiki/Sentinel-控制台（集群流控管理）)。
 
-为了大家更好地理解集群流控的使用，我们提供了云上版本的 Sentinel 集群限流控制台示例。只需要简单的几步即可快速接入 AHAS Sentinel 集群限流控制台 Demo，无需手动配置动态数据源。可以参考 [AHAS Sentinel 集群限流控制台示例文档](https://github.com/alibaba/Sentinel/wiki/AHAS-Sentinel-%E9%9B%86%E7%BE%A4%E9%99%90%E6%B5%81%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%A4%BA%E4%BE%8B)。
+同时云上版本 [AHAS Sentinel](https://help.aliyun.com/document_detail/174871.html) 提供**开箱即用的全自动托管集群流控能力**，无需手动指定/分配 token server 以及管理连接状态，同时支持分钟小时级别流控、大流量低延时场景流控场景，同时支持 Istio/Envoy 场景的 Mesh 流控能力。
 
 ## 扩展接口设计
 

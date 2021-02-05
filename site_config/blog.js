@@ -31,6 +31,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.8.1 版本发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.1 版本发布，带来多项特性改进与 bug 修复。',
+        dateStr: '2021.02.04',
+        link: '/zh-cn/blog/sentinel-1-8-1-release.html',
+      },
+      {
         title: 'Sentinel Go 正式 GA，助力云原生服务稳稳稳',
         author: 'Eric Zhao',
         desc: 'Sentinel Go 1.0 GA 版本正式发布，标志着 Go 版本正式进入生产可用阶段。',

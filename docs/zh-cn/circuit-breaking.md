@@ -21,9 +21,10 @@ Sentinel 提供以下几种熔断策略：
 注意异常降级**仅针对业务异常**，对 Sentinel 限流降级本身的异常（`BlockException`）不生效。为了统计异常比例或异常数，需要通过 `Tracer.trace(ex)` 记录业务异常。示例：
 
 ```java
+String key = "youer_key";
 Entry entry = null;
 try {
-  entry = SphU.entry(key, EntryType.IN, key);
+  entry = SphU.entry(key, EntryType.IN);
 
   // Write your biz code here.
   // <<BIZ CODE>>

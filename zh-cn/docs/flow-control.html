@@ -87,7 +87,7 @@
 <p>有了调用链路的统计信息，我们可以衍生出多种流量控制手段。</p>
 <h3>3.1 根据调用方限流</h3>
 <p><code>ContextUtil.enter(resourceName, origin)</code> 方法中的 <code>origin</code> 参数标明了调用方身份。这些信息会在 <code>ClusterBuilderSlot</code> 中被统计。可通过以下命令来展示不同的调用方对同一个资源的调用数据：</p>
-<pre><code class="language-shell">curl http://localhost:8719/origin/id=nodeA
+<pre><code class="language-shell">curl http://localhost:8719/origin?id=nodeA
 </code></pre>
 <p>调用数据示例：</p>
 <pre><code>id: nodeA

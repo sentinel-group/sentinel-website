@@ -34,7 +34,7 @@ export default {
         {
           img: '/img/feature_transpart.png',
           title: '易于使用，快速接入',
-          content: '简单易用，开源生态广泛，针对 Dubbo、Spring Cloud、gRPC、Zuul、Reactor 等框架只需要引入适配模块即可快速接入',
+          content: '简单易用，开源生态广泛，针对 Dubbo、Spring Cloud、gRPC、Zuul、Reactor、Quarkus 等框架只需要引入适配模块即可快速接入',
         },
         {
           img: '/img/feature_service.png',

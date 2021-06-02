@@ -87,7 +87,7 @@ idx id   thread  pass  blocked   success  total Rt   1m-pass   1m-block   1m-all
 `ContextUtil.enter(resourceName, origin)` 方法中的 `origin` 参数标明了调用方身份。这些信息会在 `ClusterBuilderSlot` 中被统计。可通过以下命令来展示不同的调用方对同一个资源的调用数据：
 
 ```shell
-curl http://localhost:8719/origin/id=nodeA
+curl http://localhost:8719/origin?id=nodeA
 ```
 
 调用数据示例：

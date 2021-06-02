@@ -23,7 +23,7 @@ Sentinel 提供以下几种熔断策略：
 ```java
 Entry entry = null;
 try {
-  entry = SphU.entry(key, EntryType.IN, key);
+  entry = SphU.entry(resource);
 
   // Write your biz code here.
   // <<BIZ CODE>>

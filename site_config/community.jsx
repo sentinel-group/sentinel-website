@@ -268,6 +268,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel 1.8.2 版本发布',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.8.2 版本发布，带来多项特性改进与 bug 修复。',
+          dateStr: 'Jul 6th，2021',
+          link: '/zh-cn/blog/sentinel-1-8-2-release.html',
+        },
+        {
           title: 'Sentinel Go 正式 GA，助力云原生服务稳稳稳',
           img: '/img/sentinel-go-logo.png',
           content: 'Sentinel Go 1.0 GA 版本正式发布，标志着 Go 版本正式进入生产可用阶段。',

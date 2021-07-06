@@ -31,6 +31,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.8.2 版本发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.2 版本发布，带来多项特性改进与 bug 修复。',
+        dateStr: '2021.07.06',
+        link: '/zh-cn/blog/sentinel-1-8-2-release.html',
+      },
+      {
         title: '【编程之夏】中科院开源软件供应链点亮计划 2021 Sentinel 项目招募',
         author: 'Eric Zhao',
         desc: '中科院开源软件供应链点亮计划 2021 Sentinel 项目开始招募啦，欢迎各位在校同学报名~',

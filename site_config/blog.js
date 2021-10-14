@@ -31,6 +31,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go v1.0.3 发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go v1.0.3 版本发布，带来多项特性改进与 bug 修复。',
+        dateStr: '2021.08.16',
+        link: '/zh-cn/blog/sentinel-go-1-0-3-release.html',
+      },
+      {
         title: 'Sentinel 1.8.2 版本发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.8.2 版本发布，带来多项特性改进与 bug 修复。',

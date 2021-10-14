@@ -127,9 +127,16 @@ private void initCustomizedApis() {
 
 那么这里面的 route ID（如 `product_route`）和 API name（如 `some_customized_api`）都会被标识为 Sentinel 的资源。比如访问网关的 URL 为 `http://localhost:8090/product/foo/22` 的时候，对应的统计会加到 `product_route` 和 `some_customized_api` 这两个资源上面，而 `http://localhost:8090/httpbin/json` 只会对应到 `httpbin_route` 资源上面。
 
+> **注意**：有的时候 Spring Cloud Gateway 会自己在 route 名称前面拼一个前缀，如 `ReactiveCompositeDiscoveryClient_xxx` 这种。请观察簇点链路页面实际的资源名。
+
 您可以在 `GatewayCallbackManager` 注册回调进行定制：
 
 - `setBlockHandler`：注册函数用于实现自定义的逻辑处理被限流的请求，对应接口为 `BlockRequestHandler`。默认实现为 `DefaultBlockRequestHandler`，当被限流时会返回类似于下面的错误信息：`Blocked by Sentinel: FlowException`。
+
+**注意**：
+
+- Sentinel 网关流控默认的粒度是 route 维度以及自定义 API 分组维度，默认**不支持 URL 粒度**。若通过 Spring Cloud Alibaba 接入，请将 `spring.cloud.sentinel.filter.enabled` 配置项置为 false（若在网关流控控制台上看到了 URL 资源，就是此配置项没有置为 false）。
+- 若使用 Spring Cloud Alibaba Sentinel 数据源模块，需要注意网关流控规则数据源类型是 `gw-flow`，若将网关流控规则数据源指定为 flow 则不生效。
 
 ## Zuul 1.x
 
@@ -227,6 +234,11 @@ public class MyBlockFallbackProvider implements ZuulBlockFallbackProvider {
 }
 ```
 
+**注意**：
+
+- Sentinel 网关流控默认的粒度是 route 维度以及自定义 API 分组维度，默认**不支持 URL 粒度**。若通过 Spring Cloud Alibaba 接入，请将 `spring.cloud.sentinel.filter.enabled` 配置项置为 false（若在网关流控控制台上看到了 URL 资源，就是此配置项没有置为 false）。
+- 若使用 Spring Cloud Alibaba Sentinel 数据源模块，需要注意网关流控规则数据源类型是 `gw-flow`，若将网关流控规则数据源指定为 flow 则不生效。
+
 ## Zuul 2.x
 
 > 注：从 1.7.2 版本开始支持，需要 Java 8 及以上版本。
@@ -287,4 +299,4 @@ Sentinel 1.6.3 引入了网关流控控制台的支持，用户可以直接在 S
 
 ![sentinel-dashboard-api-gateway-flow-rule](https://sentinelguard.io/blog/zh-cn/img/sentinel-dashboard-api-gateway-flow-rule.png)
 
-云上版本可以参考 [AHAS 网关流控](https://help.aliyun.com/document_detail/118482.html)。
+网关规则动态配置及网关集群流控可以参考 [AHAS Sentinel 网关流控](https://help.aliyun.com/document_detail/118482.html)。

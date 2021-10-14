@@ -4,7 +4,7 @@
 
 Sentinel 的使用可以分为两个部分:
 
-- 核心库（Java 客户端）：不依赖任何框架/库，能够运行于 Java 7 及以上的版本的运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持（见 [主流框架适配](./open-source-framework-integrations.md)）。
+- 核心库（Java 客户端）：不依赖任何框架/库，能够运行于 Java 8 及以上的版本的运行时环境，同时对 Dubbo / Spring Cloud 等框架也有较好的支持（见 [主流框架适配](./open-source-framework-integrations.md)）。
 - 控制台（Dashboard）：Dashboard 主要负责管理推送规则、监控、管理机器信息等。
 
 我们将会提供 **本地运行 demo** 和 **公网 demo** 来帮助新手快速入门。这两种方式都只需要您执行2到5个步骤。
@@ -136,8 +136,11 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 
 1. Sentinel 多样化的限流手段
 2. 如何所见即所得的配置规则
-3. 如何有效地使用 Sentinel 的监控数据
+3. 如何有效地使用 Sentinel 专业全面的监控数据
 4. 如何通过机器上报来管理机器
+5. 快速体验全托管的集群流控
+
+**HOT**: 推荐采用 [Java Agent 方式](https://help.aliyun.com/document_detail/102506.html)快速、无侵入将应用接入到 AHAS 流量防护。最新 (1.9.1+) 版本 agent 兼容部分版本 Spring Cloud Alibaba Sentinel，可直接挂载 agent 接入，无需剔除相关依赖。
 
 > 注意：若要使用阿里云 AHAS Sentinel 控制台，您需要用自己的阿里云账号登录。由于安全策略原因我们无法提供公共账号。运行了这个 Demo 之后，这个 Demo 将会向 AHAS Sentinel 控制台上报基本的机器信息；同时 AHAS Sentinel 控制台也将会根据上报的信息，通过 Sentinel Transport API 拉取簇点监控信息。如果用户不想要运行这个 Demo，停止即可。Demo 的所有的源码都开放可以下载。
 

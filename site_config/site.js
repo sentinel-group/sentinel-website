@@ -99,7 +99,7 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2021 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
   'zh-cn': {
     pageMenu: [
@@ -201,6 +201,6 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2020 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2021 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
 };

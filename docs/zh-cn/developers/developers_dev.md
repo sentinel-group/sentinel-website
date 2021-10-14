@@ -22,6 +22,8 @@
 - Zhiqiang Gu ([@yunfeiyanggzq](https://github.com/yunfeiyanggzq))
 - Binbin Zhang ([@sanxun0325](https://github.com/sanxun0325))
 - Xiaoqiang Ding ([@luckyxiaoqiang](https://github.com/luckyxiaoqiang))
+- brotherlu-xcq ([@brotherlu-xcq](https://github.com/brotherlu-xcq))
+- Peihao Yang ([@Forsworns](https://github.com/Forsworns))
 
 ## Contributor
 

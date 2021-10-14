@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-go-1-0-3-release.md",
+  "__html": "<h1>Sentinel Go 1.0.3 发布</h1>\n<p>Sentienl Go 1.0.3 版本正式发布，修复在 32位环境下不能正常工作的问题，并带来了一些特性改进和 bug 修复。从该版本开始，adapter 以及 data-source 模块重新移回到 <a href=\"https://github.com/alibaba/sentinel-golang\">sentinel-golang</a> 下面。</p>\n<p>Release notes：<a href=\"https://github.com/alibaba/sentinel-golang/releases/tag/v1.0.3\">https://github.com/alibaba/sentinel-golang/releases/tag/v1.0.3</a></p>\n"
+}

@@ -253,6 +253,11 @@ export default {
               bgColor: '#7A63FC',
             },
             {
+              text: 'Rust',
+              link: 'https://github.com/sentinel-group/sentinel-rust',
+              bgColor: '#7A63FC',
+            },
+            {
               text: 'C++',
               link: 'https://github.com/alibaba/sentinel-cpp',
               bgColor: '#00D0D9',
@@ -267,6 +272,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.8.3 版本发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.8.2 版本发布，带来多项特性改进与 bug 修复。',
+          dateStr: 'Dec 31st，2021',
+          link: '/zh-cn/blog/sentinel-1-8-3-release.html',
+        },
         {
           title: 'Sentinel 1.8.2 版本发布',
           img: '/img/brhtqqzh.jpeg',
@@ -566,6 +578,11 @@ export default {
               bgColor: '#7A63FC',
             },
             {
+              text: 'Rust',
+              link: 'https://github.com/sentinel-group/sentinel-rust',
+              bgColor: '#7A63FC',
+            },
+            {
               text: 'C++',
               link: 'https://github.com/alibaba/sentinel-cpp',
               bgColor: '#00D0D9',
@@ -579,7 +596,7 @@ export default {
             {
               text: 'Nacos',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'ZooKeeper',
@@ -609,6 +626,11 @@ export default {
             {
               text: 'Spring Cloud Config',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-spring-cloud-config',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'K8s CRD',
+              link: 'https://github.com/sentinel-group/sentinel-go-datasource-k8s-crd',
               bgColor: '#00D0D9',
             },
           ],

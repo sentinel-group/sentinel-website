@@ -65,6 +65,10 @@ export default {
             title: 'Logs',
             link: '/en-us/docs/logs.html',
           },
+          {
+            title: 'Envoy RLS token server',
+            link: '/en-us/docs/envoy-global-rate-limiting-support.html',
+          },
         ],
       },
     ],

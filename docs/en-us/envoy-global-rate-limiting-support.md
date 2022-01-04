@@ -2,6 +2,8 @@
 
 Sentinel provides the `sentinel-cluster-server-envoy-rls` module, enabling support for [Envoy rate limiting gRPC service](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/other_features/global_rate_limiting#arch-overview-rate-limit).
 
+The token server has supported both Envoy RLS v2 and v3 API. Since Envoy 1.18.0, v2 API support has been removed.
+
 <div style="text-align: center;">
 <img src="https://user-images.githubusercontent.com/9434884/68639837-d2266980-0540-11ea-8997-05084e2e47bb.png" alt="Envoy RLS Sentinel overview" style="width: 60%;" />
 </div>
@@ -14,6 +16,9 @@ Build the executable jar:
 cd sentinel-cluster-server-envoy-rls
 mvn clean package -P prod
 ```
+
+> Note: the gRPC stub classes for Envoy RLS service is generated via `protobuf-maven-plugin` during the `compile` goal.
+> The generated classes is located in the directory: `target/generated-sources/protobuf`.
 
 ## Rule configuration
 

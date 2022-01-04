@@ -22,7 +22,7 @@ export default {
         link: '',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
         children: [{
-          key: 'msha',
+          key: 'ahas',
           text: 'High-availability solution',
           link: 'https://www.aliyun.com/product/ahas?sentinel-website.topbar.0.0.0'
         }, {
@@ -99,7 +99,7 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2021 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2022 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
   'zh-cn': {
     pageMenu: [
@@ -118,9 +118,9 @@ export default {
         link: '',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
         children: [{
-          key: 'msha',
+          key: 'ahas',
           text: '高可用解决方案',
-          link: 'https://www.aliyun.com/product/ahas?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'micoservice',
           text: '微服务解决方案',
@@ -163,7 +163,7 @@ export default {
       {
         key: 'ahas',
         text: '企业版 Sentinel',
-        link: 'https://www.aliyun.com/product/ahas',
+        link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
     ],
@@ -201,6 +201,6 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 - 2021 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
+    copyright: 'Copyright © 2018 - 2022 The Sentinel Authors | An Alibaba Middleware (Aliware) Project',
   },
 };

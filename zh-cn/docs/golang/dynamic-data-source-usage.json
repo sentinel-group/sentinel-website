@@ -1,4 +1,4 @@
 {
   "filename": "dynamic-data-source-usage.md",
-  "__html": "<h1>动态数据源使用文档</h1>\n<h2>Etcd</h2>\n<h2>Consul</h2>\n<h2>Nacos</h2>\n<h2>本地文件</h2>\n"
+  "__html": "<h1>动态数据源使用文档</h1>\n<h2>Etcd</h2>\n<h2>Consul</h2>\n<h2>Nacos</h2>\n<h2>本地文件</h2>\n<h2>Kubernetes CRD</h2>\n<p><a href=\"https://github.com/sentinel-group/sentinel-go-datasource-k8s-crd\">Sentinel Go Kubernetes CRD data-source</a></p>\n"
 }

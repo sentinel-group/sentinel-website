@@ -4,6 +4,27 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Sentinel Go v1.0.4 released',
+        author: 'Eric Zhao',
+        dateStr: 'Jan 10th，2022',
+        desc: 'Sentinel Go v1.0.4 has been released with cool features like Prometheus metric exporter and improved circuit breaker half-open recovery strategy.',
+        link: '/en-us/blog/sentinel-go-1-0-4-release.html',
+      },
+      {
+        title: 'Sentinel 1.8.3 released',
+        author: 'Eric Zhao',
+        dateStr: 'Dec 31st，2021',
+        desc: 'Sentinel 1.8.3 has been released with cool features including JMX metric exporter support and Envoy RLS v3 API support.',
+        link: '/en-us/blog/sentinel-1-8-3-release.html',
+      },
+      {
+        title: 'Sentinel Go v1.0.0 GA released',
+        author: 'Eric Zhao',
+        dateStr: 'Nov 27th，2020',
+        desc: 'Sentinel Go v1.0.0 has been released! Sentinel Go has been production-ready and generally-available.',
+        link: '/en-us/blog/sentinel-go-ga-release.html',
+      },
+      {
         title: 'Sentinel 1.8.0 released',
         author: 'Eric Zhao',
         dateStr: 'Aug 20th，2020',
@@ -30,6 +51,13 @@ export default {
     barText: '博客',
     postsTitle: '所有文章',
     list: [
+      {
+        title: 'Sentinel Go v1.0.4 发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel Go v1.0.4 版本发布，带来 Prometheus metric exporter 等多项特性改进与 bug 修复。',
+        dateStr: '2022.01.10',
+        link: '/zh-cn/blog/sentinel-go-1-0-4-release.html',
+      },
       {
         title: 'Sentinel 1.8.3 版本发布',
         author: 'Eric Zhao',

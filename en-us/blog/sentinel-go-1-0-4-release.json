@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-go-1-0-4-release.md",
+  "__html": "<h1>Sentinel Go v1.0.4 Released</h1>\n<p><a href=\"https://github.com/alibaba/sentinel-golang/releases/tag/v1.0.4\">Sentinel Go v1.0.4</a> has been released with cool features like Prometheus metric exporter and improved circuit breaker half-open recovery strategy. We've also polished <a href=\"https://github.com/sentinel-group/sentinel-go-datasource-k8s-crd\">Sentinel Go Kubernetes CRD data-source</a> to support Kubernetes 1.22+.</p>\n<img src=\"https://user-images.githubusercontent.com/9434884/74398114-87730100-4e51-11ea-9267-288cbc71b508.png\" alt=\"Sentinel Golang Logo\" height=\"70%\" width=\"70%\">\n<p>For more details, please refer to <a href=\"https://github.com/alibaba/sentinel-golang/releases/tag/v1.0.4\">the release notes</a>.</p>\n"
+}

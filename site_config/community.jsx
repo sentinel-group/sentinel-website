@@ -7,6 +7,27 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel Go v1.0.4 released',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel Go v1.0.4 has been released with cool features like Prometheus metric exporter and improved circuit breaker half-open recovery strategy.',
+          dateStr: 'Jan 10th，2022',
+          link: '/en-us/blog/sentinel-go-1-0-4-release.html',
+        },
+        {
+          title: 'Sentinel 1.8.3 released',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.8.3 has been released with cool features including JMX metric exporter support and Envoy RLS v3 API support.',
+          dateStr: 'Dec 31st，2021',
+          link: '/en-us/blog/sentinel-1-8-3-release.html',
+        },
+        {
+          title: 'Sentinel Go v1.0.0 GA released',
+          img: '/img/sentinel-go-logo.png',
+          content: 'Sentinel Go v1.0.0 has been released, indicating production-ready and generally-available.',
+          dateStr: 'Nov 28th，2020',
+          link: '/en-us/blog/sentinel-go-ga-release.html',
+        },
+        {
           title: 'Sentinel 1.8.0 released',
           img: '/img/sentinel-and-quarkus.png',
           content: 'Sentinel 1.8.0 annual version released with cool features like circuit breaking improvements and Quarkus support.',
@@ -130,7 +151,7 @@ export default {
             {
               text: 'Spring Cloud',
               link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'gRPC',
@@ -177,7 +198,7 @@ export default {
             {
               text: 'Zuul 1.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Spring Cloud Gateway',
@@ -193,7 +214,7 @@ export default {
             {
               text: 'Istio/Envoy',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
           ],
         },
@@ -204,7 +225,7 @@ export default {
             {
               text: 'Nacos',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'ZooKeeper',
@@ -234,6 +255,11 @@ export default {
             {
               text: 'Spring Cloud Config',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-spring-cloud-config',
+              bgColor: '#00D0D9',
+            },
+            {
+              text: 'Kubernetes CRD',
+              link: 'https://github.com/sentinel-group/sentinel-go-datasource-k8s-crd',
               bgColor: '#00D0D9',
             },
           ],
@@ -273,9 +299,16 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel Go v1.0.4 发布',
+          img: '/img/sentinel-go-logo.png',
+          content: 'Sentinel Go v1.0.4 版本发布，带来 Prometheus metric exporter 等多项特性改进与 bug 修复。',
+          dateStr: 'Jan 10th，2022',
+          link: '/zh-cn/blog/sentinel-go-1-0-4-release.html',
+        },
+        {
           title: 'Sentinel 1.8.3 版本发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',
-          content: 'Sentinel 1.8.2 版本发布，带来多项特性改进与 bug 修复。',
+          content: 'Sentinel 1.8.3 版本发布，带来多项特性改进与 bug 修复。',
           dateStr: 'Dec 31st，2021',
           link: '/zh-cn/blog/sentinel-1-8-3-release.html',
         },
@@ -487,7 +520,7 @@ export default {
             {
               text: 'Spring Cloud',
               link: 'https://github.com/spring-cloud-incubator/spring-cloud-alibaba',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Apache Dubbo',
@@ -533,7 +566,7 @@ export default {
             {
               text: 'Zuul 1.x',
               link: 'https://github.com/alibaba/Sentinel/tree/master/sentinel-adapter/sentinel-zuul-adapter',
-              bgColor: '#7A63FC',
+              bgColor: '#00D0D9',
             },
             {
               text: 'Spring Cloud Gateway',
@@ -629,7 +662,7 @@ export default {
               bgColor: '#00D0D9',
             },
             {
-              text: 'K8s CRD',
+              text: 'Kubernetes CRD',
               link: 'https://github.com/sentinel-group/sentinel-go-datasource-k8s-crd',
               bgColor: '#00D0D9',
             },

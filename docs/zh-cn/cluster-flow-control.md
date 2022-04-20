@@ -93,7 +93,7 @@ ClusterFlowRuleManager.setPropertySupplier(namespace -> {
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-cluster-client-default</artifactId>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
 </dependency>
 ```
 
@@ -134,7 +134,7 @@ http://<ip>:<port>/cluster/client/modifyConfig?data=<config>
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-cluster-server-default</artifactId>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
 </dependency>
 ```
 

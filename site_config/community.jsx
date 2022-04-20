@@ -299,6 +299,13 @@ export default {
       title: '事件 & 新闻',
       list: [
         {
+          title: 'Sentinel 1.8.4 版本发布',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.8.4 版本发布，带来多项特性改进与 bug 修复。',
+          dateStr: 'Apr 12nd, 2022',
+          link: '/zh-cn/blog/sentinel-1-8-4-release.html',
+        },
+        {
           title: 'Sentinel Go v1.0.4 发布',
           img: '/img/sentinel-go-logo.png',
           content: 'Sentinel Go v1.0.4 版本发布，带来 Prometheus metric exporter 等多项特性改进与 bug 修复。',
@@ -308,7 +315,7 @@ export default {
         {
           title: 'Sentinel 1.8.3 版本发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',
-          content: 'Sentinel 1.8.3 版本发布，带来多项特性改进与 bug 修复。',
+          content: 'Sentinel 1.8.3 版本发布，带来 JMX exporter 等多项特性改进与 bug 修复。',
           dateStr: 'Dec 31st，2021',
           link: '/zh-cn/blog/sentinel-1-8-3-release.html',
         },

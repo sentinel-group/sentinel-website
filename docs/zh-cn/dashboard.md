@@ -76,7 +76,7 @@ java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject
 
 ![machine-discovery](https://user-images.githubusercontent.com/9434884/50627838-5cd92800-0f70-11e9-891e-31430adcbbf4.png)
 
-> 注意：若接入 Sentinel 控制台不成功，可以参考 [FAQ](https://github.com/alibaba/Sentinel/wiki/FAQ#q-sentinel-%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%B2%A1%E6%9C%89%E6%98%BE%E7%A4%BA%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E6%88%96%E8%80%85%E6%B2%A1%E6%9C%89%E7%9B%91%E6%8E%A7%E5%B1%95%E7%A4%BA%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5) 排查问题。
+> 注意：若接入 Sentinel 控制台不成功，可以参考 [FAQ](./faq.md) 排查问题。
 
 > 注意：请确保在使用较新版本的浏览器，我们不保证支持旧版本的浏览器。
 
@@ -120,7 +120,7 @@ Sentinel 控制台同时提供简单的规则管理以及推送的功能。规�
 
 目前控制台的规则推送也是通过 [规则查询更改 HTTP API](https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8#%E6%9F%A5%E8%AF%A2%E6%9B%B4%E6%94%B9%E8%A7%84%E5%88%99) 来更改规则。这也意味着这些规则**仅在内存态生效**，应用重启之后，该规则会丢失。
 
-以上是原始模式。当了解了原始模式之后，我们非常鼓励您通过 [动态规则](https://github.com/alibaba/Sentinel/wiki/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%99%E6%89%A9%E5%B1%95) 并结合各种外部存储来定制自己的规则源。我们推荐通过动态配置源的控制台来进行规则写入和推送，而不是通过 Sentinel 客户端直接写入到动态配置源中。在生产环境中，我们推荐 **push 模式**，具体可以参考：[在生产环境使用 Sentinel](https://github.com/alibaba/Sentinel/wiki/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-Sentinel)。
+以上是原始模式。当了解了原始模式之后，我们非常鼓励您通过 [动态规则](./dynamic-rule-configuration.md) 并结合各种外部存储来定制自己的规则源。我们推荐通过动态配置源的控制台来进行规则写入和推送，而不是通过 Sentinel 客户端直接写入到动态配置源中。在生产环境中，我们推荐 **push 模式**，具体可以参考：[在生产环境使用 Sentinel](https://github.com/alibaba/Sentinel/wiki/%E5%9C%A8%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-Sentinel)。
 
 > **注：若要使用集群流控功能，则必须对接动态规则源，否则无法正常使用。您也可以接入 [AHAS Sentinel](https://help.aliyun.com/document_detail/174871.html) 快速接入全自动托管、高可用的集群流控能力。**
 

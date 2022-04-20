@@ -4,7 +4,7 @@ Below is a simple demo that guides new users to use Sentinel in just 3 steps. It
 
 ## 1. Add Dependency
 
-**Note:** Sentinel requires Java 7 or later.
+**Note:** Sentinel requires Java 8 or later.
 
 If your application is build in maven, just add the following code in pom.xml.
 
@@ -12,7 +12,7 @@ If your application is build in maven, just add the following code in pom.xml.
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
 </dependency>
 ```
 

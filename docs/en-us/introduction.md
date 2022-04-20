@@ -9,7 +9,8 @@ As distributed systems are becoming increasingly popular, the reliability betwee
 * 2012, Sentinel was born in Alibaba with the main purpose of flow control.
 * 2013-2017, Sentinel grew fast and became a fundamental component for all microservices in Alibaba. It was used in more than 6000 applications and covers almost all core e-commerce scenarios. 
 * 2018, Sentinel evolves into an open-source project.
-* 2020, [Sentinel Golang](https://github.com/alibaba/sentinel-golang) released.
+* 2020, [Sentinel Go](https://github.com/alibaba/sentinel-golang) released.
+* 2021, [Sentinel Rust](https://github.com/sentinel-group/sentinel-rust) released. And we've brought cool features like Envoy WASM extension and eBPF extension with Sentinel.
 
 # Key Concepts
 

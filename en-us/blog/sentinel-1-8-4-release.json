@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-8-4-release.md",
+  "__html": "<h1>Sentinel 1.8.4 Released</h1>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/91042203-f670b400-e643-11ea-959a-c24c7c67e3f4.png\" alt=\"sentinel-open-source-eco\"></p>\n<p>We're happy to announce that <a href=\"https://github.com/alibaba/Sentinel/releases/tag/v1.8.4\">Sentinel 1.8.4</a> has been released with improvements and bug fixes including:</p>\n<ul>\n<li>Add interceptor SPI for transport command handler</li>\n<li>Add support for customizing request item parser for Spring Cloud Gateway and Zuul adapter</li>\n<li>Add log level configuration support for common logs</li>\n<li>Update Spring Boot starter to 2.5.12 for Sentinel dashboard</li>\n</ul>\n<p>For more details, please refer to <a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.8.4\">the release notes</a>.</p>\n"
+}

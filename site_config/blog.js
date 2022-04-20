@@ -4,6 +4,13 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Sentinel 1.8.4 released',
+        author: 'Eric Zhao',
+        dateStr: 'Apr 12nd，2022',
+        desc: 'Sentinel 1.8.4 has been released with improvements and bug fixes.',
+        link: '/en-us/blog/sentinel-1-8-4-release.html',
+      },
+      {
         title: 'Sentinel Go v1.0.4 released',
         author: 'Eric Zhao',
         dateStr: 'Jan 10th，2022',
@@ -51,6 +58,13 @@ export default {
     barText: '博客',
     postsTitle: '所有文章',
     list: [
+      {
+        title: 'Sentinel 1.8.4 版本发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.4 版本发布，带来多项特性改进与 bug 修复。',
+        dateStr: '2022.04.12',
+        link: '/zh-cn/blog/sentinel-1-8-4-release.html',
+      },
       {
         title: 'Sentinel Go v1.0.4 发布',
         author: 'Eric Zhao',

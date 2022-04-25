@@ -161,6 +161,12 @@ export default {
         link: '/zh-cn/community/index.html',
       },
       {
+        key: 'mse-governance',
+        text: '服务治理白皮书',
+        link: 'https://developer.aliyun.com/ebook/7565?spm=sentinel-website.topbar.0.0.0',
+        imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
+      },
+      {
         key: 'ahas',
         text: '企业版 Sentinel',
         link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0',

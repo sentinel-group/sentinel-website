@@ -32,7 +32,7 @@
 <p>使用 Sentinel 时需要在应用启动时对 Sentinel 进行相关配置并触发初始化。<code>api</code> 包下提供如下函数：</p>
 <ul>
 <li><code>InitDefault()</code>：从环境变量中读取相应配置来初始化 Sentinel，若环境变量不存在则使用默认值。</li>
-<li><code>Init(configPath string)</code>：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。日志目录配置会从环境变量读取或采用默认路径（<code>~/logs/csp</code>）。</li>
+<li><code>InitWithConfigFile(configPath string)</code>：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。日志目录配置会从环境变量读取或采用默认路径（<code>~/logs/csp</code>）。</li>
 </ul>
 <p>通用配置项加载策略和配置项请参考 <a href="https://github.com/alibaba/sentinel-golang/wiki/%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE%E9%A1%B9">通用配置项文档</a></p>
 <p>示例代码：</p>

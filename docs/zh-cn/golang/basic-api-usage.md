@@ -12,7 +12,7 @@
 使用 Sentinel 需要在应用启动时对 Sentinel 运行环境进行相关配置并触发初始化。`api` 包下提供如下函数：
 
 - `InitDefault()`：从环境变量指定的配置文件以及环境变量中读取相应配置来初始化 Sentinel，若环境变量不存在则使用默认值。
-- `Init(configPath string)`：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。
+- `InitWithConfigFile(configPath string)`：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。
 - `InitWithConfig(confEntity *config.Entity)`: 用户硬编码配置对象`*config.Entity`来初始化Sentinel。
 
 通用配置项加载策略和配置项请参考 [配置方式使用文档](https://github.com/alibaba/sentinel-golang/wiki/启动配置)
@@ -25,7 +25,7 @@ import (
 )
 
 func initSentinel() {
-	err := sentinel.Init(confPath)
+	err := sentinel.InitWithConfigFile(confPath)
 	if err != nil {
 		// 初始化 Sentinel 失败
 	}

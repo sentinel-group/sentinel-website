@@ -172,6 +172,12 @@ export default {
         link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
+      {
+        key: 'mw-developer-meetup',
+        text: '中间件开发者大会',
+        link: 'https://developer.aliyun.com/topic/middleware/developer/summit?spm=sentinel-website.topbar.0.0.0',
+        imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
+      },
     ],
     disclaimer: {
       title: 'Disclaimer',

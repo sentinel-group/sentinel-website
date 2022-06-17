@@ -80,12 +80,12 @@ export default {
         title: '用户文档',
         children: [
           {
-            title: '入门',
+            title: 'Sentinel 介绍',
+            link: '/zh-cn/docs/introduction.html',
+          },
+          {
+            title: '入门参考',
             children: [
-              {
-                title: 'Sentinel 介绍',
-                link: '/zh-cn/docs/introduction.html',
-              },
               {
                 title: '快速开始',
                 link: '/zh-cn/docs/quick-start.html',
@@ -95,10 +95,6 @@ export default {
                 link: '/zh-cn/docs/basic-implementation.html',
               },
             ],
-          },
-          {
-            title: 'FAQ',
-            link: '/zh-cn/docs/faq.html',
           },
           {
             title: '使用文档',
@@ -168,6 +164,10 @@ export default {
           {
             title: '多语言支持',
             link: '/zh-cn/docs/polyglot-support.html',
+          },
+          {
+            title: 'FAQ',
+            link: '/zh-cn/docs/faq.html',
           },
         ],
       },

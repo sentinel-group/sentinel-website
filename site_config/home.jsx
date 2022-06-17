@@ -4,7 +4,7 @@ export default {
   'zh-cn': {
     brand: {
       brandName: 'Sentinel',
-      briefIntroduction: '面向分布式服务架构的高可用流量控制组件',
+      briefIntroduction: '面向分布式、多语言异构化服务架构的流量治理组件',
       buttons: [
         {
           text: '快速开始',
@@ -20,7 +20,7 @@ export default {
     },
     introduction: {
       title: '简介',
-      desc: 'Sentinel 是面向分布式服务架构的高可用防护组件，主要以流量为切入点，从流量控制、熔断降级、系统自适应保护等多个维度来帮助用户保障微服务的稳定性。',
+      desc: 'Sentinel 是面向分布式、多语言异构化服务架构的流量治理组件，主要以流量为切入点，从流量控制、流量路由、熔断降级、系统自适应保护等多个维度来帮助用户保障微服务的稳定性。',
       img: '/img/sentinel-flow-index-overview-cn.jpg',
     },
     features: {

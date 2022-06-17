@@ -28,7 +28,7 @@ export default {
         }, {
           key: 'micoservice',
           text: 'Microservice solutions',
-          link: 'https://cn.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
         }, {
           key: 'gts',
           text: 'Distributed transaction solution',
@@ -118,13 +118,13 @@ export default {
         link: '',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
         children: [{
+          key: 'micoservice',
+          text: '微服务解决方案',
+          link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
+        }, {
           key: 'ahas',
           text: '高可用解决方案',
           link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0'
-        }, {
-          key: 'micoservice',
-          text: '微服务解决方案',
-          link: 'https://cn.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
         }, {
           key: 'gts',
           text: '分布式事务解决方案',
@@ -167,15 +167,9 @@ export default {
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
       {
-        key: 'ahas',
+        key: 'mse-ahas',
         text: '企业版 Sentinel',
-        link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0',
-        imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
-      },
-      {
-        key: 'mw-developer-meetup',
-        text: '中间件开发者大会',
-        link: 'https://developer.aliyun.com/topic/middleware/developer/summit?spm=sentinel-website.topbar.0.0.0',
+        link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
     ],

@@ -59,6 +59,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: '设计稳定的微服务系统时不得不考虑的场景',
+        author: '泮圣伟(十眠)',
+        desc: '流控降级与容错是我们设计稳定的微服务系统时不得不考虑的场景，如果我们设计每一套系统都要花许多心思来设计系统的流控降级与容错能力，这将会成为让我们每一个开发者都头疼的问题。当我们接触与设计了那么多系统的流控降级后，有没什么通用的场景、最佳实践、设计标准与规范乃至参考实现可以沉淀的？本文详细介绍了流控降级与容错的场景、标准与实践。',
+        dateStr: '2022.07.05',
+        link: '/zh-cn/blog/necessary-scenarios-of-designing-resilient-microservices.html',
+      },
+      {
         title: 'Sentinel 1.8.4 版本发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.8.4 版本发布，带来多项特性改进与 bug 修复。',

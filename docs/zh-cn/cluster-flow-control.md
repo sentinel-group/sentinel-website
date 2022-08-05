@@ -117,7 +117,7 @@ http://<ip>:<port>/cluster/client/modifyConfig?data=<config>
 - `serverPort`: token server 端口
 - `requestTimeout`: 请求的超时时间（默认为 20 ms）
 
-当然也可以通过动态配置源进行配置。我们可以通过 `ClusterClientConfigManager` 的 `register2Property` 方法注册动态配置源。配置源注册的相关逻辑可以置于 `InitFunc` 实现类中，并通过 SPI 注册，在 Sentinel 初始化时即可自动进行配置源加载监听。
+当然也可以通过动态配置源进行配置。我们可以通过 `ClusterClientConfigManager` 的 `registerServerAssignProperty` 方法注册动态配置源。配置源注册的相关逻辑可以置于 `InitFunc` 实现类中，并通过 SPI 注册，在 Sentinel 初始化时即可自动进行配置源加载监听。
 
 若用户未引入集群限流 client 相关依赖，或者 client 未开启/连接失败/通信失败，则对于开启了集群模式的规则：
 

@@ -103,6 +103,13 @@ ClusterFlowRuleManager.setPropertySupplier(namespace -> {
 http://<ip>:<port>/setClusterMode?mode=<xxx>
 ```
 
+或者通过 ClusterStateManager API 手动指定模式：
+
+```bash
+// 指定当前身份为 Token Client
+ClusterStateManager.applyState(ClusterStateManager.CLUSTER_CLIENT);
+```
+
 其中 mode 为 0 代表 client，1 代表 server。设置成功后，若已有客户端的配置，集群限流客户端将会开启并连接远程的 token server。我们可以在 `sentinel-record.log` 日志中查看连接的相关日志。
 
 若集群限流客户端未进行配置，则用户需要对客户端进行基本的配置，比如指定集群限流 token server。我们提供了 API 进行配置：
@@ -118,6 +125,18 @@ http://<ip>:<port>/cluster/client/modifyConfig?data=<config>
 - `requestTimeout`: 请求的超时时间（默认为 20 ms）
 
 当然也可以通过动态配置源进行配置。我们可以通过 `ClusterClientConfigManager` 的 `registerServerAssignProperty` 方法注册动态配置源。配置源注册的相关逻辑可以置于 `InitFunc` 实现类中，并通过 SPI 注册，在 Sentinel 初始化时即可自动进行配置源加载监听。
+
+您可以以这样的方式来注册一个 `ClusterTokenClient`：
+
+```bash
+ClusterTokenClient client = new DefaultClusterTokenClient();
+// 【可选】配置要连接的TokenServer的IP和Port
+// ClusterClientConfigManager.applyNewAssignConfig()
+// 【可选】配置当前启动的实例为客户端。
+// ClusterStateManager.applyState(ClusterStateManager.CLUSTER_CLIENT)
+// 启动您的客户端，如果  ClusterStateManager.applyState 设置为 Clinet，执行 `start` 方法会自动连接到预设的TokenServer。
+client.start();
+```
 
 若用户未引入集群限流 client 相关依赖，或者 client 未开启/连接失败/通信失败，则对于开启了集群模式的规则：
 

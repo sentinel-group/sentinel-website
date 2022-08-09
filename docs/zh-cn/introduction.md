@@ -78,3 +78,9 @@ Sentinel 的主要工作机制如下：
 * 对主流框架提供适配或者显示的 API，来定义需要保护的资源，并提供设施对资源进行实时统计和调用链路分析。
 * 根据预设的规则，结合对资源的实时统计信息，对流量进行控制。同时，Sentinel 提供开放的接口，方便您定义及改变规则。
 * Sentinel 提供实时的监控系统，方便您快速了解目前系统的状态。
+
+## 流控降级与容错标准
+
+Sentinel 社区正在将流量治理相关标准抽出到 [OpenSergo 标准](https://opensergo.io/zh-cn/)中，Sentinel 作为流量治理标准实现。有关 Sentinel 流控降级与容错 spec 的最新进展，请参考 [opensergo-specification](https://github.com/opensergo/opensergo-specification/blob/main/specification/zh-Hans/fault-tolerance.md)，也欢迎社区一起来完善标准与实现。
+
+![opensergo-and-sentinel](https://user-images.githubusercontent.com/9434884/183335605-4215c142-3f30-4cfb-a1f1-a235a44d024b.png)

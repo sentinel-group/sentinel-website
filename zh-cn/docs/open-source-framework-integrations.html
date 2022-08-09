@@ -203,9 +203,17 @@
 <h3>Dubbo</h3>
 <p>Sentinel 提供 Dubbo 的相关适配 <a href="https://github.com/dubbo/dubbo-sentinel-support">Sentinel Dubbo Adapter</a>，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。相关模块：</p>
 <ul>
+<li><code>sentinel-apache-dubbo3-adapter</code>（兼容 Apache Dubbo 3.0.5 及以上版本，自 Sentinel 1.8.5 开始支持）</li>
 <li><code>sentinel-apache-dubbo-adapter</code>（兼容 Apache Dubbo 2.7.x 及以上版本，自 Sentinel 1.5.1 开始支持）</li>
 <li><code>sentinel-dubbo-adapter</code>（兼容 Dubbo 2.6.x 版本）</li>
 </ul>
+<p>对于 Apache Dubbo <strong>3.0.5</strong> 及以上版本，使用时需引入以下模块（以 Maven 为例）：</p>
+<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>sentinel-apache-dubbo3-adapter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>x.y.z<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
 <p>对于 Apache Dubbo <strong>2.7.x</strong> 及以上版本，使用时需引入以下模块（以 Maven 为例）：</p>
 <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba.csp<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>

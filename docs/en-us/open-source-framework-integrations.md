@@ -83,6 +83,7 @@ See [the document of Sentinel Spring WebFlux Adapter module](https://github.com/
 
 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support) provides service consumer filter and provider filter for Dubbo services. Since Dubbo 2.7.x is not compatible with the previous version, we provide two modules:
 
+- `sentinel-apache-dubbo3-adapter` (compatible with Apache Dubbo **3.x** and later version, supported since Sentinel **1.8.5**)
 - `sentinel-apache-dubbo-adapter` (compatible with Apache Dubbo **2.7.x** and later version, supported since Sentinel **1.5.1**)
 - `sentinel-dubbo-adapter` (compatible with Dubbo **2.6.x** and previous version)
 

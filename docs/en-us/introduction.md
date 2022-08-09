@@ -11,6 +11,7 @@ As distributed systems are becoming increasingly popular, the reliability betwee
 * 2018, Sentinel evolves into an open-source project.
 * 2020, [Sentinel Go](https://github.com/alibaba/sentinel-golang) released.
 * 2021, [Sentinel Rust](https://github.com/sentinel-group/sentinel-rust) released. And we've brought cool features like Envoy WASM extension and eBPF extension with Sentinel.
+* 2022, Sentinel evolves into a "traffic governance" cloud-native component.
 
 # Key Concepts
 

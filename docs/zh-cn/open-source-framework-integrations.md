@@ -196,8 +196,19 @@ public class WebFluxConfig {
 
 Sentinel 提供 Dubbo 的相关适配 [Sentinel Dubbo Adapter](https://github.com/dubbo/dubbo-sentinel-support)，主要包括针对 Service Provider 和 Service Consumer 实现的 Filter。相关模块：
 
+- `sentinel-apache-dubbo3-adapter`（兼容 Apache Dubbo 3.0.5 及以上版本，自 Sentinel 1.8.5 开始支持）
 - `sentinel-apache-dubbo-adapter`（兼容 Apache Dubbo 2.7.x 及以上版本，自 Sentinel 1.5.1 开始支持）
 - `sentinel-dubbo-adapter`（兼容 Dubbo 2.6.x 版本）
+
+对于 Apache Dubbo **3.0.5** 及以上版本，使用时需引入以下模块（以 Maven 为例）：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-apache-dubbo3-adapter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
 
 对于 Apache Dubbo **2.7.x** 及以上版本，使用时需引入以下模块（以 Maven 为例）：
 

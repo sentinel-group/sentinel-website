@@ -7,6 +7,13 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.8.5 released',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.8.5 has been released with cool features including Apache Dubbo 3.x support.',
+          dateStr: 'Aug 9th，2022',
+          link: '/en-us/blog/sentinel-1-8-5-release.html',
+        },
+        {
           title: 'Sentinel Go v1.0.4 released',
           img: '/img/brhtqqzh.jpeg',
           content: 'Sentinel Go v1.0.4 has been released with cool features like Prometheus metric exporter and improved circuit breaker half-open recovery strategy.',
@@ -298,6 +305,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.8.5 版本发布',
+          img: '/img/DZyHFgnWAAEfldY.jpg',
+          content: 'Sentinel 1.8.5 版本发布，正式支持 Dubbo 3.x。',
+          dateStr: 'Aug 9th，2022',
+          link: '/zh-cn/blog/sentinel-1-8-5-release.html',
+        },
         {
           title: 'Sentinel 1.8.4 版本发布',
           img: '/img/brhtqqzh.jpeg',
@@ -626,6 +640,17 @@ export default {
               text: 'C++',
               link: 'https://github.com/alibaba/sentinel-cpp',
               bgColor: '#00D0D9',
+            },
+          ],
+        },
+        {
+          title: '标准规范',
+          content: <span>Sentinel 支持的流量治理相关标准规范</span>,
+          tags: [
+            {
+              text: 'OpenSergo',
+              link: 'https://opensergo.io/',
+              bgColor: '#7A63FC',
             },
           ],
         },

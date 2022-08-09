@@ -4,6 +4,13 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Sentinel 1.8.5 released',
+        author: 'Eric Zhao',
+        dateStr: 'Aug 9th，2022',
+        desc: 'Sentinel 1.8.5 has been released with cool features including Apache Dubbo 3.x support.',
+        link: '/en-us/blog/sentinel-1-8-5-release.html',
+      },
+      {
         title: 'Sentinel 1.8.4 released',
         author: 'Eric Zhao',
         dateStr: 'Apr 12nd，2022',
@@ -59,10 +66,17 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel 1.8.5 版本发布',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.5 版本发布，正式支持 Dubbo 3.x',
+        dateStr: '2022/08/09',
+        link: '/zh-cn/blog/sentinel-1-8-5-release.html',
+      },
+      {
         title: '设计稳定的微服务系统时不得不考虑的场景',
         author: '泮圣伟(十眠)',
         desc: '流控降级与容错是我们设计稳定的微服务系统时不得不考虑的场景，如果我们设计每一套系统都要花许多心思来设计系统的流控降级与容错能力，这将会成为让我们每一个开发者都头疼的问题。当我们接触与设计了那么多系统的流控降级后，有没什么通用的场景、最佳实践、设计标准与规范乃至参考实现可以沉淀的？本文详细介绍了流控降级与容错的场景、标准与实践。',
-        dateStr: '2022.07.05',
+        dateStr: '2022/07/05',
         link: '/zh-cn/blog/necessary-scenarios-of-designing-resilient-microservices.html',
       },
       {
@@ -76,7 +90,7 @@ export default {
         title: 'Sentinel Go v1.0.4 发布',
         author: 'Eric Zhao',
         desc: 'Sentinel Go v1.0.4 版本发布，带来 Prometheus metric exporter 等多项特性改进与 bug 修复。',
-        dateStr: '2022.01.10',
+        dateStr: '2022/01/10',
         link: '/zh-cn/blog/sentinel-go-1-0-4-release.html',
       },
       {

@@ -178,6 +178,10 @@ export default {
             title: 'Sentinel Go',
             children: [
               {
+                title: '快速开始',
+                link: '/zh-cn/docs/golang/quick-start.html',
+              },
+              {
                 title: '基本 API 使用指南',
                 link: '/zh-cn/docs/golang/basic-api-usage.html',
               },
@@ -200,6 +204,10 @@ export default {
               {
                 title: '热点参数流控',
                 link: '/zh-cn/docs/golang/hotspot-param-flow-control.html',
+              },
+              {
+                title: '开源框架适配',
+                link: '/zh-cn/docs/golang/open-source-framework-integrations.html',
               },
               {
                 title: '动态规则扩展',

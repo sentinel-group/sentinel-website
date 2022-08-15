@@ -15,7 +15,7 @@
 - `Init(configPath string)`：从给定的 YAML 文件中读取相应配置来初始化 Sentinel。
 - `InitWithConfig(confEntity *config.Entity)`: 用户硬编码配置对象`*config.Entity`来初始化Sentinel。
 
-通用配置项加载策略和配置项请参考 [配置方式使用文档](https://github.com/alibaba/sentinel-golang/wiki/启动配置)
+通用配置项加载策略和配置项请参考 [配置方式使用文档](./general-configuration.md)
 
 示例代码：
 
@@ -94,4 +94,4 @@ if err != nil {
 ```
 ### 动态数据源
 
-Sentinel 提供动态数据源接口进行扩展，用户可以通过动态文件、etcd、consul、nacos 等配置中心来动态地配置规则。
+Sentinel 提供动态数据源接口进行扩展，用户可以通过动态文件、etcd、consul、nacos 等配置中心来动态地配置规则。详情请参考[动态数据源使用文档](./dynamic-data-source-usage.md)。

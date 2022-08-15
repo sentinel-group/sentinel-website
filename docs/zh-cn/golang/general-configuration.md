@@ -117,6 +117,7 @@ sentinel:
 ```
 
 ### 通过配置对象初始化Sentinel运行环境
+
 `InitWithConfig(confEntity *config.Entity)` 函数初始化，用户需要自己制定配置项 `config.Entity`, Sentinle 会使用用户输入的配置项初始化。如果存在环境变量，那么环境变量优先级最高。
 
 注意：环境变量配置优先级最高。若同时存在，则环境变量的配置会覆盖 YAML 文件的配置。

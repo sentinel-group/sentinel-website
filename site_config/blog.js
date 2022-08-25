@@ -66,6 +66,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: '中科院2022编程之夏项目中期进展 - Sentinel Go Envoy WASM 插件设计与实现',
+        author: 'halfrost',
+        desc: '这篇文章将介绍中科院2022编程之夏项目中期进展：Sentinel Go Envoy WASM 插件设计与实现。',
+        dateStr: '2022/08/25',
+        link: '/zh-cn/blog/sentinel-envoy-wasm-plugin-design-proposal.html',
+      },
+      {
         title: 'Sentinel 1.8.5 版本发布',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.8.5 版本发布，正式支持 Dubbo 3.x',

@@ -6,7 +6,7 @@
 
 ![](./img/sentinel-wasm-plugin-bg.png)
 
-由于 [Sentinel token server for Envoy Global Rate Limiting Service](https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls) 模型的限制，场景和性能有局限，加上云原生近几年的高速发展，Sentinel 支持 WASM extension 在社区中的呼声越来越高。利用 proxy-wasm extension 机制，借助 Sentinel Go 原生的实现，可以在 Envoy 甚至 Istio 侧实现全面的 Sentinel 流量治理能力与标准覆盖。
+由于 [Sentinel token server for Envoy Global Rate Limiting Service](https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls) 模型的限制，场景和性能有局限，加上云原生近几年的高速发展，Sentinel 支持 WASM extension 在社区中的呼声越来越高。利用 proxy-wasm extension 机制，借助 Sentinel Go 原生的实现，可以在 Envoy 甚至 Istio 侧实现全面的 Sentinel 流量治理能力与 [OpenSergo 微服务治理标准覆盖](https://opensergo.io/zh-cn)。
 
 ## 涉及工具
 
@@ -20,9 +20,9 @@
 
 本次实现的 [Sentinel Proxy-WASM extension](https://github.com/sentinel-group/sentinel-go-proxy-wasm-extension) 是基于 [Sentinel Go](https://github.com/alibaba/sentinel-golang)。所以要用到 [proxy-wasm-go-sdk](https://github.com/tetratelabs/proxy-wasm-go-sdk)。这个 repo 是对 Proxy-Wasm ABI 的一层封装，提供了一系列 Go 语言的 API。使用这个 SDK，可以生成与 Proxy-Wasm 规范兼容的 Wasm 二进制文件。
 
-在讨论 wasm 架构设计之前，要写谈谈 Wasm 虚拟机 (Wasm VM) 。Wasm VM 是加载插件的载体。在 Envoy 中，在每个线程中创建 VM 并且 VM 之间相互隔离。因此，我们创建的程序将被复制到 Envoy 创建的线程中，并加载到每个 VM 上。 Proxy-Wasm 规范中允许在单个 VM 中拥有多个插件。换句话说，一个 VM 可以被多个插件共同使用。
+在讨论 WASM 架构设计之前，要写谈谈 Wasm 虚拟机 (Wasm VM) 。Wasm VM 是加载插件的载体。在 Envoy 中，在每个线程中创建 VM 并且 VM 之间相互隔离。因此，我们创建的程序将被复制到 Envoy 创建的线程中，并加载到每个 VM 上。 Proxy-Wasm 规范中允许在单个 VM 中拥有多个插件。换句话说，一个 VM 可以被多个插件共同使用。
 
-考虑到 sentinel 未来不仅要支持 http filter，有可能还要支持 grpc 的 filter，所以这次 wasm 插件的设计思路是基于 L4 tcp 来实现的。阅读 wasm 的文档，我们可以知道，tcp 层可以做的操作有：tcp 数据帧相关操作、建立连接，断开链接，上行数据处理，下行数据处理。
+考虑到 Sentinel 未来不仅要支持 http filter，有可能还要支持 grpc 的 filter，所以这次 wasm 插件的设计思路是基于 L4 tcp 来实现的。阅读 wasm 的文档，我们可以知道，tcp 层可以做的操作有：tcp 数据帧相关操作、建立连接，断开链接，上行数据处理，下行数据处理。
 
 > 值得提的是，还有一种特性是，Wasm Service 是一种在单例 VM 中运行的插件（即 Envoy 主线程中仅存在一个实例）。它主要用于 filter 并行执行一些额外的工作，例如聚合指标、日志等。有时，这样的单例 VM 本身也称为 Wasm 服务。sentinel 如果有聚合指标的操作，可以借助 Wasm Service 来完成。
 

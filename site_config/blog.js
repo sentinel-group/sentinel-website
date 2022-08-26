@@ -66,11 +66,11 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
-        title: 'Hertz 和 sentinel-golang 的对接方案',
+        title: 'Hertz 和 Sentinel Go 的对接方案',
         author: 'Skyenought',
-        desc: '这篇文章将介绍如何使 Hertz 可以以中间件的形式引入 sentinel-golang',
+        desc: '这篇文章将介绍如何使 CloudWeGo Hertz 可以以中间件的形式引入 Sentinel Go 从而实现流控降级能力。',
         dateStr: '2022/08/26',
-        link: '/zh-cn/blog/sentinel-golang-hertz.html',
+        link: '/zh-cn/blog/sentinel-golang-and-cloudwego-hertz.html',
       },
       {
         title: '中科院2022编程之夏项目中期进展 - Sentinel Go Envoy WASM 插件设计与实现',

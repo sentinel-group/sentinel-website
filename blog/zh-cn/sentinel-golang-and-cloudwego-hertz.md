@@ -1,4 +1,4 @@
-# Hertz 和 sentinel-golang 的对接方案
+# Hertz 和 Sentinel Go 的对接方案
 
 ## 介绍
 
@@ -8,8 +8,9 @@
 
 ## 背景
 
-> 鉴于 Hertz 自身没有熔断限流的能力，于是将 sentinel-golang 这种成熟的方案通过中间件的方式引入进来进行流量的熔断和处理。
-> 此方案将介绍如何使 Hertz 可以以中间件的形式引入 sentinel-golang
+鉴于 Hertz 自身没有熔断限流的能力，于是将 [Sentinel Go](https://github.com/alibaba/sentinel-golang) 这种成熟的方案通过中间件的方式引入进来进行流量的熔断和处理。
+
+此方案将介绍如何使 Hertz 可以以中间件的形式引入 sentinel-golang。
 
 ## Sentinel 中 adapter 的实现思路
 
@@ -133,8 +134,9 @@ func SentinelServerMiddleware(opts ...Option) app.HandlerFunc {
 }
 ```
 
-请求进入中间件的逻辑流程图
-![](.\img\sentinel-golang-hertz1.jpg)
+请求进入中间件的逻辑流程图：
+
+![](./img/sentinel-golang-hertz1.jpg)
 
 ## Hertz adapter 和 Sentinel Gin adpter 的差异
 
@@ -156,8 +158,7 @@ func(ctx context.Context, c *app.RequestContext)
 ## Sentinel Hertz client adapter 实现
 
 1. 中间件函数使用 hertz client middleware 的 `middleware.Endpoint`
-
-1. 由于 client middleware 必须保持**默认**格式，所以使用构造函数从外部给 middlware 函数内部 的options 进行赋值，最后返回一个统一格式的中间件
+2. 由于 client middleware 必须保持**默认**格式，所以使用构造函数从外部给 middlware 函数内部 的options 进行赋值，最后返回一个统一格式的中间件
 
 ### 自定义函数的注入原理
 
@@ -248,4 +249,4 @@ func SentinelClientMiddleware(opts ...ClientOption) client.Middleware {
 
 Client 的基本业务流程图：
 
-![](.\img\sentinel-golang-hertz2.jpg)
+![](./img/sentinel-golang-hertz2.jpg)

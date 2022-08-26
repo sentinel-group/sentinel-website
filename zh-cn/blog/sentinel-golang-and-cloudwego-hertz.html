@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163094446-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-163094446-1');
+	</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="sentinel-golang-and-cloudwego-hertz" />
+	<meta name="description" content="sentinel-golang-and-cloudwego-hertz" />
+	<!-- 网页标签标题 -->
+	<title>sentinel-golang-and-cloudwego-hertz</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><span><a href="/zh-cn/index.html">首页</a></span></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/docs/introduction.html">文档</a></span></li><li class="menu-item menu-item-normal"><div class="nav-container"><div class="word"><a>解决方案</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></div><ul class="sub-nav-container" style="width:220px"><li><a href="https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0" target="_blank">微服务解决方案</a></li><li><a href="https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0" target="_blank">高可用解决方案</a></li><li><a href="https://www.aliyun.com/aliware/txc?sentinel-website.topbar.0.0.0" target="_blank">分布式事务解决方案</a></li><li><a href="https://cn.aliyun.com/product/aliware/sae?sentinel-website.topbar.0.0.0" target="_blank">微服务Serverless解决方案</a></li><li><a href="https://www.aliyun.com/product/edas?sentinel-website.topbar.0.0.0" target="_blank">APaaS解决方案</a></li><li><a href="https://www.aliyun.com/product/servicemesh?sentinel-website.topbar.0.0.0" target="_blank">服务网格解决方案</a></li></ul> </div></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/docs/developers/developers_dev.html">开发者</a></span></li><li class="menu-item menu-item-normal menu-item-normal-active"><span><a href="/zh-cn/blog/index.html">博客</a></span></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/community/index.html">社区</a></span></li><li class="menu-item menu-item-normal"><span><a href="https://developer.aliyun.com/ebook/7565?spm=sentinel-website.topbar.0.0.0">服务治理白皮书</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></span></li><li class="menu-item menu-item-normal"><span><a href="https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0">企业版 Sentinel</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></span></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Hertz 和 Sentinel Go 的对接方案</h1>
+<h2>介绍</h2>
+<p>在以云原生为技术支撑的背景下，各个公司都开源了自己的微服务框架或产品，如耳熟能详的 Istio、Envoy、Kratos、Go-zero 等。前段时间字节跳动也开源了 <strong><a href="https://mp.weixin.qq.com/s/D1Pol8L9F_5-Yte_k4DH8A">超大规模的企业级微服务 HTTP 框架 — Hertz</a></strong>。</p>
+<p>经过了字节跳动内部一年多的使用和迭代，高性能企业级 HTTP 框架—— Hertz，已在 <a href="https://github.com/cloudwego">CloudWeGo</a> 正式开源啦！Hertz 已经成为了字节跳动内部最大的 HTTP 框架，线上接入的服务数量超过<strong>1 万</strong>，峰值 QPS 超过 <strong>4 千万</strong>，具有<strong>高易用性</strong>、<strong>易扩展</strong>、<strong>低时延</strong>的特点。对于字节跳动服务框架团队和 CloudWeGo 而言，Hertz 将不仅仅是一个开源项目，它也是一个真实的超大规模企业级实践。</p>
+<h2>背景</h2>
+<p>鉴于 Hertz 自身没有熔断限流的能力，于是将 <a href="https://github.com/alibaba/sentinel-golang">Sentinel Go</a> 这种成熟的方案通过中间件的方式引入进来进行流量的熔断和处理。</p>
+<p>此方案将介绍如何使 Hertz 可以以中间件的形式引入 sentinel-golang。</p>
+<h2>Sentinel 中 adapter 的实现思路</h2>
+<h3>提供自定义处理函数</h3>
+<p>adapter 提供了 <code>WithResourceExtractor</code> 添加自定义资源函数 和 <code>WithBlockFallback</code> 自定义失败回调函数等 Option 来对程序进行个性化处理</p>
+<blockquote>
+<p>何为热点？热点即经常访问的数据。很多时候我们希望统计某个热点数据中访问频次最高的 Top K 数据，并对其访问进行限制。比如：</p>
+<ul>
+<li>
+<p>商品 ID 为参数，统计一段时间内最常购买的商品 ID 并进行限制</p>
+</li>
+<li>
+<p>用户 ID 为参数，针对一段时间内频繁访问的用户 ID 进行限制
+热点参数限流会统计传入参数中的热点参数，并根据配置的限流阈值与模式，对包含热点参数的资源调用进行限流。热点参数限流可以看做是一种特殊的流量控制，仅对包含热点参数的资源调用生效。</p>
+</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WithResourceExtractor</code></td>
+<td><code>WithResourceExtractor</code> 为设置网络请求的自定义函数，通过自定义的资源名和 Sentinel-golang 中的 热点参数流控规则 的 <code>Resource</code> 相匹配以达到自定义规则的目的</td>
+</tr>
+<tr>
+<td><code>WithBlockFallback</code></td>
+<td><code>WithBlockFallback</code> 为设置请求被阻断时的自定义回调函数，可以通过 <code>context.Context</code> 和 <code>app.RequestContext</code> 分别来进行错误日志打印和自定义回调处理</td>
+</tr>
+</tbody>
+</table>
+<h3>如何使用提供的自定义函数</h3>
+<p>以下为使用 <code>WithResourceExtracto</code>r 时的伪代码</p>
+<pre><code class="language-go"><span class="hljs-comment">// eg：FullPath 为 /ping</span>
+h.use(SentinelMiddleware(
+    WithResourceExtractor(
+       <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(c context.Context, ctx *app.RequestContext)</span> <span class="hljs-title">string</span></span> {
+          <span class="hljs-keyword">return</span> ctx.FullPath()
+       },
+    ),
+))
+
+<span class="hljs-comment">// 默认的 resourceName eg: GET:/ping</span>
+resourceName := <span class="hljs-keyword">string</span>(c.Request.Method()) + <span class="hljs-string">":"</span> + c.FullPath()
+
+<span class="hljs-comment">// 通过 WithResourceExtractor 使用自定义的 resourceName </span>
+<span class="hljs-keyword">if</span> options.resourceExtract != <span class="hljs-literal">nil</span> {
+   <span class="hljs-comment">// 为上方定义的 /ping </span>
+   resourceName = options.resourceExtract(ctx, c)
+}
+
+<span class="hljs-comment">// 将 resourceName 放入 sentinel.Entry</span>
+entry, err := sentinel.Entry(
+   resourceName,
+   sentinel.WithResourceType(base.ResTypeWeb),
+   sentinel.WithTrafficType(base.Inbound),
+)
+</code></pre>
+<p>以下为使用 <code>WithBlockFallback</code> 时进行自定义错误返回的伪代码</p>
+<pre><code class="language-Go"><span class="hljs-comment">// 在 block 时 返回自定义的 json 数据</span>
+h.use(SentinelMiddleware(
+    WithBlockFallback(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(c context.Context, ctx *app.RequestContext)</span></span> {
+       ctx.AbortWithStatusJSON(<span class="hljs-number">400</span>, <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>{}{
+          <span class="hljs-string">"code"</span>:    <span class="hljs-number">400</span>,
+          <span class="hljs-string">"message"</span>: <span class="hljs-string">"busy"</span>,
+       })
+    ),
+)
+
+<span class="hljs-keyword">if</span> options.blockFallback != <span class="hljs-literal">nil</span> {
+   <span class="hljs-comment">// 通过 WithResourceExtractor 使用自定义的 json 返回</span>
+   options.blockFallback(ctx, c)
+} <span class="hljs-keyword">else</span> {
+   <span class="hljs-comment">// 默认返回 http.StatusTooManyRequests: 403</span>
+   c.AbortWithStatus(http.StatusTooManyRequests)
+}
+</code></pre>
+<h3>Hertz Server 中间件的业务实现</h3>
+<h4>自定义函数的注入原理</h4>
+<p><code>evaluateServerOptions</code> 为 server middleware 的 option 注入函数，它内部将存放默认的实现逻辑，用户可以通过自定义 option 的方式将默认实现替换为自定义逻辑</p>
+<pre><code class="language-Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">evaluateServerOptions</span><span class="hljs-params">(opts []ServerOption)</span> *<span class="hljs-title">serverOptions</span></span> {
+   <span class="hljs-comment">// 提供默认实现 </span>
+   options := &amp;serverOptions{
+      resourceExtract: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(c context.Context, ctx *app.RequestContext)</span> <span class="hljs-title">string</span></span> {
+         <span class="hljs-keyword">return</span> fmt.Sprintf(<span class="hljs-string">"%v:%v"</span>, <span class="hljs-keyword">string</span>(ctx.Request.Method()), ctx.FullPath())
+      },
+      blockFallback: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(c context.Context, ctx *app.RequestContext)</span></span> {
+         ctx.AbortWithStatus(http.StatusTooManyRequests)
+      },
+   }
+   <span class="hljs-comment">// 将用户的自定义 option 同默认配置进行替换</span>
+   options.Apply(opts)
+   <span class="hljs-keyword">return</span> options
+}
+</code></pre>
+<h4>Server Middleware 的实现逻辑</h4>
+<blockquote>
+<p>使用 Sentinel 的 Entry API 将业务逻辑封装起来，这一步称为“埋点”。每个埋点都有一个资源名称（resource），代表触发了这个资源的调用或访问。</p>
+</blockquote>
+<p>以下为大致的伪代码：</p>
+<pre><code class="language-Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SentinelServerMiddleware</span><span class="hljs-params">(opts ...Option)</span> <span class="hljs-title">app</span>.<span class="hljs-title">HandlerFunc</span></span> {
+   options := evaluateOptions(opts)
+   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, c *app.RequestContext)</span></span> {
+      <span class="hljs-comment">// 获取默认的 resourceName 或自定义的资源名</span>
+     resourceName := options.resourceExtract(c, ctx)
+   
+      <span class="hljs-comment">// 进行埋点</span>
+      entry, err := sentinel.Entry(
+         resourceName,
+         sentinel.WithResourceType(base.ResTypeWeb),
+         sentinel.WithTrafficType(base.Inbound),
+      )
+      <span class="hljs-comment">// 产生 err 就应该停止继续业务逻辑</span>
+      <span class="hljs-comment">// 使用默认的响应逻辑或自定义的响应逻辑</span>
+    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+       options.blockFallback(c, ctx)
+       <span class="hljs-keyword">return</span>
+    }
+      <span class="hljs-keyword">defer</span> entry.Exit()
+      c.Next(ctx)
+   }
+}
+</code></pre>
+<p>请求进入中间件的逻辑流程图：</p>
+<p><img src="./img/sentinel-golang-hertz1.jpg" alt=""></p>
+<h2>Hertz adapter 和 Sentinel Gin adpter 的差异</h2>
+<ul>
+<li>
+<p>Hertz 提供客户端和服务端的功能，和 gin 并不一样，gin 只提供服务端功能</p>
+</li>
+<li>
+<p>Hertz server 和 client 的 middleware 原理实现并不相同，Hertz server 使用 <code>app.HandlerFunc</code> Hertz middleware 使用 <code>middleware.Endpoint</code> ，所以需要分别编写</p>
+</li>
+<li>
+<p>将中间件处理函数 <code>gin.HandlerFunc</code> 置换为 Hertz 的 <code>app.HandlerFunc</code></p>
+</li>
+<li>
+<p>将option的基本类型从gin 的 <code>HandlerFunc</code>替换Hertz 的 <code>HandlerFunc</code> 对请求进行自定义处理</p>
+</li>
+</ul>
+<pre><code class="language-Go"><span class="hljs-comment">// gin 的 HandlerFunc</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(*gin.Context)</span>
+// <span class="hljs-title">hertz</span> 的 <span class="hljs-title">HandlerFunc</span>
+<span class="hljs-title">func</span><span class="hljs-params">(ctx context.Context, c *app.RequestContext)</span>
+</span></code></pre>
+<h2>Sentinel Hertz client adapter 实现</h2>
+<ol>
+<li>中间件函数使用 hertz client middleware 的 <code>middleware.Endpoint</code></li>
+<li>由于 client middleware 必须保持<strong>默认</strong>格式，所以使用构造函数从外部给 middlware 函数内部 的options 进行赋值，最后返回一个统一格式的中间件</li>
+</ol>
+<h3>自定义函数的注入原理</h3>
+<p><code>evaluateClientOptions</code> 为 client middleware 的 option 注入函数，它内部将存放默认的实现逻辑，用户可以通过自定义 option 的方式将默认实现替换为自定义逻辑</p>
+<p>以下为 <code>evaluateClientOptions</code> 的实现伪代码</p>
+<pre><code class="language-Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">evaluateClientOptions</span><span class="hljs-params">(opts []ClientOption)</span> *<span class="hljs-title">clientOptions</span></span> {
+    <span class="hljs-comment">// 提供默认实现 </span>
+   options := &amp;clientOptions{
+      resourceExtractForClient: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, req *protocol.Request, resp *protocol.Response)</span> <span class="hljs-title">string</span></span> {
+         <span class="hljs-keyword">return</span> fmt.Sprintf(<span class="hljs-string">"%v:%v"</span>, <span class="hljs-keyword">string</span>(req.Method()), <span class="hljs-keyword">string</span>(req.Path()))
+      },
+      blockFallbackForClient: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, req *protocol.Request, resp *protocol.Response)</span></span> {
+         resp.SetStatusCode(http.StatusTooManyRequests)
+      },
+   }
+   <span class="hljs-comment">// 将用户的自定义 option 同默认配置进行替换</span>
+   options.Apply(opts)
+   <span class="hljs-keyword">return</span> options
+}
+</code></pre>
+<p>以下为伪代码：</p>
+<pre><code class="language-Go"><span class="hljs-comment">// 中间件默认格式</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(next client.Endpoint)</span> <span class="hljs-title">client</span>.<span class="hljs-title">Endpoint</span></span> {
+   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, req *protocol.Request, resp *protocol.Response)</span> <span class="hljs-params">(err error)</span></span> {
+     <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span> 
+   }
+}
+
+<span class="hljs-comment">// 构造函数的初步实现方案</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SentinelClientMiddleware</span><span class="hljs-params">(opts ...Option)</span> <span class="hljs-title">client</span>.<span class="hljs-title">Endpoint</span></span> {
+   <span class="hljs-comment">// 注入 option</span>
+   options := evaluateClientOptions(opts)
+   <span class="hljs-comment">// 进行中间件实现</span>
+   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(next client.Endpoint)</span> <span class="hljs-title">client</span>.<span class="hljs-title">Endpoint</span></span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, req *protocol.Request, resp *protocol.Response)</span> <span class="hljs-params">(err error)</span></span> {
+         <span class="hljs-comment">// 进行option注入以及进行埋点处理等</span>
+         ...
+         err = next(ctx, req, resp)
+         <span class="hljs-comment">// 处理错误</span>
+         <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+            <span class="hljs-keyword">return</span> err
+         }
+         <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+      }
+   }
+}
+</code></pre>
+<ul>
+<li>Client middleware 逻辑使用伪代码展示</li>
+</ul>
+<pre><code class="language-Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SentinelClientMiddleware</span><span class="hljs-params">(opts ...ClientOption)</span> <span class="hljs-title">client</span>.<span class="hljs-title">Middleware</span></span> {
+   <span class="hljs-comment">// 注入默认实现或用户的自定义实现</span>
+   options := evaluateClientOptions(opts)
+   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(next client.Endpoint)</span> <span class="hljs-title">client</span>.<span class="hljs-title">Endpoint</span></span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, req *protocol.Request, resp *protocol.Response)</span> <span class="hljs-params">(err error)</span></span> {
+         <span class="hljs-comment">// 使用默认ResourceName: eg: GET:/ping 或自定义资源名</span>
+         resourceName := options.resourceExtractForClient(ctx, req, resp)
+          <span class="hljs-comment">// 进行埋点</span>
+         entry, blockErr := sentinel.Entry(
+            resourceName,
+            sentinel.WithResourceType(base.ResTypeWeb),
+            sentinel.WithTrafficType(base.Outbound),
+         )
+         <span class="hljs-comment">// 发生熔断，应停止继续</span>
+         <span class="hljs-keyword">if</span> blockErr != <span class="hljs-literal">nil</span> {
+            <span class="hljs-comment">// 使用默认响应或用户自定义响应</span>
+            options.blockFallbackForClient(ctx, req, resp)
+            <span class="hljs-keyword">return</span>
+         }
+         <span class="hljs-keyword">defer</span> entry.Exit()
+         err = next(ctx, req, resp)
+         <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+            sentinel.traceError(entry, err)
+            <span class="hljs-keyword">return</span> err
+         }
+         <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+      }
+   }
+}
+</code></pre>
+<p>Client 的基本业务流程图：</p>
+<p><img src="./img/sentinel-golang-hertz2.jpg" alt=""></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2022 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

@@ -66,6 +66,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: 'Sentinel Go 毫秒级统计数据结构揭秘',
+        author: '张斌斌',
+        desc: '本文将揭秘 Sentienl Go 底层是如何实现的毫秒级指标数据存储与统计。',
+        dateStr: '2022/10/10',
+        link: '/zh-cn/blog/sentinel-go-internal-data-structure.html',
+      },
+      {
         title: 'Hertz 和 Sentinel Go 的对接方案',
         author: 'Skyenought',
         desc: '这篇文章将介绍如何使 CloudWeGo Hertz 可以以中间件的形式引入 Sentinel Go 从而实现流控降级能力。',

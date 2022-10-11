@@ -41,7 +41,7 @@ func tryAcquire() bool {
 
 如下图，统计周期为1S,限流阈值是2的情况下，假设4次请求恰好“跨越”了固定的时间窗口，如红色的1S时间窗口所示会有四次请求，明显不符合限流的预期：
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809235716-eb98a842-c561-454e-8264-f5d74b15de08.png)
+![sentinel-go-data-structure-fixed-window.png](img/sentinel-go-data-structure-fixed-window.png)
 
 ## 滑动时间窗口
 
@@ -52,7 +52,7 @@ func tryAcquire() bool {
 
 如下所示，统计周期为1s，每个周期内分为两个格子，每个格子的长度是500ms：
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809216031-a83abbd5-d788-4bc4-a74a-9a368e35a42d.png)
+![sentinel-go-data-structure-sliding-window.png](img/sentinel-go-data-structure-sliding-window.png)
 
 在滑动窗口中统计周期以及窗口的大小，需要根据业务情况进行设定。
 
@@ -80,7 +80,7 @@ type BucketWrap struct {
 
 如下:统计周期1s,每个窗口的长度是200ms
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809430107-7a881188-5a9f-4dec-8297-7c1d6ccfa78d.png)
+![sentinel-go-data-structure-window-struct.png](img/sentinel-go-data-structure-window-struct.png)
 
 **指标数据:**
 
@@ -96,11 +96,11 @@ type BucketWrap struct {
 
 在上面介绍了为了解决边界问题，滑动时间窗口统计的过程需要向右滑动。随时时间的推移，无限的向右滑动，势必会让slice持续的扩张，导致slice的容量“无限”增长
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809530011-0777a4ee-dc65-4d66-946e-1ff35acd6468.png)
+![sentinel-go-data-structure-slice.png](img/sentinel-go-data-structure-slice.png)
 
 为了解决这个问题，在 Sentinel Go 中实现了一个**时间轮**的概念，通过固定slice长度将过期的时间窗口重置，节省空间。
 
-[image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809576849-105f80ea-b21b-4e6b-8b35-5ccc56530614.png)
+![sentinel-go-data-structure-time-round.png](img/sentinel-go-data-structure-time-round.png)
 
 如下：原子时间轮数据结构
 
@@ -126,7 +126,7 @@ func calculateStartTime(now uint64, bucketLengthInMs uint32) uint64 {
 // 窗口下标位置
 idx := int((now / uint64(bucketLengthInMs)) % uint64(len))
 ```
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809716417-340ebe2a-d8cf-45d5-8eec-b7151d5bcf3d.png)
+![sentinel-go-data-structure-index.png](img/sentinel-go-data-structure-index.png)
 
 2. 初始化窗口数据结构（BucketWrap）
 
@@ -151,7 +151,7 @@ for i := 0; i < idx; i++ {
 }
 ```
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664809926111-aa984af3-ffd6-4f08-b711-2fd559070442.png)
+![sentinel-go-data-structure-init.png](img/sentinel-go-data-structure-init.png)
 
 3. 将窗口数组首元素地址设置到原子时间轮：
 
@@ -208,7 +208,7 @@ func (aa *AtomicBucketWrapArray) elementOffset(idx int) (unsafe.Pointer, bool) {
 2. 根据下标位置在elementOffset func中，首先将底层的slice首元素地址转换成uintptr，然后将窗口对应下标*对应的指针字节大小即可以得到对应窗口元素的地址
 3. 将对应窗口地址转换成时间窗口（`*BucketWarp`）即可
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664810079545-9515a623-f66b-4331-b94b-6597b09ee6ff.png)
+![sentinel-go-data-structure-slice-calculate.png](img/sentinel-go-data-structure-slice-calculate.png)
 
 **窗口更新**：和获取窗口一样，获取到对应下标位置的窗口地址，然后利用 `atomic.CompareAndSwapPointer` 进行 CAS 更新，将新的窗口指针地址更新到底层数组中。
 
@@ -259,7 +259,7 @@ func (la *LeapArray) ValuesConditional(now uint64, predicate base.TimePredicate)
 
 如下图所示：统计周期=1000ms（跨两个格子），now=1300时 计算出 start=500,end=1000:
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664810153196-7cc78b85-b169-459e-b79d-0739a0374b5e.png)
+![sentinel-go-data-structure-start.png](img/sentinel-go-data-structure-start.png)
 
 那么在计算周期内的pass数量时，会根据如下条件遍历格子，也就会找到开始时间是500和1000的两个格子，那么统计的时候1000的这个格子中的数据自然也会被统计到。（当前时间1300，在1000的这个格子中）
 
@@ -275,11 +275,11 @@ satisfiedBuckets := m.real.ValuesConditional(now, func(ws uint64) bool {
 
 如下图：根据窗口开始时间匹配发现0号窗口已过期：
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664810244540-85b11be9-34b5-4b00-a01f-f44f3e5b8e6d.png)
+![sentinel-go-data-structure-overdue.png](img/sentinel-go-data-structure-overdue.png)
 
 如下图：重置窗口的开始时间和统计指标：
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664810284863-60de1a29-7b90-4f5b-bb8e-b417ed454663.png)
+![sentinel-go-data-structure-reset.png](img/sentinel-go-data-structure-reset.png)
 
 核心代码：
 
@@ -327,7 +327,7 @@ func (la *LeapArray) currentBucketOfTime(now uint64, bg BucketGenerator) (*Bucke
 
 Sentinel Go 的整体的数据结构图：
 
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/215568/1664810329713-a977e44b-261c-4039-8d2a-32b29eb405e7.png)
+![sentinel-go-data-structure-all.png](img/sentinel-go-data-structure-all.png)
 
 ### 作者介绍
 张斌斌（GitHub 账号：binbin0325，公众号：柠檬汁Code）Sentinel-Golang Committer 、ChaosBlade Committer 、 Nacos PMC 、Apache Dubbo-Go Committer。目前主要关注于混沌工程、中间件以及云原生方向。

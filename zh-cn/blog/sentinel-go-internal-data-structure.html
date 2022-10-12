@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163094446-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-163094446-1');
+	</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="sentinel-go-internal-data-structure" />
+	<meta name="description" content="sentinel-go-internal-data-structure" />
+	<!-- 网页标签标题 -->
+	<title>sentinel-go-internal-data-structure</title>
+	<link rel="shortcut icon" href="/img/sentinel.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/sentinel_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><span><a href="/zh-cn/index.html">首页</a></span></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/docs/introduction.html">文档</a></span></li><li class="menu-item menu-item-normal"><div class="nav-container"><div class="word"><a>解决方案</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></div><ul class="sub-nav-container" style="width:220px"><li><a href="https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0" target="_blank">微服务解决方案</a></li><li><a href="https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0" target="_blank">高可用解决方案</a></li><li><a href="https://www.aliyun.com/aliware/txc?sentinel-website.topbar.0.0.0" target="_blank">分布式事务解决方案</a></li><li><a href="https://cn.aliyun.com/product/aliware/sae?sentinel-website.topbar.0.0.0" target="_blank">微服务Serverless解决方案</a></li><li><a href="https://www.aliyun.com/product/edas?sentinel-website.topbar.0.0.0" target="_blank">APaaS解决方案</a></li><li><a href="https://www.aliyun.com/product/servicemesh?sentinel-website.topbar.0.0.0" target="_blank">服务网格解决方案</a></li></ul> </div></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/docs/developers/developers_dev.html">开发者</a></span></li><li class="menu-item menu-item-normal menu-item-normal-active"><span><a href="/zh-cn/blog/index.html">博客</a></span></li><li class="menu-item menu-item-normal"><span><a href="/zh-cn/community/index.html">社区</a></span></li><li class="menu-item menu-item-normal"><span><a href="https://developer.aliyun.com/ebook/7565?spm=sentinel-website.topbar.0.0.0">服务治理白皮书</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></span></li><li class="menu-item menu-item-normal"><span><a href="https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0">企业版 Sentinel</a><img class="menu-img" src="https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png"/></span></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Sentinel Go 毫秒级统计数据结构揭秘</h1>
+<h2>介绍</h2>
+<p>随着微服务的流行，服务和服务之间的稳定性变得越来越重要。在2020年，Sentinel 社区推出 <a href="https://github.com/alibaba/sentinel-golang">Sentinel Go 版本</a>，朝着云原生方向演进。Sentinel Go 作为流量治理组件，主要以流量为切入点，从流量路由、流量控制、流量整形、熔断降级、系统自适应过载保护、热点流量防护等多个维度来帮助开发者保障微服务的稳定性。</p>
+<p>无论是流量控制还是熔断降级，实现的核心思想都是通过统计一段时间内的指标数据（请求数/错误数等），然后根据预选设定的阈值判断是否应该进行流量管控</p>
+<p>那么如何存储并统计这一段时间内的指标数据则是核心关键，本文将揭秘 Sentienl Go 是如何实现的<strong>毫秒级指标数据存储与统计。</strong></p>
+<h2>固定窗口</h2>
+<p>在正式介绍之前，先简单介绍一下固定窗口的算法（也叫计数器算法）是实现流量控制比较简单的一种方式。其他常见的还有很多例如滑动时间窗口算法，漏桶算法，令牌桶算法等等。</p>
+<p>固定窗口算法一般是通过原子操作将请求在统计周期内进行累加，然后当请求数大于阈值时进行限流。实现代码：</p>
+<pre><code class="language-go"><span class="hljs-keyword">var</span> (
+    counter    <span class="hljs-keyword">int64</span> <span class="hljs-comment">//计数</span>
+    intervalMs <span class="hljs-keyword">int64</span> = <span class="hljs-number">1000</span> <span class="hljs-comment">//窗口长度(1S)</span>
+    threshold  <span class="hljs-keyword">int64</span> = <span class="hljs-number">2</span> <span class="hljs-comment">//限流阈值</span>
+    startTime        = time.Now().UnixMilli() <span class="hljs-comment">//窗口开始时间</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++ {
+       <span class="hljs-keyword">if</span> tryAcquire() {
+          fmt.Println(<span class="hljs-string">"成功请求"</span>, time.Now().Unix())
+      }
+   }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">tryAcquire</span><span class="hljs-params">()</span> <span class="hljs-title">bool</span></span> {
+    <span class="hljs-keyword">if</span> time.Now().UnixMilli()-atomic.LoadInt64(&amp;startTime) &gt; intervalMs {
+       atomic.StoreInt64(&amp;startTime, time.Now().UnixMilli())
+       atomic.StoreInt64(&amp;counter, <span class="hljs-number">0</span>)
+   }
+    <span class="hljs-keyword">return</span> atomic.AddInt64(&amp;counter, <span class="hljs-number">1</span>) &lt;= threshold
+}
+</code></pre>
+<p>固定窗口的限流在实现上看起来比较简单容易，但是也有一些问题，最典型的就是“边界”问题。</p>
+<p>如下图，统计周期为1S,限流阈值是2的情况下，假设4次请求恰好“跨越”了固定的时间窗口，如红色的1S时间窗口所示会有四次请求，明显不符合限流的预期：</p>
+<p><img src="img/sentinel-go-data-structure-fixed-window.png" alt="sentinel-go-data-structure-fixed-window.png"></p>
+<h2>滑动时间窗口</h2>
+<p>在滑动时间窗口算法中可以解决固定窗口算法的边界问题，在滑动窗口算法中通常有两个比较重要的概念</p>
+<ul>
+<li>统计周期：例如想限制5S的请求数不能超过100次，那么5S就是统计周期</li>
+<li>窗口(格子)的大小：一个周期内会有多个窗口(格子)进行指标（例如请求数）的统计，长度相等的统计周期，格子的数量越多，统计的越精确</li>
+</ul>
+<p>如下所示，统计周期为1s，每个周期内分为两个格子，每个格子的长度是500ms：</p>
+<p><img src="img/sentinel-go-data-structure-sliding-window.png" alt="sentinel-go-data-structure-sliding-window.png"></p>
+<p>在滑动窗口中统计周期以及窗口的大小，需要根据业务情况进行设定。</p>
+<ul>
+<li><strong>统计周期一致，窗口大小不一致</strong>：窗口越大统计精准度越低，但并发性能好；窗口越小，统计精准度越高，但并发性能随之降低</li>
+<li><strong>统计周期不一致，窗口大小一致</strong>：周期越长抗流量脉冲情况越好</li>
+</ul>
+<h2>统计结构</h2>
+<p>下面将详细介绍 Sentinel-Go 是如何使用滑动时间窗口高效的存储和统计指标数据的。</p>
+<h3>窗口结构</h3>
+<p>在滑动时间窗口中时间很重要。每个窗口（BucketWrap）的组成是由一个开始时间和一个抽象的统计结构</p>
+<pre><code class="language-go"><span class="hljs-keyword">type</span> BucketWrap <span class="hljs-keyword">struct</span> {
+   <span class="hljs-comment">// BucketStart represents start timestamp of this statistic bucket wrapper.</span>
+   BucketStart <span class="hljs-keyword">uint64</span>
+   <span class="hljs-comment">// Value represents the actual data structure of the metrics (e.g. MetricBucket).</span>
+   Value atomic.Value
+}
+</code></pre>
+<ul>
+<li><strong>开始时间</strong>：当前格子的的起始时间</li>
+<li><strong>统计结构</strong>：存储指标数据，原子操作并发安全</li>
+</ul>
+<p>如下:统计周期1s,每个窗口的长度是200ms</p>
+<p><img src="img/sentinel-go-data-structure-window-struct.png" alt="sentinel-go-data-structure-window-struct.png"></p>
+<p><strong>指标数据:</strong></p>
+<ol>
+<li>pass: 表示到来的数量，即此刻通过 Sentinel-Go 规则的流量数量</li>
+<li>block: 表示被拦截的流量数量</li>
+<li>complete: 表示完成的流量数量，包含正常结束和异常结束的情况</li>
+<li>error: 表示错误的流量数量（熔断场景使用）</li>
+<li>rt： 单次请求的request time</li>
+<li>total：暂时无用</li>
+</ol>
+<h3>原子时间轮</h3>
+<p>如上：整个统计周期内有多个时间窗口，在 Sentinel Go 中统计周期是由slice实现的，每个元素对应一个窗口。</p>
+<p>在上面介绍了为了解决边界问题，滑动时间窗口统计的过程需要向右滑动。随时时间的推移，无限的向右滑动，势必会让slice持续的扩张，导致slice的容量“无限”增长</p>
+<p><img src="img/sentinel-go-data-structure-slice.png" alt="sentinel-go-data-structure-slice.png"></p>
+<p>为了解决这个问题，在 Sentinel Go 中实现了一个<strong>时间轮</strong>的概念，通过固定slice长度将过期的时间窗口重置，节省空间。</p>
+<p><img src="img/sentinel-go-data-structure-time-round.png" alt="sentinel-go-data-structure-time-round.png"></p>
+<p>如下：原子时间轮数据结构</p>
+<pre><code class="language-go"><span class="hljs-keyword">type</span> AtomicBucketWrapArray <span class="hljs-keyword">struct</span> {
+   <span class="hljs-comment">// The base address for real data array</span>
+   base unsafe.Pointer <span class="hljs-comment">// 窗口数组首元素地址</span>
+   <span class="hljs-comment">// The length of slice(array), it can not be modified.</span>
+   length <span class="hljs-keyword">int</span> <span class="hljs-comment">// 窗口数组的长度</span>
+   data   []*BucketWrap <span class="hljs-comment">//窗口数组</span>
+}
+</code></pre>
+<h4>初始化</h4>
+<ol>
+<li>根据当前时间计算出当前时间对应的窗口的startime，并得到当前窗口对应的位置：</li>
+</ol>
+<pre><code class="language-go"><span class="hljs-comment">// 计算开始时间</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">calculateStartTime</span><span class="hljs-params">(now <span class="hljs-keyword">uint64</span>, bucketLengthInMs <span class="hljs-keyword">uint32</span>)</span> <span class="hljs-title">uint64</span></span> {
+   <span class="hljs-keyword">return</span> now - (now % <span class="hljs-keyword">uint64</span>(bucketLengthInMs))
+}
+<span class="hljs-comment">// 窗口下标位置</span>
+idx := <span class="hljs-keyword">int</span>((now / <span class="hljs-keyword">uint64</span>(bucketLengthInMs)) % <span class="hljs-keyword">uint64</span>(<span class="hljs-built_in">len</span>))
+</code></pre>
+<p><img src="img/sentinel-go-data-structure-index.png" alt="sentinel-go-data-structure-index.png"></p>
+<ol start="2">
+<li>初始化窗口数据结构（BucketWrap）</li>
+</ol>
+<pre><code class="language-go"><span class="hljs-keyword">for</span> i := idx; i &lt;= <span class="hljs-built_in">len</span><span class="hljs-number">-1</span>; i++ {
+   ww := &amp;BucketWrap{
+      BucketStart: startTime,
+      Value:       atomic.Value{},
+   }
+   ww.Value.Store(generator.NewEmptyBucket())
+   ret.data[i] = ww
+   startTime += <span class="hljs-keyword">uint64</span>(bucketLengthInMs)
+}
+<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; idx; i++ {
+   ww := &amp;BucketWrap{
+      BucketStart: startTime,
+      Value:       atomic.Value{},
+   }
+   ww.Value.Store(generator.NewEmptyBucket())
+   ret.data[i] = ww
+   startTime += <span class="hljs-keyword">uint64</span>(bucketLengthInMs)
+}
+</code></pre>
+<p><img src="img/sentinel-go-data-structure-init.png" alt="sentinel-go-data-structure-init.png"></p>
+<ol start="3">
+<li>将窗口数组首元素地址设置到原子时间轮：</li>
+</ol>
+<pre><code class="language-go"><span class="hljs-comment">// calculate base address for real data array</span>
+sliHeader := (*util.SliceHeader)(unsafe.Pointer(&amp;ret.data))
+ret.base = unsafe.Pointer((**BucketWrap)(unsafe.Pointer(sliHeader.Data)))
+</code></pre>
+<p>如果对unsafe.Pointer和slice熟悉的同学，对于这段代码不难理解。这里通过unsafe.Pointer将底层slice首元素（第一个窗口）地址设置到原子时间轮中。这么做的原因主要是实现对时间轮中的元素（窗口）进行<strong>原子无锁的读取和更新。</strong></p>
+<h4>窗口获取&amp;窗口替换</h4>
+<p>如何在并发安全的情况下读取窗口和对窗口进行替换（时间轮涉及到对窗口更新操作），代码如下：</p>
+<pre><code class="language-go"><span class="hljs-comment">// 获取对应窗口</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(aa *AtomicBucketWrapArray)</span> <span class="hljs-title">get</span><span class="hljs-params">(idx <span class="hljs-keyword">int</span>)</span> *<span class="hljs-title">BucketWrap</span></span> {
+   <span class="hljs-comment">// aa.elementOffset(idx) return the secondary pointer of BucketWrap, which is the pointer to the aa.data[idx]</span>
+   <span class="hljs-comment">// then convert to (*unsafe.Pointer)</span>
+   <span class="hljs-keyword">if</span> offset, ok := aa.elementOffset(idx); ok {
+      <span class="hljs-keyword">return</span> (*BucketWrap)(atomic.LoadPointer((*unsafe.Pointer)(offset)))
+   }
+   <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+}
+
+<span class="hljs-comment">// 替换对应窗口</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(aa *AtomicBucketWrapArray)</span> <span class="hljs-title">compareAndSet</span><span class="hljs-params">(idx <span class="hljs-keyword">int</span>, except, update *BucketWrap)</span> <span class="hljs-title">bool</span></span> {
+   <span class="hljs-comment">// aa.elementOffset(idx) return the secondary pointer of BucketWrap, which is the pointer to the aa.data[idx]</span>
+   <span class="hljs-comment">// then convert to (*unsafe.Pointer)</span>
+   <span class="hljs-comment">// update secondary pointer</span>
+   <span class="hljs-keyword">if</span> offset, ok := aa.elementOffset(idx); ok {
+      <span class="hljs-keyword">return</span> atomic.CompareAndSwapPointer((*unsafe.Pointer)(offset), unsafe.Pointer(except), unsafe.Pointer(update))
+   }
+   <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+}
+
+<span class="hljs-comment">// 获取对应窗口的地址</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(aa *AtomicBucketWrapArray)</span> <span class="hljs-title">elementOffset</span><span class="hljs-params">(idx <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(unsafe.Pointer, <span class="hljs-keyword">bool</span>)</span></span> {
+   <span class="hljs-keyword">if</span> idx &gt;= aa.length || idx &lt; <span class="hljs-number">0</span> {
+      logging.Error(errors.New(<span class="hljs-string">"array index out of bounds"</span>),
+         <span class="hljs-string">"array index out of bounds in AtomicBucketWrapArray.elementOffset()"</span>,
+         <span class="hljs-string">"idx"</span>, idx, <span class="hljs-string">"arrayLength"</span>, aa.length)
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>
+   }
+   basePtr := aa.base
+   <span class="hljs-keyword">return</span> unsafe.Pointer(<span class="hljs-keyword">uintptr</span>(basePtr) + <span class="hljs-keyword">uintptr</span>(idx)*unsafe.Sizeof(basePtr)), <span class="hljs-literal">true</span>
+}
+</code></pre>
+<p><strong>获取窗口</strong>:</p>
+<ol>
+<li>在get func中接收根据当前时间计算出的窗口对应下标位置</li>
+<li>根据下标位置在elementOffset func中，首先将底层的slice首元素地址转换成uintptr，然后将窗口对应下标*对应的指针字节大小即可以得到对应窗口元素的地址</li>
+<li>将对应窗口地址转换成时间窗口（<code>*BucketWarp</code>）即可</li>
+</ol>
+<p><img src="img/sentinel-go-data-structure-slice-calculate.png" alt="sentinel-go-data-structure-slice-calculate.png"></p>
+<p><strong>窗口更新</strong>：和获取窗口一样，获取到对应下标位置的窗口地址，然后利用 <code>atomic.CompareAndSwapPointer</code> 进行 CAS 更新，将新的窗口指针地址更新到底层数组中。</p>
+<h3>滑动窗口</h3>
+<p>在原子时间轮中提供了对窗口读取以及更新的操作。那么<strong>在什么时机触发更新以及如何滑动呢？</strong></p>
+<h4>滑动</h4>
+<p>所谓滑动就是根据当前时间找到整个统计周期的所有窗口中的数据。例如在限流场景下，我们需要获取统计周期内的所有pass的流量，从而来判断当前流量是否应该被限流。</p>
+<p>核心代码如下：</p>
+<pre><code class="language-go"><span class="hljs-comment">// 根据当前时间获取周期内的所有窗口</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(m *SlidingWindowMetric)</span> <span class="hljs-title">getSatisfiedBuckets</span><span class="hljs-params">(now <span class="hljs-keyword">uint64</span>)</span> []*<span class="hljs-title">BucketWrap</span></span> {
+   start, end := m.getBucketStartRange(now)
+   satisfiedBuckets := m.<span class="hljs-built_in">real</span>.ValuesConditional(now, <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ws <span class="hljs-keyword">uint64</span>)</span> <span class="hljs-title">bool</span></span> {
+      <span class="hljs-keyword">return</span> ws &gt;= start &amp;&amp; ws &lt;= end
+   })
+   <span class="hljs-keyword">return</span> satisfiedBuckets
+}
+
+
+<span class="hljs-comment">// 根据当前时间获取整个周期对应的窗口的开始时间和结束时间</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(m *SlidingWindowMetric)</span> <span class="hljs-title">getBucketStartRange</span><span class="hljs-params">(timeMs <span class="hljs-keyword">uint64</span>)</span> <span class="hljs-params">(start, end <span class="hljs-keyword">uint64</span>)</span></span> {
+   curBucketStartTime := calculateStartTime(timeMs, m.<span class="hljs-built_in">real</span>.BucketLengthInMs())
+   end = curBucketStartTime
+   start = end - <span class="hljs-keyword">uint64</span>(m.intervalInMs) + <span class="hljs-keyword">uint64</span>(m.<span class="hljs-built_in">real</span>.BucketLengthInMs())
+   <span class="hljs-keyword">return</span>
+}
+
+<span class="hljs-comment">// 匹配符合条件的窗口</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(la *LeapArray)</span> <span class="hljs-title">ValuesConditional</span><span class="hljs-params">(now <span class="hljs-keyword">uint64</span>, predicate base.TimePredicate)</span> []*<span class="hljs-title">BucketWrap</span></span> {
+   <span class="hljs-keyword">if</span> now &lt;= <span class="hljs-number">0</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">make</span>([]*BucketWrap, <span class="hljs-number">0</span>)
+   }
+   ret := <span class="hljs-built_in">make</span>([]*BucketWrap, <span class="hljs-number">0</span>, la.array.length)
+   <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; la.array.length; i++ {
+      ww := la.array.get(i)
+      <span class="hljs-keyword">if</span> ww == <span class="hljs-literal">nil</span> || la.isBucketDeprecated(now, ww) || !predicate(atomic.LoadUint64(&amp;ww.BucketStart)) {
+         <span class="hljs-keyword">continue</span>
+      }
+      ret = <span class="hljs-built_in">append</span>(ret, ww)
+   }
+   <span class="hljs-keyword">return</span> ret
+}
+</code></pre>
+<p>如下图所示：统计周期=1000ms（跨两个格子），now=1300时 计算出 start=500,end=1000:</p>
+<p><img src="img/sentinel-go-data-structure-start.png" alt="sentinel-go-data-structure-start.png"></p>
+<p>那么在计算周期内的pass数量时，会根据如下条件遍历格子，也就会找到开始时间是500和1000的两个格子，那么统计的时候1000的这个格子中的数据自然也会被统计到。（当前时间1300，在1000的这个格子中）</p>
+<pre><code class="language-go">satisfiedBuckets := m.<span class="hljs-built_in">real</span>.ValuesConditional(now, <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ws <span class="hljs-keyword">uint64</span>)</span> <span class="hljs-title">bool</span></span> { 
+ 		<span class="hljs-keyword">return</span> ws &gt;= start &amp;&amp; ws &lt;= end 
+ 	}) 
+</code></pre>
+<h4>更新</h4>
+<p>每次流量经过时都会进行相应的指标存储，在存储时会先获取对应的窗口，然后会根据窗口的开始时间进行对比，如果过期则进行窗口重置。</p>
+<p>如下图：根据窗口开始时间匹配发现0号窗口已过期：</p>
+<p><img src="img/sentinel-go-data-structure-overdue.png" alt="sentinel-go-data-structure-overdue.png"></p>
+<p>如下图：重置窗口的开始时间和统计指标：</p>
+<p><img src="img/sentinel-go-data-structure-reset.png" alt="sentinel-go-data-structure-reset.png"></p>
+<p>核心代码：</p>
+<pre><code class="language-go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(la *LeapArray)</span> <span class="hljs-title">currentBucketOfTime</span><span class="hljs-params">(now <span class="hljs-keyword">uint64</span>, bg BucketGenerator)</span> <span class="hljs-params">(*BucketWrap, error)</span></span> {
+   <span class="hljs-comment">// 计算当前时间对应的窗口下标</span>
+   idx := la.calculateTimeIdx(now)
+   <span class="hljs-comment">// 计算当前时间对应的窗口的开始时间</span>
+   bucketStart := calculateStartTime(now, la.bucketLengthInMs)
+
+   <span class="hljs-keyword">for</span> {
+     <span class="hljs-comment">// 获取旧窗口</span>
+      old := la.array.get(idx)
+      <span class="hljs-comment">// 如果旧窗口==nil则初始化(正常不会执行这部分代码)</span>
+      <span class="hljs-keyword">if</span> old == <span class="hljs-literal">nil</span> {
+         newWrap := &amp;BucketWrap{
+            BucketStart: bucketStart,
+            Value:       atomic.Value{},
+         }
+         newWrap.Value.Store(bg.NewEmptyBucket())
+         <span class="hljs-keyword">if</span> la.array.compareAndSet(idx, <span class="hljs-literal">nil</span>, newWrap) {
+            <span class="hljs-keyword">return</span> newWrap, <span class="hljs-literal">nil</span>
+         } <span class="hljs-keyword">else</span> {
+            runtime.Gosched()
+         }
+      <span class="hljs-comment">// 如果本次计算的开始时间等于旧窗口的开始时间，则认为窗口没有过期，直接返回</span>
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> bucketStart == atomic.LoadUint64(&amp;old.BucketStart) {
+         <span class="hljs-keyword">return</span> old, <span class="hljs-literal">nil</span>
+      <span class="hljs-comment">//  如果本次计算的开始时间大于旧窗口的开始时间，则认为窗口过期尝试重置</span>
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> bucketStart &gt; atomic.LoadUint64(&amp;old.BucketStart) {
+         <span class="hljs-keyword">if</span> la.updateLock.TryLock() {
+            old = bg.ResetBucketTo(old, bucketStart)
+            la.updateLock.Unlock()
+            <span class="hljs-keyword">return</span> old, <span class="hljs-literal">nil</span>
+         } <span class="hljs-keyword">else</span> {
+            runtime.Gosched()
+         }
+        ......
+      } 
+}
+</code></pre>
+<h2>总结</h2>
+<p>通过上面的介绍可以了解到在 Sentienl Go 中实现底层指标的统计代码量并不多，本质是通过“时间轮”进行指标的数据统计和存储，在时间轮中借鉴slice的底层实现利用unsafe.Pointer和atomic配合对时间轮进行无锁的原子操作，极大的提升了性能。</p>
+<p>Sentinel Go 的整体的数据结构图：</p>
+<p><img src="img/sentinel-go-data-structure-all.png" alt="sentinel-go-data-structure-all.png"></p>
+<h3>作者介绍</h3>
+<p>张斌斌（GitHub 账号：binbin0325，公众号：柠檬汁Code）Sentinel-Golang Committer 、ChaosBlade Committer 、 Nacos PMC 、Apache Dubbo-Go Committer。目前主要关注于混沌工程、中间件以及云原生方向。</p>
+<h3>文章参考</h3>
+<ul>
+<li><a href="https://louyuting.blog.csdn.net/article/details/103826830">惜暮大佬巨作【unsafe.Pointer使用原则】</a></li>
+</ul>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/sentinel_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>Sentinel is an open-source project under Apache License 2.0.</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/quick-start.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/contribution/contribution-guideline.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 - 2022 The Sentinel Authors | An Alibaba Middleware (Aliware) Project</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

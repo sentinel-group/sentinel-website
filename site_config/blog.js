@@ -4,6 +4,13 @@ export default {
     postsTitle: 'All posts',
     list: [
       {
+        title: 'Sentinel 1.8.6 released',
+        author: 'Eric Zhao',
+        dateStr: 'Oct 27th，2022',
+        desc: 'Sentinel 1.8.6 has been released with initial support for OpenSergo fault-tolerance spec.',
+        link: '/en-us/blog/sentinel-1-8-6-release.html',
+      },
+      {
         title: 'Sentinel 1.8.5 released',
         author: 'Eric Zhao',
         dateStr: 'Aug 9th，2022',
@@ -65,6 +72,13 @@ export default {
     barText: '博客',
     postsTitle: '所有文章',
     list: [
+      {
+        title: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流量治理标准',
+        author: 'Eric Zhao',
+        desc: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流控降级与容错等流量治理标准。',
+        dateStr: '2022/10/27',
+        link: '/zh-cn/blog/sentinel-1-8-6-release.html',
+      },
       {
         title: 'Sentinel Go 毫秒级统计数据结构揭秘',
         author: '张斌斌',

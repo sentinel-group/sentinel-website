@@ -7,6 +7,13 @@ export default {
       title: 'Events & News',
       list: [
         {
+          title: 'Sentinel 1.8.6 released',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.8.6 has been released with initial support for OpenSergo fault-tolerance spec.',
+          dateStr: 'Oct 27th，2022',
+          link: '/en-us/blog/sentinel-1-8-6-release.html',
+        },
+        {
           title: 'Sentinel 1.8.5 released',
           img: '/img/DZyHFgnWAAEfldY.jpg',
           content: 'Sentinel 1.8.5 has been released with cool features including Apache Dubbo 3.x support.',
@@ -305,6 +312,13 @@ export default {
     events: {
       title: '事件 & 新闻',
       list: [
+        {
+          title: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流量治理标准',
+          img: '/img/brhtqqzh.jpeg',
+          content: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流控降级与容错等流量治理标准。',
+          dateStr: 'Oct 27th，2022',
+          link: '/zh-cn/blog/sentinel-1-8-6-release.html',
+        },
         {
           title: 'Sentinel 1.8.5 版本发布',
           img: '/img/DZyHFgnWAAEfldY.jpg',

@@ -1,0 +1,4 @@
+{
+  "filename": "sentinel-1-8-5-release copy.md",
+  "__html": "<h1>Sentinel 1.8.5 Released</h1>\n<p><img src=\"https://user-images.githubusercontent.com/9434884/91042203-f670b400-e643-11ea-959a-c24c7c67e3f4.png\" alt=\"sentinel-open-source-eco\"></p>\n<p>We're happy to announce that <a href=\"https://github.com/alibaba/Sentinel/releases/tag/v1.8.5\">Sentinel 1.8.5</a> has been released with improvements and bug fixes including Apache Dubbo 3.x support and dashboard enhancements. For more details, please refer to <a href=\"https://github.com/alibaba/Sentinel/releases/tag/1.8.5\">the release notes</a>.</p>\n"
+}

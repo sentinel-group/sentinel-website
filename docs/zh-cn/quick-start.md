@@ -19,7 +19,7 @@ Sentinel 的使用可以分为两个部分:
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-core</artifactId>
-    <version>1.8.5</version>
+    <version>1.8.6</version>
 </dependency>
 ```
 
@@ -117,7 +117,7 @@ Sentinel 开源控制台支持实时监控和规则管理。接入控制台的�
 <dependency>
     <groupId>com.alibaba.csp</groupId>
     <artifactId>sentinel-transport-simple-http</artifactId>
-    <version>1.8.5</version>
+    <version>1.8.6</version>
 </dependency>
 ```
 

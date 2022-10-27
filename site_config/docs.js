@@ -140,6 +140,10 @@ export default {
                 link: '/zh-cn/docs/dynamic-rule-configuration.html',
               },
               {
+                title: 'OpenSergo 流量治理',
+                link: '/zh-cn/docs/opensergo-data-source.html',
+              },
+              {
                 title: '日志',
                 link: '/zh-cn/docs/logs.html',
               },

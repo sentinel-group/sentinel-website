@@ -11,12 +11,13 @@
 
 	  gtag('config', 'UA-163094446-1');
 	</script>
+	<meta name="aes-config" content="pid=xux-opensource&user_type=101&uid=&username=&dim10=Sentinel" />
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="keywords" content="dynamic-rule-configuration" />
+	<meta name="keywords" content="dynamic-rule-configuration,Sentinel" />
 	<meta name="description" content="dynamic-rule-configuration" />
 	<!-- 网页标签标题 -->
-	<title>dynamic-rule-configuration</title>
+	<title>dynamic-rule-configuration | Sentinel</title>
 	<link rel="shortcut icon" href="/img/sentinel.ico"/>
 	<link rel="stylesheet" href="/build/documentation.css" />
 </head>
@@ -47,6 +48,7 @@ DegradeRuleManager.loadRules(List&lt;DegradeRule&gt; rules); <span class="hljs-c
 <li>Pull-based: 动态文件数据源、<a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-consul">Consul</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-eureka">Eureka</a></li>
 <li>Push-based: <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-zookeeper">ZooKeeper</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-redis">Redis</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-nacos">Nacos</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-apollo">Apollo</a>, <a href="https://github.com/alibaba/Sentinel/tree/master/sentinel-extension/sentinel-datasource-etcd">etcd</a></li>
 </ul>
+<p>流量治理标准数据源：<a href="./opensergo-data-source.md">OpenSergo</a></p>
 <h3>拉模式扩展</h3>
 <p>实现拉模式的数据源最简单的方式是继承 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-extension/sentinel-datasource-extension/src/main/java/com/alibaba/csp/sentinel/datasource/AutoRefreshDataSource.java"><code>AutoRefreshDataSource</code></a> 抽象类，然后实现 <code>readSource()</code> 方法，在该方法里从指定数据源读取字符串格式的配置数据。比如 <a href="https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-dynamic-file-rule/src/main/java/com/alibaba/csp/sentinel/demo/file/rule/FileDataSourceDemo.java">基于文件的数据源</a>。</p>
 <h3>推模式扩展</h3>
@@ -147,7 +149,7 @@ FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
 	<script>
 		window.rootPath = '';
-  </script>
+    </script>
 	<script src="/build/documentation.js"></script>
 </body>
 </html>

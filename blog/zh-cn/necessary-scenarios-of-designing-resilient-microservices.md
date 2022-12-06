@@ -102,7 +102,7 @@ spec:
 
 ### 阿里云微服务解决方案
 
-在阿里云上提供了一款[完全遵循 OpenSergo 微服务标准的企业级产品 MSE](https://www.aliyun.com/product/aliware/mse?sentinel-website.blog.0.0.0)，[MSE 服务治理企业版中的流量治理能力](https://help.aliyun.com/document_detail/429556.html?sentinel-website.blog.0.0.0)我们可以理解为是一个企业版的 Sentinel。下面我们基于 MSE 来演示一下，如何通过流量控制与熔断降级来保护我们的微服务，可以从容地面对不确定性的流量以及一系列不稳定的场景。
+在阿里云上提供了一款[完全遵循 OpenSergo 微服务标准的企业级产品 MSE](https://www.aliyun.com/product/aliware/mse?spm=sentinel-website.blog.0.0.0)，[MSE 服务治理企业版中的流量治理能力](https://help.aliyun.com/document_detail/429556.html?spm=sentinel-website.blog.0.0.0)我们可以理解为是一个企业版的 Sentinel。下面我们基于 MSE 来演示一下，如何通过流量控制与熔断降级来保护我们的微服务，可以从容地面对不确定性的流量以及一系列不稳定的场景。
 
 #### 配置流控规则
 
@@ -114,7 +114,7 @@ spec:
 
 ![image](https://user-images.githubusercontent.com/9434884/177269852-ac56df55-436a-4703-ac50-6bce02b05057.png)
 
-我们可以配置最简单的 [QPS 模式的流控规则](https://help.aliyun.com/document_detail/421958.html?sentinel-website.blog.0.0.0)，比如上面的例子即限制该接口每秒单机调用量不超过 80 次。
+我们可以配置最简单的 [QPS 模式的流控规则](https://help.aliyun.com/document_detail/421958.html?spm=sentinel-website.blog.0.0.0)，比如上面的例子即限制该接口每秒单机调用量不超过 80 次。
 
 #### 监控查看流控效果
 

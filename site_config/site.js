@@ -24,28 +24,24 @@ export default {
         children: [{
           key: 'ahas',
           text: 'High-availability solution',
-          link: 'https://www.aliyun.com/product/ahas?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'micoservice',
           text: 'Microservice solutions',
-          link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
-        }, {
-          key: 'gts',
-          text: 'Distributed transaction solution',
-          link: 'https://www.aliyun.com/aliware/txc?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/aliware/mse?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'serverless',
           text: 'Serverless solution for miscoservices',
-          link: 'https://cn.aliyun.com/product/aliware/sae?sentinel-website.topbar.0.0.0'
+          link: 'https://cn.aliyun.com/product/aliware/sae?spm=sentinel-website.topbar.0.0.0'
         },
         {
           key: 'appas',
           text: 'APaaS solution',
-          link: 'https://www.aliyun.com/product/edas?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/edas?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'mesh',
           text: 'Service mesh solution',
-          link: 'https://www.aliyun.com/product/servicemesh?sentinel-website.topbar.0.0.0',
+          link: 'https://www.aliyun.com/product/servicemesh?spm=sentinel-website.topbar.0.0.0',
         }
         ]
       },
@@ -120,28 +116,24 @@ export default {
         children: [{
           key: 'micoservice',
           text: '微服务解决方案',
-          link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/aliware/mse?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'ahas',
           text: '高可用解决方案',
           link: 'https://www.aliyun.com/product/ahas?spm=sentinel-website.topbar.0.0.0'
         }, {
-          key: 'gts',
-          text: '分布式事务解决方案',
-          link: 'https://www.aliyun.com/aliware/txc?sentinel-website.topbar.0.0.0'
-        }, {
           key: 'serverless',
           text: '微服务Serverless解决方案',
-          link: 'https://cn.aliyun.com/product/aliware/sae?sentinel-website.topbar.0.0.0'
+          link: 'https://cn.aliyun.com/product/aliware/sae?spm=sentinel-website.topbar.0.0.0'
         },
         {
           key: 'appas',
           text: 'APaaS解决方案',
-          link: 'https://www.aliyun.com/product/edas?sentinel-website.topbar.0.0.0'
+          link: 'https://www.aliyun.com/product/edas?spm=sentinel-website.topbar.0.0.0'
         }, {
           key: 'mesh',
           text: '服务网格解决方案',
-          link: 'https://www.aliyun.com/product/servicemesh?sentinel-website.topbar.0.0.0',
+          link: 'https://www.aliyun.com/product/servicemesh?spm=sentinel-website.topbar.0.0.0',
         }
         ]
       },
@@ -169,7 +161,7 @@ export default {
       {
         key: 'mse-ahas',
         text: '企业版 Sentinel',
-        link: 'https://www.aliyun.com/product/aliware/mse?sentinel-website.topbar.0.0.0',
+        link: 'https://www.aliyun.com/product/aliware/mse?spm=sentinel-website.topbar.0.0.0',
         imgUrl: 'https://img.alicdn.com/tfs/TB1esl_m.T1gK0jSZFrXXcNCXXa-200-200.png',
       },
     ],

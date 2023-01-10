@@ -1976,3 +1976,11 @@ h1, h2, h3, h4, h5, h6 {
   .home-page .feature-section, .home-page .users-section {
     padding-left: 20px;
     padding-right: 20px; } }
+
+.msemap-section .msemap-container h3 {
+  font-family: Avenir-Medium;
+  font-weight: 700;
+  font-size: 36px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px; }

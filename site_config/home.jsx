@@ -57,6 +57,9 @@ export default {
         link: '/zh-cn/docs/quick-start.html',
       },
     },
+    msclandscape: {
+      title: '微服务全景图',
+    },
     users: {
       title: 'Who is using Sentinel',
       desc: <p>请在 <a href="https://github.com/alibaba/Sentinel/issues/18">此处</a> 登记并提供反馈来帮助 Sentinel 做的更好 :)</p>,
@@ -128,6 +131,9 @@ export default {
         text: 'READ MORE',
         link: '/en-us/docs/quick-start.html',
       },
+    },
+    msclandscape: {
+      title: 'Microservice Landscape',
     },
     users: {
       title: 'Who is using Sentinel',

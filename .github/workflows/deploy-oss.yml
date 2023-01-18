@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   Build-Deploy:
     runs-on: ubuntu-18.04

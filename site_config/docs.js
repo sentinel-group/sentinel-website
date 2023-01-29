@@ -140,10 +140,6 @@ export default {
                 link: '/zh-cn/docs/dynamic-rule-configuration.html',
               },
               {
-                title: 'OpenSergo 流量治理',
-                link: '/zh-cn/docs/opensergo-data-source.html',
-              },
-              {
                 title: '日志',
                 link: '/zh-cn/docs/logs.html',
               },
@@ -160,6 +156,10 @@ export default {
           {
             title: 'Sentinel 控制台',
             link: '/zh-cn/docs/dashboard.html',
+          },
+          {
+            title: 'OpenSergo 流量治理',
+            link: '/zh-cn/docs/opensergo-data-source.html',
           },
           {
             title: '开源框架适配',

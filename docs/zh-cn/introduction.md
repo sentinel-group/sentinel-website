@@ -10,7 +10,7 @@
 * 2019 年，Sentinel 朝着多语言扩展的方向不断探索，推出 [C++ 原生版本](https://github.com/alibaba/sentinel-cpp)，同时针对 Service Mesh 场景也推出了 [Envoy 集群流量控制支持](https://github.com/alibaba/Sentinel/tree/master/sentinel-cluster/sentinel-cluster-server-envoy-rls)，以解决 Service Mesh 架构下多语言限流的问题。
 * 2020 年，推出 [Sentinel Go 版本](https://github.com/alibaba/sentinel-golang)，继续朝着云原生方向演进。
 * 2021 年，Sentinel 正在朝着 2.0 云原生高可用决策中心组件进行演进；同时推出了 [Sentinel Rust 原生版本](https://github.com/sentinel-group/sentinel-rust)。同时我们也在 Rust 社区进行了 Envoy WASM extension 及 eBPF extension 等场景探索。
-* 2022 年，Sentinel 品牌升级为流量治理，领域涵盖流量路由/调度、流量染色、流控降级、过载保护/实例摘除等；同时社区将流量治理相关标准抽出到 [OpenSergo 标准](https://opensergo.io/)中，Sentinel 作为流量治理标准实现。
+* 2022 年，Sentinel 品牌升级为流量治理，领域涵盖流量路由/调度、流量染色、流控降级、过载保护/实例摘除等；同时社区将流量治理相关标准抽出到 [OpenSergo 标准](https://opensergo.io/zh-cn/)中，Sentinel 作为流量治理标准实现。
 
 ## Sentinel 基本概念
 
@@ -81,6 +81,6 @@ Sentinel 的主要工作机制如下：
 
 ## 流控降级与容错标准
 
-Sentinel 社区正在将流量治理相关标准抽出到 [OpenSergo 标准](https://opensergo.io/zh-cn/)中，Sentinel 作为流量治理标准实现。有关 Sentinel 流控降级与容错 spec 的最新进展，请参考 [opensergo-specification](https://github.com/opensergo/opensergo-specification/blob/main/specification/zh-Hans/fault-tolerance.md)，也欢迎社区一起来完善标准与实现。
+Sentinel 社区正在将流量治理相关标准抽出到 [OpenSergo spec](https://opensergo.io/zh-cn/) 中，Sentinel 作为流量治理标准实现。有关 Sentinel 流控降级与容错 spec 的最新进展，请参考 [opensergo-specification](https://github.com/opensergo/opensergo-specification/blob/main/specification/zh-Hans/fault-tolerance.md)，也欢迎社区一起来完善标准与实现。
 
-![opensergo-and-sentinel](https://user-images.githubusercontent.com/9434884/183335605-4215c142-3f30-4cfb-a1f1-a235a44d024b.png)
+![opensergo-and-sentinel](./img/opensergo/opensergo-sentinel-fault-tolerance-zh-cn.jpg)

@@ -6,7 +6,7 @@ Sentinel 社区提供对接 OpenSergo spec 的动态数据源模块 [`sentinel-d
 
 > 注意：该适配模块目前还在 beta 阶段。目前 Sentinel OpenSergo 数据源支持流控规则、匀速排队规则以及熔断规则。
 
-![image](https://user-images.githubusercontent.com/9434884/186125289-efb5e75a-0d6d-486c-a577-f986024ad911.png)
+![image](../../img/opensergo/sentinel-opensergo-datasource-arch.jpg)
 
 以 Java 版本为例，首先 Maven 引入依赖：
 
@@ -19,7 +19,7 @@ Sentinel 社区提供对接 OpenSergo spec 的动态数据源模块 [`sentinel-d
 </dependency>
 ```
 
-然后在项目合适的位置（如 Spring 初始化 hook 或 Sentinel InitFunc 中）中创建并注册 Sentinel OpenSergo 数据源：
+然后在项目合适的位置（如 Spring 初始化 hook 或 Sentinel `InitFunc` 中）中创建并注册 Sentinel OpenSergo 数据源。在应用启动前，确保 OpenSergo 控制面及 CRD 已经部署在 Kubernetes 集群中，可以参考[控制面快速部署文档](https://opensergo.io/zh-cn/docs/quick-start/opensergo-control-plane/)。
 
 ```java
 // 传入 OpenSergo Control Plane 的 endpoint，以及希望监听的应用名.
@@ -33,3 +33,5 @@ FlowRuleManager.register2Property(openSergo.subscribeFlowRules());
 ```
 
 启动应用后，即可编写 [FaultToleranceRule、RateLimitStrategy 等 CR YAML](https://github.com/opensergo/opensergo-specification/blob/main/specification/zh-Hans/fault-tolerance.md) 来动态配置流控容错规则，通过 kubectl apply 到集群中即可生效。
+
+Sentinel 社区提供了一个 [Spring Boot 应用接入 OpenSergo 数据源的 demo](https://github.com/alibaba/Sentinel/blob/master/sentinel-demo/sentinel-demo-opensergo-datasource/README.zh-cn.md)，可作参考。

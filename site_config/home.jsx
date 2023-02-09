@@ -58,7 +58,7 @@ export default {
       },
     },
     msclandscape: {
-      title: '微服务全景图',
+      title: '微服务生态全景图',
     },
     users: {
       title: 'Who is using Sentinel',
@@ -133,7 +133,7 @@ export default {
       },
     },
     msclandscape: {
-      title: 'Microservice Landscape',
+      title: 'Microservice Ecosystem Landscape',
     },
     users: {
       title: 'Who is using Sentinel',

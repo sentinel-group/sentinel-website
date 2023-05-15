@@ -73,6 +73,13 @@ export default {
     postsTitle: '所有文章',
     list: [
       {
+        title: '中科院开源之夏 2023 Sentinel 项目招募，一起定义下一代微服务',
+        author: 'Eric Zhao',
+        desc: '中科院开源之夏 2023 Sentinel 项目开始报名啦，大牛导师手把手带领开源成长，赢取 1.2w 奖金、一起定义下一代云原生与微服务技术演进，欢迎各位在校同学报名~',
+        dateStr: '2023/05/15',
+        link: '/zh-cn/blog/summer-ospp-2023.html',
+      },
+      {
         title: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流量治理标准',
         author: 'Eric Zhao',
         desc: 'Sentinel 1.8.6 版本发布，初步支持 OpenSergo 流控降级与容错等流量治理标准。',

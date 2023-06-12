@@ -12,6 +12,7 @@ Sentinel Go 目前已提供以下框架或组件的 adapter 模块：
   - [dubbo-go](https://github.com/apache/dubbo-go/tree/master/filter/sentinel)
   - [gRPC-go](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/adapters/grpc)
   - [go-micro](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/adapters/micro)
+  - [go-micro](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/adapters/go-zero)
 - Service Mesh && Runtime
   - [Dapr](https://docs.dapr.io/reference/components-reference/supported-middleware/middleware-sentinel/)
   - MOSN

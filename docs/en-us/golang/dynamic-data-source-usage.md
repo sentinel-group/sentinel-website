@@ -1,7 +1,9 @@
-# 动态数据源使用文档
+# Dynamic Data-Source (Go)
 
-- [本地文件 (pull-based)](https://pkg.go.dev/github.com/alibaba/sentinel-golang/ext/datasource/file)
+- [File (pull-based)](https://pkg.go.dev/github.com/alibaba/sentinel-golang/ext/datasource/file)
 - [etcd v3](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/datasource/etcdv3)
 - [Nacos](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/datasource/nacos)
 - [Consul](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/datasource/consul)
 - [Apollo](https://pkg.go.dev/github.com/alibaba/sentinel-golang/pkg/datasource/apollo)
+
+
